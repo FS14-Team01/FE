@@ -9,19 +9,20 @@
 }
 
 :root {
-  --black-black: #0f0f0f;
-  --brand-yellow: #ffcc00;
-  --gray-500: #161616;
-  --gray-400: #5a5a5a;
-  --gray-300: #4a4a4a;
-  --gray-200: #dddddd;
-  --gray-100: #eeeeee;
-  --pure-white: #ffffff;
-  --error-red: #ff483d;
-  --grade-blue: #29c9f9;
-  --grade-purple: #a77eff;
-  --grade-pink: #ff2a6a;
-  --overlay-black: #00000099;
+  --color-black: #0f0f0f;
+  --color-brand-yellow: #ffcc00;
+  --color-gray-500: #161616;
+  --color-gray-400: #5a5a5a;
+  --color-gray-300: #4a4a4a;
+  --color-gray-200: #dddddd;
+  --color-gray-100: #eeeeee;
+  --color-white: #ffffff;
+  --color-error: #ff483d;
+  --color-grade-blue: #29c9f9;
+  --color-grade-purple: #a77eff;
+  --color-grade-pink: #ff2a6a;
+  --color-overlay-black: #00000099;
+  --color-toast-background: #535353CC;
 
   --font-main: 'Noto Sans KR', sans-serif;
   --font-brand: 'YeogiOttaeJalnan', sans-serif;
