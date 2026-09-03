@@ -8,9 +8,11 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
 
       retry: (failureCount, error) => {
-        return error?.code === 'NETWORK_ERROR' || error?.status >= 500;
-        failureCount < 1;
-      }
+        return (
+          (error?.code === "NETWORK_ERROR" || error?.status >= 500) &&
+          failureCount < 1
+        );
+      },
     },
 
     mutations: {
@@ -19,4 +21,4 @@ const queryClient = new QueryClient({
   },
 });
 
-export default queryClient
+export default queryClient;
