@@ -1,5 +1,43 @@
-* {
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+@font-face {
+  font-family: 'YeogiOttaeJalnan';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff')
+    format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+:root {
+  --black-black: #0f0f0f;
+  --brand-yellow: #ffcc00;
+  --gray-500: #161616;
+  --gray-400: #5a5a5a;
+  --gray-300: #4a4a4a;
+  --gray-200: #dddddd;
+  --gray-100: #eeeeee;
+  --pure-white: #ffffff;
+  --error-red: #ff483d;
+  --grade-blue: #29c9f9;
+  --grade-purple: #a77eff;
+  --grade-pink: #ff2a6a;
+
+  --font-main: 'Noto Sans KR', sans-serif;
+  --font-brand: 'YeogiOttaeJalnan', sans-serif;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  padding: 0;
+}
+
+html,
+body {
   margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
 }
