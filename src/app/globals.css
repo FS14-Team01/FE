@@ -4,9 +4,7 @@
   font-family: 'YeogiOttaeJalnan';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff')
     format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-weight: normal;
 }
 
 :root {
@@ -48,7 +46,6 @@ body {
   color: var(--color-white);
   background: var(--color-black);
   font-family: var(--font-main);
-  -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -56,20 +53,6 @@ input,
 select,
 textarea {
   font: inherit;
-}
-
-button {
-  color: inherit;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
 }
 
 @media (max-width: 1199px) {
@@ -81,6 +64,5 @@ img {
 @media (max-width: 743px) {
   :root {
     --layout-padding: 15px;
-    --header-height: 60px;
   }
 }
