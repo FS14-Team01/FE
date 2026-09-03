@@ -20,6 +20,8 @@
   --color-grade-blue: #29c9f9;
   --color-grade-purple: #a77eff;
   --color-grade-pink: #ff2a6a;
+  --color-overlay-black: #00000099;
+  --color-toast-background: #535353CC;
 
   --font-main: 'Noto Sans KR', sans-serif;
   --font-brand: 'YeogiOttaeJalnan', sans-serif;
