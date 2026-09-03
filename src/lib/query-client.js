@@ -11,12 +11,11 @@ const queryClient = new QueryClient({
         return error?.code === 'NETWORK_ERROR' || error?.status >= 500;
       },
     },
-  },
 
-  mutations: {
-    retry: false
+    mutations: {
+      retry: false,
+    },
   },
-},
 });
 
-export default queryClient;
+export default queryClient
