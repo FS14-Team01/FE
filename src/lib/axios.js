@@ -10,8 +10,9 @@ import {
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
-  // Content-Type을 고정하면 FormData 요청에 boundary가 빠져 axios에 맡김
+  // 리프레시 토큰 쿠키를 주고받기 위해 필요. 백엔드 CORS에 credentials 허용 필요
   withCredentials: true,
+  // Content-Type은 지정하지 않음. 고정하면 FormData 요청에 boundary가 빠짐
 });
 
 instance.interceptors.request.use(
@@ -35,7 +36,12 @@ const UNKNOWN_ERROR_CODE = 'UNKNOWN_ERROR';
 const REFRESH_ENDPOINT = '/auth/refresh';
 
 /** 여기서 나는 401은 토큰 갱신으로 해결되지 않음 */
-const AUTH_ENDPOINTS = ['/auth/login', '/auth/signup', REFRESH_ENDPOINT];
+const AUTH_ENDPOINTS = [
+  '/auth/login',
+  '/auth/signup',
+  '/auth/logout',
+  REFRESH_ENDPOINT,
+];
 
 const DEFAULT_MESSAGES = {
   timeout: '요청 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.',
@@ -49,6 +55,10 @@ const STATUS_FALLBACKS = {
   401: { code: 'UNAUTHORIZED', message: '로그인이 필요합니다.' },
   403: { code: 'FORBIDDEN', message: '해당 요청에 대한 권한이 없습니다.' },
   404: { code: 'NOT_FOUND', message: '요청한 데이터를 찾을 수 없습니다.' },
+  409: {
+    code: 'CONFLICT',
+    message: '요청을 처리할 수 없는 상태입니다.',
+  },
   500: {
     code: 'INTERNAL_SERVER_ERROR',
     message: '서버 오류가 발생했습니다.',
@@ -66,16 +76,26 @@ function isAuthEndpoint(url) {
   );
 }
 
-/** 모든 에러를 { status, code, message, original } 형태로 통일 */
+/** 백엔드 계약 확정 전이라 { error: {...} }와 { code, message } 두 형태를 모두 받음 */
+function extractErrorBody(data) {
+  if (!data || typeof data !== 'object') return null;
+
+  return data.error && typeof data.error === 'object' ? data.error : data;
+}
+
+/** 모든 에러를 { status, code, message, details, requestId, original } 형태로 통일 */
 function normalizeError(error) {
   if (error.response) {
     const { status, data } = error.response;
+    const body = extractErrorBody(data);
     const fallback = STATUS_FALLBACKS[status];
 
     return {
       status,
-      code: data?.code ?? fallback?.code ?? UNKNOWN_ERROR_CODE,
-      message: data?.message ?? fallback?.message ?? DEFAULT_MESSAGES.unknown,
+      code: body?.code ?? fallback?.code ?? UNKNOWN_ERROR_CODE,
+      message: body?.message ?? fallback?.message ?? DEFAULT_MESSAGES.unknown,
+      details: body?.details ?? null,
+      requestId: body?.requestId ?? null,
       original: error,
     };
   }
@@ -85,6 +105,8 @@ function normalizeError(error) {
       status: NO_RESPONSE_STATUS,
       code: 'TIMEOUT',
       message: DEFAULT_MESSAGES.timeout,
+      details: null,
+      requestId: null,
       original: error,
     };
   }
@@ -95,6 +117,8 @@ function normalizeError(error) {
       status: NO_RESPONSE_STATUS,
       code: 'NETWORK_ERROR',
       message: DEFAULT_MESSAGES.network,
+      details: null,
+      requestId: null,
       original: error,
     };
   }
@@ -103,6 +127,8 @@ function normalizeError(error) {
     status: NO_RESPONSE_STATUS,
     code: UNKNOWN_ERROR_CODE,
     message: error.message || DEFAULT_MESSAGES.unknown,
+    details: null,
+    requestId: null,
     original: error,
   };
 }
@@ -119,7 +145,9 @@ function refreshAccessToken() {
       timeout: instance.defaults.timeout,
     })
     .then((response) => {
-      const token = response.data?.accessToken;
+      // 응답 형태가 확정 전이라 { accessToken }과 { data: { accessToken } } 모두 받음
+      const body = response.data;
+      const token = body?.accessToken ?? body?.data?.accessToken;
 
       if (!token) {
         throw new Error('갱신 응답에 액세스 토큰이 없습니다');
@@ -145,24 +173,28 @@ instance.interceptors.response.use(
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest._retry &&
-      !isAuthEndpoint(originalRequest.url);
+      !isAuthEndpoint(originalRequest.url) &&
+      !!getAccessToken();
 
     if (shouldRefresh) {
       originalRequest._retry = true;
 
+      let token;
+
+      // 갱신 실패만 재로그인 상황이라 여기서만 토큰을 지움
       try {
-        const token = await refreshAccessToken();
-
-        // 만료된 토큰이 남아 있어 갈아끼움
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-
-        return await instance(originalRequest);
+        token = await refreshAccessToken();
       } catch (refreshError) {
-        // 호출부가 재로그인 상황을 구분하도록 갱신 쪽 에러를 전달
         clearAccessToken();
 
         return Promise.reject(normalizeError(refreshError));
       }
+
+      // 만료된 토큰이 남아 있어 갈아끼움
+      originalRequest.headers.Authorization = `Bearer ${token}`;
+
+      // 재시도가 실패하면 그 응답이 다시 인터셉터를 타 정규화됨
+      return instance(originalRequest);
     }
 
     return Promise.reject(normalizeError(error));

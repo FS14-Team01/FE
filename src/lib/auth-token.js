@@ -10,6 +10,9 @@
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 
+/** localStorage가 막혀도 새로고침 전까지는 로그인이 유지되도록 하는 대체 보관소 */
+let memoryToken = null;
+
 /** SSR·빌드 시점에는 window가 없습니다 */
 const canUseStorage = () => typeof window !== 'undefined';
 
@@ -17,25 +20,30 @@ export function getAccessToken() {
   if (!canUseStorage()) return null;
 
   try {
-    return window.localStorage.getItem(ACCESS_TOKEN_KEY);
+    // 저장에 실패해 메모리에만 있는 토큰이 최신입니다
+    return window.localStorage.getItem(ACCESS_TOKEN_KEY) ?? memoryToken;
   } catch {
     // 시크릿 모드 등에서 접근이 막힐 수 있습니다
-    return null;
+    return memoryToken;
   }
 }
 
 export function setAccessToken(token) {
   if (!canUseStorage()) return;
 
+  memoryToken = token;
+
   try {
     window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
   } catch {
-    // 저장에 실패해도 이번 세션은 메모리상의 토큰으로 동작합니다
+    // 저장에 실패해도 memoryToken으로 이번 세션은 동작합니다
   }
 }
 
 export function clearAccessToken() {
   if (!canUseStorage()) return;
+
+  memoryToken = null;
 
   try {
     window.localStorage.removeItem(ACCESS_TOKEN_KEY);
