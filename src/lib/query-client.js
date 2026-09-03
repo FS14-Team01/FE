@@ -9,7 +9,8 @@ const queryClient = new QueryClient({
 
       retry: (failureCount, error) => {
         return error?.code === 'NETWORK_ERROR' || error?.status >= 500;
-      },
+        failureCount < 1;
+      }
     },
 
     mutations: {
