@@ -1,0 +1,55 @@
+.wrapper {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 455px;
+  padding: 50px 0;
+  color: var(--pure-white);
+  border-radius: 20px;
+  background: var(--black-black);
+  transform: scale(0.9);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.title {
+  margin: 0;
+  font-size: 46px;
+  font-family: var(--font-brand);
+}
+
+.result {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.nextAvailable {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--gray-200);
+}
+
+.title span, .result span, .nextAvailable span{
+  color: var(--brand-yellow);
+}
