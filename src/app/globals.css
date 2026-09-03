@@ -4,26 +4,30 @@
   font-family: 'YeogiOttaeJalnan';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff')
     format('woff');
-  font-weight: normal;
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
 :root {
-  --black-black: #0f0f0f;
-  --brand-yellow: #ffcc00;
-  --gray-500: #161616;
-  --gray-400: #5a5a5a;
-  --gray-300: #4a4a4a;
-  --gray-200: #dddddd;
-  --gray-100: #eeeeee;
-  --pure-white: #ffffff;
-  --error-red: #ff483d;
-  --grade-blue: #29c9f9;
-  --grade-purple: #a77eff;
-  --grade-pink: #ff2a6a;
+  --color-black: #0f0f0f;
+  --color-brand-yellow: #ffcc00;
+  --color-gray-500: #161616;
+  --color-gray-400: #5a5a5a;
+  --color-gray-300: #4a4a4a;
+  --color-gray-200: #dddddd;
+  --color-gray-100: #eeeeee;
+  --color-white: #ffffff;
+  --color-error: #ff483d;
+  --color-grade-blue: #29c9f9;
+  --color-grade-purple: #a77eff;
+  --color-grade-pink: #ff2a6a;
 
   --font-main: 'Noto Sans KR', sans-serif;
   --font-brand: 'YeogiOttaeJalnan', sans-serif;
+  --layout-max-width: 1480px;
+  --layout-padding: 40px;
+  --header-height: 80px;
 }
 
 *,
@@ -34,10 +38,49 @@
 
 html,
 body {
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
+  padding-top: var(--header-height);
+  color: var(--color-white);
+  background: var(--color-black);
   font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --layout-padding: 24px;
+  }
+}
+
+@media (max-width: 743px) {
+  :root {
+    --layout-padding: 15px;
+    --header-height: 60px;
+  }
 }
