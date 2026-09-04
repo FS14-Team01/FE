@@ -5,7 +5,6 @@
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff')
     format('woff');
   font-weight: normal;
-  font-display: swap;
 }
 
 :root {
@@ -26,6 +25,9 @@
 
   --font-main: 'Noto Sans KR', sans-serif;
   --font-brand: 'YeogiOttaeJalnan', sans-serif;
+  --layout-max-width: 1480px;
+  --layout-padding: 40px;
+  --header-height: 80px;
 }
 
 *,
@@ -36,10 +38,38 @@
 
 html,
 body {
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
+  padding-top: var(--header-height);
+  color: var(--color-white);
+  background: var(--color-black);
   font-family: var(--font-main);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --layout-padding: 24px;
+  }
+}
+
+@media (max-width: 743px) {
+  :root {
+    --layout-padding: 15px;
+  }
 }
