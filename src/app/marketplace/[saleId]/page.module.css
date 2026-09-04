@@ -1,0 +1,21 @@
+.main {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 60px var(--layout-padding) 120px;
+}
+
+.saleDetailSection {
+  min-height: 560px;
+}
+
+@media (max-width: 743px) {
+  .main {
+    padding-top: 20px;
+    padding-bottom: 60px;
+  }
+
+  .saleDetailSection {
+    min-height: 0;
+  }
+}
