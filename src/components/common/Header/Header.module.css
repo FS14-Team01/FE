@@ -1,0 +1,264 @@
+.header {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-black);
+}
+
+.inner {
+  display: flex;
+  width: min(100%, var(--layout-max-width));
+  height: var(--header-height);
+  margin: 0 auto;
+  padding: 0 var(--layout-padding);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoLink {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.logo {
+  width: 140px;
+  height: auto;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: var(--color-gray-200);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.authLink,
+.nickname {
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+.authLink {
+  color: var(--color-gray-200);
+  text-align: right;
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.authLink:hover,
+.nickname:hover {
+  color: var(--color-white);
+  opacity: 0.8;
+}
+
+.authLink:focus-visible,
+.nickname:focus-visible,
+.notificationButton:focus-visible,
+.logoLink:focus-visible,
+.menuButton:focus-visible,
+.mobileLoginLink:focus-visible,
+.drawerLoginButton:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 4px;
+}
+
+.notificationButton {
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.nickname {
+  color: var(--color-gray-200);
+  font-family: var(--font-main);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.54px;
+}
+
+.menuButton,
+.notificationButton,
+.mobileNotificationButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menuButton,
+.mobileLoginLink,
+.mobileNotificationButton {
+  display: none;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.backdrop,
+.drawer {
+  display: none;
+}
+
+.menuButton {
+  width: 40px;
+}
+
+@media (max-width: 743px) {
+  .inner {
+    height: var(--header-height);
+  }
+
+  .logo {
+    width: 112px;
+  }
+
+  .logoLink {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .menuButton {
+    display: inline-flex;
+    order: -1;
+  }
+
+  .mobileLoginLink {
+    display: inline-flex;
+    margin-left: auto;
+    color: var(--color-gray-200);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .navigation {
+    display: none;
+  }
+
+  .mobileNotificationButton {
+    display: inline-flex;
+    width: 40px;
+    margin-left: auto;
+  }
+
+  .mobileNotificationButton .notificationIcon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .backdrop {
+    position: fixed;
+    z-index: 110;
+    inset: 0;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: rgb(0 0 0 / 70%);
+  }
+
+  .drawer {
+    position: fixed;
+    z-index: 120;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: min(280px, 75vw);
+    padding: 72px 20px 40px;
+    background: var(--color-gray-500);
+    flex-direction: column;
+  }
+
+  .userSummary {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-gray-300);
+  }
+
+  .userSummary > strong {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+
+  .guestSummary p {
+    margin: -8px 0 18px;
+    color: var(--color-gray-400);
+    font-size: 12px;
+  }
+
+  .drawerLoginButton {
+    display: flex;
+    width: 100%;
+    height: 44px;
+    color: var(--color-black);
+    background: var(--color-brand-yellow);
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .pointRow {
+    display: flex;
+    color: var(--color-gray-400);
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+
+  .pointRow strong {
+    color: var(--color-brand-yellow);
+  }
+
+  .drawerNavigation {
+    display: flex;
+    padding-top: 22px;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .drawerNavigation a:focus-visible,
+  .drawerLoginButton:focus-visible,
+  .drawerLogoutButton:focus-visible {
+    outline: 2px solid var(--color-brand-yellow);
+    outline-offset: 4px;
+  }
+
+  .drawerLogoutButton {
+    margin-top: auto;
+    padding: 0;
+    border: 0;
+    color: var(--color-gray-400);
+    background: transparent;
+    align-self: flex-start;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 479px) {
+  .notificationButton .notificationIcon {
+    width: 22px;
+    height: 22px;
+  }
+}
