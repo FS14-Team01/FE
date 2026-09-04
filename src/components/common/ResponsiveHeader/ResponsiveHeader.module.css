@@ -1,0 +1,17 @@
+.defaultHeader {
+  display: block;
+}
+
+.mobileHeader {
+  display: none;
+}
+
+@media (max-width: 743px) {
+  .defaultHeader {
+    display: none;
+  }
+
+  .mobileHeader {
+    display: block;
+  }
+}
