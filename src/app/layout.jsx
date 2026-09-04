@@ -1,13 +1,13 @@
-import './globals.css';
-
-export const metadata = {
-  title: '최애의 포토',
-};
+import './globals.css'
+import Footer from '@/components/common/Footer/Footer'
 
 export default function RootLayout({ children }) {
   return (
-    <html lang='ko'>
-      <body>{children}</body>
+    <html lang="ko">
+      <body>
+        {children}
+        <Footer />
+      </body>
     </html>
-  );
+  )
 }
