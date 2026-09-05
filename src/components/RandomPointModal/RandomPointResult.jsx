@@ -1,5 +1,5 @@
 import Image from "next/image";
-import closeIcon from "../../../public/assets/ic_close.png";
+import closeIcon from "../../../public/assets/ic_close.svg";
 import point from "../../../public/assets/ic_point.png";
 import styles from "./RandomPointResult.module.css";
 

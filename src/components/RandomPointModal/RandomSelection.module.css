@@ -18,9 +18,9 @@
   width: 1034px;
   padding: 50px 0;
   border-radius: 2px;
-  color: var(--pure-white);
+  color: var(--color-white);
   border-radius: 20px;
-  background: var(--gray-500);
+  background: var(--color-gray-500);
   transform: scale(0.8);
 }
 
@@ -40,7 +40,7 @@
 }
 
 .title span {
-  color: var(--brand-yellow);
+  color: var(--color-brand-yellow);
 }
 
 .description {
@@ -88,9 +88,9 @@
   height: 60px;
   border: none;
   border-radius: 2px;
-  background: var(--brand-yellow);
+  background: var(--color-brand-yellow);
   font-size: 18px;
   font-weight: 700;
-  color: var(--black-black);
+  color: var(--color-black);
   cursor: pointer;
 }

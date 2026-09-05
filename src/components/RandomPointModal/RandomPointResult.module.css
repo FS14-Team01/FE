@@ -17,9 +17,9 @@
 
   width: 455px;
   padding: 50px 0;
-  color: var(--pure-white);
+  color: var(--color-white);
   border-radius: 20px;
-  background: var(--black-black);
+  background: var(--color-black);
   transform: scale(0.9);
 }
 
@@ -47,9 +47,9 @@
 .nextAvailable {
   font-size: 16px;
   font-weight: 400;
-  color: var(--gray-200);
+  color: var(--color-gray-200);
 }
 
 .title span, .result span, .nextAvailable span{
-  color: var(--brand-yellow);
+  color: var(--color-brand-yellow);
 }

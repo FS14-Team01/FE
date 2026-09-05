@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import closeIcon from "../../../public/assets/ic_close.png";
+import closeIcon from "../../../public/assets/ic_close.svg";
 import randomBoxBlue from "../../../public/assets/ic_random_box_blue.png";
 import randomBoxPurple from "../../../public/assets/ic_random_box_purple.png";
 import randomBoxRed from "../../../public/assets/ic_random_box_red.png";
