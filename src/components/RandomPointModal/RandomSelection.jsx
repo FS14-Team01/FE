@@ -1,21 +1,30 @@
 'use client';
 
-import Image from "next/image";
-import { useState } from "react";
-import closeIcon from "../../../public/assets/ic_close.svg";
-import randomBoxBlue from "../../../public/assets/ic_random_box_blue.png";
-import randomBoxPurple from "../../../public/assets/ic_random_box_purple.png";
-import randomBoxRed from "../../../public/assets/ic_random_box_red.png";
-import styles from "./RandomSelection.module.css";
+import Image from 'next/image';
+import { useState } from 'react';
+import closeIcon from '../../../public/assets/ic_close.svg';
+import randomBoxBlue from '../../../public/assets/ic_random_box_blue.png';
+import randomBoxPurple from '../../../public/assets/ic_random_box_purple.png';
+import randomBoxRed from '../../../public/assets/ic_random_box_red.png';
+import styles from './RandomSelection.module.css';
 
-const RANDOME_BOXES = [
-  { id: "blue", src: randomBoxBlue, },
-  { id: "purple", src: randomBoxPurple, },
-  { id: "red", src: randomBoxRed, },
+const RANDOM_BOXES = [
+  { id: 'blue', src: randomBoxBlue },
+  { id: 'purple', src: randomBoxPurple },
+  { id: 'red', src: randomBoxRed },
 ]
 
-export default function RandomSelection() {
+// 테스트용 랜덤 포인트 api 호출 결과
+const RANDOM_POINT_RESULT = {
+  amount: 50,
+  unselectedAmounts: [20, 200],
+}
+
+export default function RandomSelection({ setStep }) {
   const [selectedBox, setSelectedBox] = useState(null);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [isSelectConfirmed, setIsSelectConfirmed] = useState(false);
+  const unselectedBoxes = RANDOM_BOXES.filter((randomBox) => randomBox.id !== selectedBox);
 
   return (
     <div className={styles.wrapper}>
@@ -32,10 +41,9 @@ export default function RandomSelection() {
         >
           <Image
             src={closeIcon}
-            width={17}
-            height={17}
+            width={25}
+            height={25}
             alt=""
-            loading="eager"
           />
         </button>
 
@@ -53,38 +61,69 @@ export default function RandomSelection() {
         </p>
 
         <div className={styles.boxes}>
-          {RANDOME_BOXES.map((randomBox) => {
-            const isSelected = selectedBox === randomBox.id;
-            const isUnselected =
-              selectedBox !== null && selectedBox !== randomBox.id;
+          {/** 선택 전에는 상자를, 선택 완료 후에는 각 상자의 포인트를 표시 */}
+          {!isSelectConfirmed ? (
+            RANDOM_BOXES.map((randomBox) => {
+              const isSelected = selectedBox === randomBox.id;
+              const isUnselected =
+                selectedBox !== null && selectedBox !== randomBox.id;
 
-            return (
-              <button
-                key={randomBox.id}
-                type="button"
-                aria-label="랜덤 포인트 박스"
-                className={`
-                  ${styles.boxBtn}
-                  ${isSelected ? styles.selectedBox : ''}
-                  ${isUnselected ? styles.unselectedBox : ''}
-                `}
-                onClick={() => setSelectedBox(randomBox.id)}
-              >
-                <Image
-                  src={randomBox.src}
-                  width={245}
-                  height={190}
-                  alt=""
-                  loading="eager"
-                />
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={randomBox.id}
+                  type="button"
+                  aria-label="랜덤 포인트 박스"
+                  className={`
+                    ${styles.boxBtn}
+                    ${isSelected ? styles.selectedBox : ''}
+                    ${isUnselected ? styles.unselectedBox : ''}
+                    ${isFadingOut ? styles.fadeOut : ''}
+                  `}
+                  onClick={() => setSelectedBox(randomBox.id)}
+                >
+                  <Image
+                    src={randomBox.src}
+                    width={245}
+                    height={190}
+                    alt=""
+                  />
+                </button>
+              );
+            })
+          ) : (
+            RANDOM_BOXES.map((randomBox) => (
+              randomBox.id === selectedBox 
+              ? (
+                <p 
+                  key={randomBox.id}
+                  className={styles.selectedPoint}
+                >
+                 {RANDOM_POINT_RESULT.amount}
+                </p>
+              ) : (
+                <p 
+                  key={randomBox.id}
+                  className={styles.unselectedPoint}
+                >
+                  {RANDOM_POINT_RESULT.unselectedAmounts[unselectedBoxes.findIndex(box => box.id === randomBox.id)]}
+                </p>
+              )
+            ))
+          )}
         </div>
 
-        {selectedBox && 
+        {selectedBox && !isSelectConfirmed &&
           <button 
             className={styles.selectBtn}
+            onClick={() => {
+              setIsFadingOut(true)
+              setTimeout(() => {
+                setIsSelectConfirmed(true)
+              }, 500)
+              setTimeout(() => {
+                setStep('result')
+              }, 2000)
+            }}
           >
             선택 완료
           </button>

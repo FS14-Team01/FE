@@ -1,7 +1,7 @@
-import Image from "next/image";
-import closeIcon from "../../../public/assets/ic_close.svg";
-import point from "../../../public/assets/ic_point.png";
-import styles from "./RandomPointResult.module.css";
+import Image from 'next/image';
+import closeIcon from '../../../public/assets/ic_close.svg';
+import point from '../../../public/assets/ic_point.png';
+import styles from './RandomPointResult.module.css';
 
 export default function RandomPointResult() {
   return (
@@ -20,10 +20,9 @@ export default function RandomPointResult() {
         >
           <Image
             src={closeIcon}
-            width={17}
-            height={17}
+            width={25}
+            height={25}
             alt=""
-            loading="eager"
           />
         </button>
 
@@ -36,7 +35,6 @@ export default function RandomPointResult() {
           width={340}
           height={324}
           alt=""
-          loading="eager"
         />
 
         <p 
