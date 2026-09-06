@@ -1,0 +1,64 @@
+
+.photoCard {
+  width: 100%;
+  max-width:440px;
+  min-width: 0;
+  padding: 20px;
+  background-color: var(--gray-500);
+  box-sizing: border-box;
+}
+
+/* 포토카드 이미지 영역 */
+.imgWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3; /* 이미지 비율 가로 4 : 세로 3 */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.imgWrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 솔드아웃 스타일 */
+.soldOut {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* soldout card dim 처리 */
+.soldOut .dim {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* SOLD OUT 아이콘 */
+.soldOut > img {
+  position: relative;
+  z-index: 1;
+  width: 60%; 
+  max-width: 170px;
+  height: auto;
+}
+
+/* 카드 텍스트 컨텐츠 */
+.textWrap{
+  color: var(--pure-white);
+  margin-top: 25px;
+}
+
+.textWrap .name {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
