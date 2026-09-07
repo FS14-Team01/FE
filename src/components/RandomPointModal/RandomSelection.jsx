@@ -82,6 +82,7 @@ export default function RandomSelection({ setStep }) {
                   onClick={() => setSelectedBox(randomBox.id)}
                 >
                   <Image
+                    className={styles.boxImage}
                     src={randomBox.src}
                     width={245}
                     height={190}

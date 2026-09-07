@@ -31,6 +31,7 @@ export default function RandomPointResult() {
         </p>
 
         <Image
+          className={styles.pointImage}
           src={point}
           width={340}
           height={324}
@@ -45,7 +46,9 @@ export default function RandomPointResult() {
         </p>
 
         <p className={styles.nextAvailable}>
-          다음 랜덤박스는 <span>오늘 낮 12시</span>에 열려요
+          다음 랜덤박스는
+          <br className={styles.mobileBreak} /> 
+          <span> 오늘 낮 12시</span>에 열려요
         </p>
       </div>
     </div>

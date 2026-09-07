@@ -21,7 +21,6 @@
   color: var(--color-white);
   border-radius: 20px;
   background: var(--color-gray-500);
-  transform: scale(0.8);
 }
 
 .closeBtn {
@@ -145,4 +144,85 @@
   font-weight: 700;
   color: var(--color-black);
   cursor: pointer;
+}
+
+@media (max-width: 1199px) {
+  .content {
+    width: 600px;
+  }
+
+  .title {
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .boxes {
+    gap: 25px;
+    margin: 60px 0;
+  }
+
+  .boxImage, .selectedPoint, .unselectedPoint {
+    width: 150px;
+    height: 132px;
+  }
+
+  .selectedPoint {
+    font-size: 70px;
+  }
+
+  .unselectedPoint {
+    font-size: 30px;
+  }
+
+  .selectBtn {
+    width: 440px;
+    height: 55px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 743px) {
+  .content {
+    width: 350px;
+  }
+
+  .closeBtn {
+    top: 15px;
+    right: 15px;
+  }
+
+  .title {
+    font-size: 30px;;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .boxes {
+    gap: 15px;
+  }
+
+  .boxImage, .selectedPoint, .unselectedPoint {
+    width: 97px;
+    height: 75px;
+  }
+
+  .selectedPoint {
+    font-size: 45px;
+  }
+
+  .unselectedPoint {
+    font-size: 25px;
+  }
+
+  .selectBtn {
+    width: 300px;
+    height: 55px;
+  }
+  
 }
