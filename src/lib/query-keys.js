@@ -11,26 +11,24 @@
 export const marketKeys = {
   all: ['market'],
   lists: () => [...marketKeys.all, 'list'],
-  /** filters: { keyword, grade, category, status, sort, limit } */
   list: (filters) => [...marketKeys.lists(), filters],
   details: () => [...marketKeys.all, 'detail'],
   detail: (saleId) => [...marketKeys.details(), saleId],
 };
 
 /* 마이갤러리 — GET /users/me/ownerships */
+// 추가한부분
 export const galleryKeys = {
   all: ['gallery'],
   lists: () => [...galleryKeys.all, 'list'],
-  /** filters: { keyword, grade, category, sort, limit } */
   list: (filters) => [...galleryKeys.lists(), filters],
 };
 
 /* 나의 판매 포토카드 — GET /users/me/sales */
-// 명세상 검색·등급·카테고리 필터가 없어 마켓보다 filters가 좁습니다
+// 추가한부분
 export const saleKeys = {
   all: ['sale'],
   lists: () => [...saleKeys.all, 'list'],
-  /** filters: { status, sort, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
 };
 
@@ -43,29 +41,26 @@ export const photoCardKeys = {
 };
 
 /* 교환 제안 — GET /sales/:saleId/exchange-offers, GET /users/me/exchange-offers */
+// 추가한부분
 export const exchangeKeys = {
   all: ['exchange'],
   received: () => [...exchangeKeys.all, 'received'],
-  /** filters: { status, limit } */
   receivedBySale: (saleId, filters) => [
     ...exchangeKeys.received(),
     saleId,
     filters,
   ],
   sent: () => [...exchangeKeys.all, 'sent'],
-  /** filters: { status, limit } */
   sentList: (filters) => [...exchangeKeys.sent(), filters],
-  // 단건 조회는 제안자와 판매자가 모두 보므로 받은/보낸과 분리합니다
   details: () => [...exchangeKeys.all, 'detail'],
   detail: (exchangeOfferId) => [...exchangeKeys.details(), exchangeOfferId],
 };
 
 /* 알림 — GET /notifications */
-// 안 읽은 알림은 전용 엔드포인트가 없어 { isRead: false } 목록으로 조회합니다
+// 추가한부분
 export const notificationKeys = {
   all: ['notification'],
   lists: () => [...notificationKeys.all, 'list'],
-  /** filters: { isRead, type, limit } */
   list: (filters) => [...notificationKeys.lists(), filters],
 };
 
