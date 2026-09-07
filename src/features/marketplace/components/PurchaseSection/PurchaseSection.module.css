@@ -1,0 +1,9 @@
+.section {
+  min-height: 164px;
+}
+
+@media (max-width: 743px) {
+  .section {
+    min-height: 140px;
+  }
+}
