@@ -9,4 +9,6 @@ export const TOAST_ACTIONS = {
   sale: '판매 등록',
   purchase: '구매',
   exchange: '교환 제시',
+  exchangeAccept: '교환 승인',
+  exchangeReject: '교환 거절',
 }
