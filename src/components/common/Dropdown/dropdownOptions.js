@@ -22,3 +22,10 @@ export const SALE_STATUS_OPTIONS = [
   { value: 'SOLD_OUT', label: '판매 완료' },
   { value: 'CANCELLED', label: '판매 취소' },
 ];
+
+/** 마켓플레이스 목록 정렬 */
+export const MARKET_SORT_OPTIONS = [
+  { value: 'recent', label: '최신순' },
+  { value: 'priceAsc', label: '낮은 가격순' },
+  { value: 'priceDesc', label: '높은 가격순' },
+];
