@@ -11,6 +11,7 @@
 export const marketKeys = {
   all: ['market'],
   lists: () => [...marketKeys.all, 'list'],
+  /** filters: { keyword, grade, category, status, sort, limit } */
   list: (filters) => [...marketKeys.lists(), filters],
   details: () => [...marketKeys.all, 'detail'],
   detail: (saleId) => [...marketKeys.details(), saleId],
@@ -21,6 +22,7 @@ export const marketKeys = {
 export const galleryKeys = {
   all: ['gallery'],
   lists: () => [...galleryKeys.all, 'list'],
+  /** filters: { keyword, grade, category, limit } */
   list: (filters) => [...galleryKeys.lists(), filters],
 };
 
@@ -29,6 +31,7 @@ export const galleryKeys = {
 export const saleKeys = {
   all: ['sale'],
   lists: () => [...saleKeys.all, 'list'],
+  /** filters: { keyword, grade, category, status, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
 };
 
@@ -45,12 +48,14 @@ export const photoCardKeys = {
 export const exchangeKeys = {
   all: ['exchange'],
   received: () => [...exchangeKeys.all, 'received'],
+  /** filters: { limit } */
   receivedBySale: (saleId, filters) => [
     ...exchangeKeys.received(),
     saleId,
     filters,
   ],
   sent: () => [...exchangeKeys.all, 'sent'],
+  /** filters: { limit } */
   sentList: (filters) => [...exchangeKeys.sent(), filters],
   // 단건 조회는 제안자와 판매자가 모두 보므로 받은/보낸과 분리합니다
   details: () => [...exchangeKeys.all, 'detail'],
@@ -63,6 +68,7 @@ export const exchangeKeys = {
 export const notificationKeys = {
   all: ['notification'],
   lists: () => [...notificationKeys.all, 'list'],
+  /** filters: { isRead, limit } */
   list: (filters) => [...notificationKeys.lists(), filters],
 };
 
