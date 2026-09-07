@@ -52,12 +52,14 @@ export const exchangeKeys = {
   ],
   sent: () => [...exchangeKeys.all, 'sent'],
   sentList: (filters) => [...exchangeKeys.sent(), filters],
+  // 단건 조회는 제안자와 판매자가 모두 보므로 받은/보낸과 분리합니다
   details: () => [...exchangeKeys.all, 'detail'],
   detail: (exchangeOfferId) => [...exchangeKeys.details(), exchangeOfferId],
 };
 
 /* 알림 — GET /notifications */
 // 추가한부분
+// 안 읽은 알림은 전용 엔드포인트가 없어 { isRead: false } 목록으로 조회합니다
 export const notificationKeys = {
   all: ['notification'],
   lists: () => [...notificationKeys.all, 'list'],

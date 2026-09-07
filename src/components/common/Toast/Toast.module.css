@@ -1,0 +1,57 @@
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: fit-content;
+  max-width: 600px;
+  height: 72px;
+  padding: 24px 40px;
+  border-radius: 99px;
+  background: var(--color-toast-background);
+  backdrop-filter: blur(5px);
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.message {
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-white);
+  text-align: center;
+  text-overflow: ellipsis;
+  /* 모든 메세지는 한 줄로 통일 */
+  white-space: nowrap;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+@media (max-width: 1199px) {
+  .toast {
+    top: 4px;
+  }
+}
+
+@media (max-width: 743px) {
+  .toast {
+    top: 15px;
+    width: fit-content;
+    max-width: 350px;
+    height: 64px;
+    padding: 20px;
+  }
+
+  .message {
+    font-size: 16px;
+  }
+}
