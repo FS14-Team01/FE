@@ -17,7 +17,6 @@ const CARD_CATEGORY_LABELS = {
 }
 
 const EXCHANGE_STATUS_LABELS = {
-  PENDING: '대기 중',
   ACCEPTED: '승인 완료',
   REJECTED: '거절 완료',
   CANCELLED: '취소됨',
@@ -55,7 +54,6 @@ function Divider() {
 export default function ExchangeCard({
   currentUserId,
   exchangeOffer,
-  sale,
   isProcessing = false,
   errorMessage = '',
   onAccept,
@@ -75,14 +73,15 @@ export default function ExchangeCard({
   const categoryLabel = getCategoryLabel(offeredCard.category)
   const isPending = status === 'PENDING'
   const isActionable = isPending && !isProcessing
-  const isMatchingSale = sale?.id === saleListing.id
-  const isRequester = isMatchingSale && currentUserId === requester.id
-  const isSeller = isMatchingSale && currentUserId === sale?.seller?.id
-  const offerRole = isRequester ? 'requester' : isSeller ? 'seller' : 'viewer'
-  const hasActionPermission = isRequester || isSeller
+  const isRequester = currentUserId === requester.id
+  const isSeller = currentUserId === saleListing.sellerId
   const imageStyle = offeredCard.imageUrl
     ? { '--photo-card-image': `url("${offeredCard.imageUrl}")` }
     : undefined
+
+  if (!isRequester && !isSeller) {
+    return null
+  }
 
   return (
     <article
@@ -90,7 +89,6 @@ export default function ExchangeCard({
       data-card-variant='exchange'
       data-grade={gradeClassName}
       data-status={status.toLowerCase()}
-      data-offer-role={offerRole}
       aria-label={`${offeredCard.name}, ${gradeLabel} 등급 교환 제안 카드`}
       aria-busy={isProcessing}
     >
@@ -140,7 +138,7 @@ export default function ExchangeCard({
           isRequester ? styles.requesterActions : ''
         }`.trim()}
       >
-        {isPending && hasActionPermission ? (
+        {isPending ? (
           isRequester ? (
             <button
               type='button'
