@@ -53,8 +53,9 @@ function Divider() {
 }
 
 export default function ExchangeCard({
-  offer,
-  salePrice,
+  exchangeOffer,
+  offeredPhotoCard,
+  sale,
   actionMode = 'seller',
   isProcessing = false,
   errorMessage = '',
@@ -63,17 +64,17 @@ export default function ExchangeCard({
   onCancel,
   className = '',
 }) {
-  const { id: exchangeOfferId, offeredCard, requester } = offer
-  const status = normalizeEnum(offer.status)
+  const { id: exchangeOfferId, offeredCard, requester } = exchangeOffer
+  const status = normalizeEnum(exchangeOffer.status)
   const gradeClassName = getGradeClassName(offeredCard.grade)
   const gradeLabel = getGradeLabel(offeredCard.grade)
   const categoryLabel = getCategoryLabel(offeredCard.category)
   const isPending = status === 'PENDING'
   const isActionable = isPending && !isProcessing
   const isBuyerAction = actionMode === 'buyer'
-  const imageStyle = offeredCard.imageUrl
-    ? { '--photo-card-image': `url("${offeredCard.imageUrl}")` }
-    : undefined
+  const imageStyle = {
+    '--photo-card-image': `url("${offeredPhotoCard.imageUrl}")`,
+  }
 
   return (
     <article
@@ -107,7 +108,7 @@ export default function ExchangeCard({
 
             <span className={styles.purchasePrice}>
               <Divider />
-              <strong>{formatPoints(salePrice)}</strong>
+              <strong>{formatPoints(sale.price)}</strong>
               <span>에 구매</span>
             </span>
 
@@ -116,7 +117,7 @@ export default function ExchangeCard({
         </div>
 
         <div className={styles.rule} />
-        <p className={styles.description}>{offeredCard.description}</p>
+        <p className={styles.description}>{offeredPhotoCard.description}</p>
         {errorMessage && (
           <p className={styles.errorMessage} role='alert'>
             {errorMessage}
