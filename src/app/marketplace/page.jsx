@@ -1,7 +1,18 @@
+'use client';
+
+import { useState } from 'react';
 import Header from '@/components/common/Header/Header';
+import SearchInput from '@/components/marketplace/SearchInput';
 import styles from './page.module.css';
 
 export default function MarketplacePage() {
+  const [keyword, setKeyword] = useState('');
+
+  const handleSearch = (value) => {
+    // TODO: marketKeys.list({ keyword: value, ... }) 연동
+    console.log('검색어:', value);
+  };
+
   return (
     <>
       <Header />
@@ -12,6 +23,12 @@ export default function MarketplacePage() {
         </div>
 
         <div className={styles.filterRow}>
+          <SearchInput
+            value={keyword}
+            onChange={setKeyword}
+            onSearch={handleSearch}
+          />
+
           <div className={styles.sortArea}>
           </div>
 
