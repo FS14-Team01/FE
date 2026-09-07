@@ -5,7 +5,7 @@ import styles from './SearchInput.module.css';
 /**
  * @param {string} value
  * @param {(value: string) => void} onChange
- * @param {() => void} [onSearch] 
+ * @param {(value: string) => void} [onSearch] 
  * @param {string} [placeholder]
  */
 
@@ -17,7 +17,7 @@ export default function SearchInput({
   className,
 }) {
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !event.nativeEvent.isComposing) {
       onSearch?.(value);
     }
   };
