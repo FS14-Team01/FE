@@ -1,0 +1,76 @@
+.main {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 60px var(--layout-padding) 120px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-gray-400);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-gray-400);
+}
+
+/* 정렬만 오른쪽 끝으로 밀어냄 */
+.sortArea {
+  margin-left: auto;
+}
+
+.cardSection {
+  padding-top: 40px;
+}
+
+/* 반응형: 태블릿 */
+@media (max-width: 1199px) {
+  .main {
+    padding-top: 40px;
+    padding-bottom: 80px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .filterRow {
+    gap: 20px;
+  }
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 743px) {
+  .main {
+    padding-top: 20px;
+    padding-bottom: 60px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .filterRow {
+    gap: 12px;
+  }
+
+  .cardSection {
+    padding-top: 20px;
+  }
+}
