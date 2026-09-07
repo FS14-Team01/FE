@@ -146,6 +146,13 @@
   cursor: pointer;
 }
 
+.closeBtn:focus-visible,
+.boxBtn:focus-visible,
+.selectBtn:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 4px;
+}
+
 @media (max-width: 1199px) {
   .content {
     width: 600px;
