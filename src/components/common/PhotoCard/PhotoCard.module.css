@@ -1,18 +1,19 @@
-
 .photoCard {
   width: 100%;
-  max-width:440px;
+  max-width: 440px;
   min-width: 0;
-  padding: 20px;
-  background-color: var(--gray-500);
+  padding: 40px 20px;
+  background-color: var(--color-gray-500);
   box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 포토카드 이미지 영역 */
+/*-------- 포토카드 이미지 영역 --------*/
 .imgWrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3; /* 이미지 비율 가로 4 : 세로 3 */
+  aspect-ratio: 4 / 3;
+  /* 이미지 비율 가로 4 : 세로 3 */
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -25,7 +26,101 @@
   object-fit: cover;
 }
 
-/* 솔드아웃 스타일 */
+/*-------- 포토카드 텍스트 영역 --------*/
+.photoCard .title {
+  color: var(--color-gray-300);
+}
+
+.photoCard .textWrap {
+  color: var(--color-white);
+  margin-top: 25px;
+}
+
+.photoCard .textWrap .name {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.photoCard .infoWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-gray-400);
+  box-sizing: border-box;
+}
+
+.photoCard .gradeCategory {
+  display: flex;
+  align-items: center;
+}
+
+.photoCard .gradeCategory .line {
+  width: 1px;
+  height: 16px;
+  margin: 4px 10px 0 10px;
+  box-sizing: border-box;
+  background-color: var(--color-gray-400);
+}
+
+.photoCard .category {
+  color: var(--color-gray-300);
+}
+
+.photoCard .ownerName {
+  text-decoration: underline;
+}
+
+.photoCard .saleInfo {
+  margin-top: 20px;
+}
+
+.photoCard .saleInfo>div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.photoCard .saleInfo .data {
+  font-size: 18px;
+}
+
+.photoCard .saleInfo .supply {
+  margin-top: 10px;
+}
+
+.photoCard .saleInfo .supply .data span {
+  color: var(--color-gray-400);
+}
+
+.photoCard .cardBottom {
+  margin-top: 55px;
+  text-align: center;
+}
+
+.photoCard .cardBottom img {
+  width: 100px;
+}
+
+/*-------- 카드 등급 --------*/
+.gradeCategory .gradeCommon {
+  color: var(--color-brand-yellow);
+}
+
+.gradeCategory .gradeRare {
+  color: var(--color-grade-blue);
+}
+
+.gradeCategory .gradeSuperRare {
+  color: var(--color-grade-purple);
+}
+
+.gradeCategory .gradeLegendary {
+  color: var(--color-grade-pink);
+}
+
+
+/*-------- 솔드아웃 스타일 --------*/
 .soldOut {
   position: absolute;
   inset: 0;
@@ -43,22 +138,52 @@
 }
 
 /* SOLD OUT 아이콘 */
-.soldOut > img {
+.soldOut>img {
   position: relative;
   z-index: 1;
-  width: 60%; 
+  width: 50%;
   max-width: 170px;
   height: auto;
 }
 
-/* 카드 텍스트 컨텐츠 */
-.textWrap{
-  color: var(--pure-white);
-  margin-top: 25px;
+@media (max-width: 1199px) {
+  .photoCard {
+    padding: 20px;
+  }
+
+  .photoCard .cardBottom {
+    margin-top: 45px;
+  }
 }
 
-.textWrap .name {
-  margin-bottom: 10px;
-  font-size: 22px;
-  font-weight: bold;
+@media(max-width:743px) {
+  .photoCard {
+    padding: 10px;
+  }
+
+  .photoCard .textWrap .name {
+    font-size: 14px;
+  }
+
+  .photoCard .infoWrap {
+    padding-bottom: 10px;
+  }
+
+  .photoCard .textWrap {
+    font-size: 10px;
+    margin-top: 10px;
+  }
+
+  .photoCard .gradeCategory .line {
+    height: 10px;
+    margin: 5px;
+  }
+
+  .photoCard .saleInfo .data {
+    font-size: 10px;
+  }
+
+  .photoCard .cardBottom {
+    display: none;
+  }
 }
