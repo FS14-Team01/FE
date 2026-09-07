@@ -17,7 +17,6 @@
   
   width: 1034px;
   padding: 50px 0;
-  border-radius: 2px;
   color: var(--color-white);
   border-radius: 20px;
   background: var(--color-gray-500);
@@ -203,7 +202,7 @@
   }
 
   .title {
-    font-size: 30px;;
+    font-size: 30px;
   }
 
   .description {
@@ -231,5 +230,4 @@
     width: 300px;
     height: 55px;
   }
-  
 }

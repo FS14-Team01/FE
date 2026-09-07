@@ -63,10 +63,7 @@ export default function RandomSelection({ setStep, onClose }) {
           />
         </button>
 
-        <h2 
-          className={styles.title}
-          id="random-point-selection-title"
-        >
+        <h2 className={styles.title} id="random-point-selection-title">
           랜덤<span>포인트</span>
         </h2>
 
@@ -123,7 +120,7 @@ export default function RandomSelection({ setStep, onClose }) {
                   key={randomBox.id}
                   className={styles.unselectedPoint}
                 >
-                  {RANDOM_POINT_RESULT.unselectedAmounts[unselectedBoxes.findIndex(box => box.id === randomBox.id)]}
+                  {RANDOM_POINT_RESULT.unselectedAmounts[unselectedBoxes.findIndex(box => box.id === randomBox.id)]}P
                 </p>
               )
             ))

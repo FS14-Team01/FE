@@ -12,9 +12,7 @@ export default function MainLayout({ children }) {
 
   return (
     <>
-      <Header 
-        onRandomBoxClick={openRandomPoint}
-      />
+      <Header onRandomBoxClick={openRandomPoint} />
       <main>{children}</main>
 
       {isRandomPointOpen && (

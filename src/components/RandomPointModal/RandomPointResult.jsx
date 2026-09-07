@@ -26,10 +26,7 @@ export default function RandomPointResult({ onClose }) {
           />
         </button>
 
-        <h2 
-          className={styles.title}
-          id="random-point-result-title"
-        >
+        <h2 className={styles.title} id="random-point-result-title">
           랜덤<span>포인트</span>
         </h2>
 
