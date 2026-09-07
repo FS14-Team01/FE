@@ -5,9 +5,9 @@
   height: 626px;
   overflow: hidden;
 
-  color: #ffffff;
-  background: #161616;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  background: var(--color-gray-500);
+  border: 1px solid var(--color-gray-300);
   border-radius: 2px;
 }
 
@@ -19,7 +19,7 @@
   height: 270px;
   overflow: hidden;
 
-  background-color: #d9d9d9;
+  background-color: var(--color-gray-200);
   background-image: var(--photo-card-image);
   background-position: center;
   background-size: cover;
@@ -70,13 +70,13 @@
 }
 
 .purchasePrice strong {
-  color: #ffffff;
+  color: var(--color-white);
   font-weight: 400;
 }
 
 .purchasePrice > span:last-child {
   margin-left: -5px;
-  color: #a4a4a4;
+  color: var(--color-gray-200);
 }
 
 .grade {
@@ -86,27 +86,27 @@
 }
 
 .common {
-  color: #efff04;
+  color: var(--color-brand-yellow);
 }
 
 .rare {
-  color: #29c9f9;
+  color: var(--color-grade-blue);
 }
 
 .super_rare {
-  color: #a77eff;
+  color: var(--color-grade-purple);
 }
 
 .legendary {
-  color: #ff2a6a;
+  color: var(--color-grade-pink);
 }
 
 .separator {
-  color: #5a5a5a;
+  color: var(--color-gray-400);
 }
 
 .category {
-  color: #a4a4a4;
+  color: var(--color-gray-200);
 }
 
 .nickname {
@@ -114,7 +114,7 @@
   margin-left: 12px;
   overflow: hidden;
 
-  color: #ffffff;
+  color: var(--color-white);
   text-decoration: underline;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -123,7 +123,7 @@
 .rule {
   height: 1px;
   margin: 20px 0;
-  background: #5a5a5a;
+  background: var(--color-gray-400);
 }
 
 .description {
@@ -142,7 +142,7 @@
 .errorMessage {
   overflow: hidden;
   margin: 8px 0 0;
-  color: #ff483d;
+  color: var(--color-error);
   font-size: 12px;
   line-height: 16px;
   text-overflow: ellipsis;
@@ -172,31 +172,31 @@
 }
 
 .actions button:focus-visible {
-  outline: 3px solid #29c9f9;
+  outline: 3px solid var(--color-grade-blue);
   outline-offset: 3px;
 }
 
 .actions button:disabled {
-  cursor: wait;
+  cursor: not-allowed;
   opacity: 0.55;
 }
 
 .reject,
 .cancel {
-  color: #ffffff;
-  background: #161616;
-  border: 1px solid #eeeeee;
+  color: var(--color-white);
+  background: var(--color-gray-500);
+  border: 1px solid var(--color-gray-100);
 }
 
-.buyerActions {
+.requesterActions {
   grid-template-columns: 1fr;
 }
 
 .accept {
-  color: #0f0f0f;
+  color: var(--color-black);
   font-weight: 700 !important;
-  background: #efff04;
-  border: 1px solid #efff04;
+  background: var(--color-brand-yellow);
+  border: 1px solid var(--color-brand-yellow);
 }
 
 .resolvedStatus {
@@ -204,9 +204,9 @@
   grid-column: 1 / -1;
   height: 60px;
   margin: 0;
-  color: #a4a4a4;
-  background: #222;
-  border: 1px solid #5a5a5a;
+  color: var(--color-gray-200);
+  background: var(--color-gray-500);
+  border: 1px solid var(--color-gray-400);
   border-radius: 2px;
   align-items: center;
   justify-content: center;

@@ -53,10 +53,9 @@ function Divider() {
 }
 
 export default function ExchangeCard({
+  currentUserId,
   exchangeOffer,
-  offeredPhotoCard,
   sale,
-  actionMode = 'seller',
   isProcessing = false,
   errorMessage = '',
   onAccept,
@@ -64,17 +63,26 @@ export default function ExchangeCard({
   onCancel,
   className = '',
 }) {
-  const { id: exchangeOfferId, offeredCard, requester } = exchangeOffer
+  const {
+    id: exchangeOfferId,
+    offeredCard,
+    requester,
+    saleListing,
+  } = exchangeOffer
   const status = normalizeEnum(exchangeOffer.status)
   const gradeClassName = getGradeClassName(offeredCard.grade)
   const gradeLabel = getGradeLabel(offeredCard.grade)
   const categoryLabel = getCategoryLabel(offeredCard.category)
   const isPending = status === 'PENDING'
   const isActionable = isPending && !isProcessing
-  const isBuyerAction = actionMode === 'buyer'
-  const imageStyle = {
-    '--photo-card-image': `url("${offeredPhotoCard.imageUrl}")`,
-  }
+  const isMatchingSale = sale?.id === saleListing.id
+  const isRequester = isMatchingSale && currentUserId === requester.id
+  const isSeller = isMatchingSale && currentUserId === sale?.seller?.id
+  const offerRole = isRequester ? 'requester' : isSeller ? 'seller' : 'viewer'
+  const hasActionPermission = isRequester || isSeller
+  const imageStyle = offeredCard.imageUrl
+    ? { '--photo-card-image': `url("${offeredCard.imageUrl}")` }
+    : undefined
 
   return (
     <article
@@ -82,7 +90,7 @@ export default function ExchangeCard({
       data-card-variant='exchange'
       data-grade={gradeClassName}
       data-status={status.toLowerCase()}
-      data-action-mode={isBuyerAction ? 'buyer' : 'seller'}
+      data-offer-role={offerRole}
       aria-label={`${offeredCard.name}, ${gradeLabel} 등급 교환 제안 카드`}
       aria-busy={isProcessing}
     >
@@ -108,7 +116,7 @@ export default function ExchangeCard({
 
             <span className={styles.purchasePrice}>
               <Divider />
-              <strong>{formatPoints(sale.price)}</strong>
+              <strong>{formatPoints(saleListing.price)}</strong>
               <span>에 구매</span>
             </span>
 
@@ -117,7 +125,9 @@ export default function ExchangeCard({
         </div>
 
         <div className={styles.rule} />
-        <p className={styles.description}>{offeredPhotoCard.description}</p>
+        {offeredCard.description && (
+          <p className={styles.description}>{offeredCard.description}</p>
+        )}
         {errorMessage && (
           <p className={styles.errorMessage} role='alert'>
             {errorMessage}
@@ -127,16 +137,16 @@ export default function ExchangeCard({
 
       <div
         className={`${styles.actions} ${
-          isBuyerAction ? styles.buyerActions : ''
+          isRequester ? styles.requesterActions : ''
         }`.trim()}
       >
-        {isPending ? (
-          isBuyerAction ? (
+        {isPending && hasActionPermission ? (
+          isRequester ? (
             <button
               type='button'
               className={styles.cancel}
               onClick={() => onCancel?.({ exchangeOfferId })}
-              disabled={!isActionable}
+              disabled={!isActionable || !onCancel}
             >
               <span className={styles.desktopButtonText}>
                 {isProcessing ? '처리 중' : '취소하기'}
@@ -151,7 +161,7 @@ export default function ExchangeCard({
                 type='button'
                 className={styles.reject}
                 onClick={() => onReject?.({ exchangeOfferId })}
-                disabled={!isActionable}
+                disabled={!isActionable || !onReject}
               >
                 <span className={styles.desktopButtonText}>
                   {isProcessing ? '처리 중' : '거절하기'}
@@ -164,7 +174,7 @@ export default function ExchangeCard({
                 type='button'
                 className={styles.accept}
                 onClick={() => onAccept?.({ exchangeOfferId })}
-                disabled={!isActionable}
+                disabled={!isActionable || !onAccept}
               >
                 <span className={styles.desktopButtonText}>
                   {isProcessing ? '처리 중' : '승인하기'}
