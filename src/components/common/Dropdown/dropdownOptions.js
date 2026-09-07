@@ -28,3 +28,4 @@ export const MARKET_SORT_OPTIONS = [
   { value: 'priceAsc', label: '낮은 가격순' },
   { value: 'priceDesc', label: '높은 가격순' },
 ];
+
