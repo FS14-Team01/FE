@@ -19,7 +19,19 @@ function NotificationIcon() {
   )
 }
 
-export default function Header({ user = null, onLogout, onNotificationClick }) {
+function RandomBoxIcon() {
+  return (
+    <Image
+      src="/assets/ic_random_box_red.png"
+      alt=""
+      width={39}
+      height={32}
+      className={styles.randomBoxIcon}
+    />
+  )
+}
+
+export default function Header({ user = null, onLogout, onRandomBoxClick, onNotificationClick }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const isAuthenticated = Boolean(user)
   const closeMenu = () => setIsMenuOpen(false)
@@ -53,6 +65,14 @@ export default function Header({ user = null, onLogout, onNotificationClick }) {
         <nav className={styles.navigation} aria-label="주요 메뉴">
           {isAuthenticated ? (
             <>
+              <button
+                type="button"
+                className={styles.randomBoxButton}
+                aria-label="랜덤 포인트 뽑기"
+                onClick={onRandomBoxClick}
+              >
+                <RandomBoxIcon />
+              </button>
               <button
                 type="button"
                 className={styles.notificationButton}
@@ -94,14 +114,24 @@ export default function Header({ user = null, onLogout, onNotificationClick }) {
           </Link>
         )}
         {isAuthenticated && (
-          <button
-            type="button"
-            className={styles.mobileNotificationButton}
-            aria-label="알림 보기"
-            onClick={onNotificationClick}
-          >
-            <NotificationIcon />
-          </button>
+          <div className={styles.mobileActions}>
+            <button
+                type="button"
+                className={styles.randomBoxButton}
+                aria-label="랜덤 포인트 뽑기"
+                onClick={onRandomBoxClick}
+              >
+                <RandomBoxIcon />
+              </button>
+            <button
+              type="button"
+              className={styles.mobileNotificationButton}
+              aria-label="알림 보기"
+              onClick={onNotificationClick}
+            >
+              <NotificationIcon />
+            </button>
+          </div>
         )}
       </div>
 
