@@ -136,7 +136,7 @@ export default function MobileFilterSheet({
                     type="button"
                     role="option"
                     aria-selected={draft[activeTab] === option.value}
-                    className={styles.option}
+                    className={`${styles.option} ${activeTab === 'grade' ? styles[option.value.toLowerCase()] : ''}`}
                     onClick={() => handleSelect(option.value)}
                   >
                     <span>{option.label}</span>
