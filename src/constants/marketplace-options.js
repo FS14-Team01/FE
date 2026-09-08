@@ -26,9 +26,10 @@ export const SALE_STATUS_LABELS = {
   CANCELLED: '판매 취소',
 };
 
-export const SALE_STATUS_OPTIONS = Object.entries(SALE_STATUS_LABELS).map(
-  ([value, label]) => ({ value, label }),
-);
+export const SALE_STATUS_OPTIONS = [
+  { value: 'ON_SALE', label: SALE_STATUS_LABELS.ON_SALE },
+  { value: 'SOLD_OUT', label: SALE_STATUS_LABELS.SOLD_OUT },
+];
 
 export const EXCHANGE_STATUS_LABELS = {
   PENDING: '대기 중',
