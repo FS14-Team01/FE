@@ -1,26 +1,11 @@
 'use client'
 
+import {
+  getCardCategoryLabel,
+  getCardGradeLabel,
+  getExchangeStatusLabel,
+} from '@/constants/marketplace-options'
 import styles from './ExchangeCard.module.css'
-
-const CARD_GRADE_LABELS = {
-  COMMON: 'COMMON',
-  RARE: 'RARE',
-  SUPER_RARE: 'SUPER RARE',
-  LEGENDARY: 'LEGENDARY',
-}
-
-const CARD_CATEGORY_LABELS = {
-  POKEMON: '포켓몬',
-  SUPER_MARIO: '슈퍼 마리오',
-  HELLO_KITTY: '헬로키티',
-  DIGIMON: '디지몬',
-}
-
-const EXCHANGE_STATUS_LABELS = {
-  ACCEPTED: '승인 완료',
-  REJECTED: '거절 완료',
-  CANCELLED: '취소됨',
-}
 
 function normalizeEnum(value) {
   return String(value).trim().toUpperCase().replaceAll(' ', '_')
@@ -28,16 +13,6 @@ function normalizeEnum(value) {
 
 function getGradeClassName(grade) {
   return normalizeEnum(grade).toLowerCase()
-}
-
-function getGradeLabel(grade) {
-  const key = normalizeEnum(grade)
-  return CARD_GRADE_LABELS[key] ?? key.replaceAll('_', ' ')
-}
-
-function getCategoryLabel(category) {
-  const key = normalizeEnum(category)
-  return CARD_CATEGORY_LABELS[key] ?? String(category)
 }
 
 function formatPoints(points) {
@@ -70,8 +45,10 @@ export default function ExchangeCard({
   } = exchangeOffer
   const status = normalizeEnum(exchangeOffer.status)
   const gradeClassName = getGradeClassName(offeredCard.grade)
-  const gradeLabel = getGradeLabel(offeredCard.grade)
-  const categoryLabel = getCategoryLabel(offeredCard.category)
+  const gradeLabel = getCardGradeLabel(normalizeEnum(offeredCard.grade))
+  const categoryLabel = getCardCategoryLabel(
+    normalizeEnum(offeredCard.category),
+  )
   const isPending = status === 'PENDING'
   const isActionable = isPending && !isProcessing
   const isRequester = viewerRole === 'requester'
@@ -187,7 +164,7 @@ export default function ExchangeCard({
           )
         ) : (
           <p className={styles.resolvedStatus} role="status">
-            {EXCHANGE_STATUS_LABELS[status] ?? status}
+            {getExchangeStatusLabel(status)}
           </p>
         )}
       </div>
