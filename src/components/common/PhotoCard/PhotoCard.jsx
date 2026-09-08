@@ -40,7 +40,7 @@ export default function PhotoCard({
         {/* SOLD_OUT일 때만 표시 */}
         {status === 'SOLD_OUT' && (
           <div className={styles.soldOut}>
-            <img src="../assets/ic_soldout.svg" alt="ic_soldout" />
+            <img src="/assets/ic_soldout.svg" alt="ic_soldout" />
             <div className={styles.dim}></div>
           </div>
         )}
