@@ -90,7 +90,6 @@ export default function PhotoCard({
               <div className={styles.title}>
                 가격
               </div>
-
               <div className={styles.data}>
                 {price} P
               </div>
