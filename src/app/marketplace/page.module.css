@@ -27,7 +27,6 @@
   align-items: center;
   gap: 38px;
   padding: 20px 0;
-  border-bottom: 1px solid var(--color-gray-400);
 }
 
 /* 정렬만 오른쪽 끝으로 밀어냄 */
