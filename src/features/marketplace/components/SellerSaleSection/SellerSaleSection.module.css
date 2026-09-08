@@ -1,0 +1,56 @@
+.section {
+  width: 100%;
+  margin-top: 48px;
+}
+
+.heading {
+  border-bottom: 2px solid var(--color-gray-200);
+}
+
+.title {
+  margin: 0;
+  padding-bottom: 14px;
+  font-size: 24px;
+}
+
+.preference {
+  min-height: 112px;
+}
+
+.actions {
+  display: grid;
+  gap: 12px;
+}
+
+.primary,
+.secondary {
+  min-height: 56px;
+  border: 1px solid var(--color-gray-200);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary {
+  border-color: var(--color-brand-yellow);
+  color: var(--color-black);
+  background: var(--color-brand-yellow);
+}
+
+.secondary {
+  color: var(--color-white);
+  background: transparent;
+}
+
+@media (max-width: 743px) {
+  .section {
+    margin-top: 40px;
+  }
+
+  .heading {
+    border-bottom-width: 1px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+}

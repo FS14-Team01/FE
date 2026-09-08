@@ -23,10 +23,7 @@ const EXCHANGE_STATUS_LABELS = {
 }
 
 function normalizeEnum(value) {
-  return String(value)
-    .trim()
-    .toUpperCase()
-    .replaceAll(' ', '_')
+  return String(value).trim().toUpperCase().replaceAll(' ', '_')
 }
 
 function getGradeClassName(grade) {
@@ -48,11 +45,15 @@ function formatPoints(points) {
 }
 
 function Divider() {
-  return <span className={styles.separator} aria-hidden='true'>|</span>
+  return (
+    <span className={styles.separator} aria-hidden="true">
+      |
+    </span>
+  )
 }
 
 export default function ExchangeCard({
-  currentUserId,
+  viewerRole,
   exchangeOffer,
   isProcessing = false,
   errorMessage = '',
@@ -73,12 +74,12 @@ export default function ExchangeCard({
   const categoryLabel = getCategoryLabel(offeredCard.category)
   const isPending = status === 'PENDING'
   const isActionable = isPending && !isProcessing
-  const isRequester = currentUserId === requester.id
-  const isSeller = currentUserId === saleListing.sellerId
+  const isRequester = viewerRole === 'requester'
+  const isSeller = viewerRole === 'seller'
   const imageStyle = offeredCard.imageUrl
     ? { '--photo-card-image': `url("${offeredCard.imageUrl}")` }
     : undefined
-
+  // 구조적으로는 isSeller가 크게 필요하지 않지만 두 역할을 명시적으로 검증하려는 목적
   if (!isRequester && !isSeller) {
     return null
   }
@@ -86,7 +87,7 @@ export default function ExchangeCard({
   return (
     <article
       className={`${styles.card} ${className}`.trim()}
-      data-card-variant='exchange'
+      data-card-variant="exchange"
       data-grade={gradeClassName}
       data-status={status.toLowerCase()}
       aria-label={`${offeredCard.name}, ${gradeLabel} 등급 교환 제안 카드`}
@@ -94,7 +95,7 @@ export default function ExchangeCard({
     >
       <div
         className={styles.image}
-        role='img'
+        role="img"
         aria-label={`${offeredCard.name} 포토카드 이미지`}
         style={imageStyle}
       />
@@ -126,8 +127,9 @@ export default function ExchangeCard({
         {offeredCard.description && (
           <p className={styles.description}>{offeredCard.description}</p>
         )}
+        {/* 추후 공통 에러 객체로 리팩터링 */}
         {errorMessage && (
-          <p className={styles.errorMessage} role='alert'>
+          <p className={styles.errorMessage} role="alert">
             {errorMessage}
           </p>
         )}
@@ -141,7 +143,7 @@ export default function ExchangeCard({
         {isPending ? (
           isRequester ? (
             <button
-              type='button'
+              type="button"
               className={styles.cancel}
               onClick={() => onCancel?.({ exchangeOfferId })}
               disabled={!isActionable || !onCancel}
@@ -156,7 +158,7 @@ export default function ExchangeCard({
           ) : (
             <>
               <button
-                type='button'
+                type="button"
                 className={styles.reject}
                 onClick={() => onReject?.({ exchangeOfferId })}
                 disabled={!isActionable || !onReject}
@@ -169,7 +171,7 @@ export default function ExchangeCard({
                 </span>
               </button>
               <button
-                type='button'
+                type="button"
                 className={styles.accept}
                 onClick={() => onAccept?.({ exchangeOfferId })}
                 disabled={!isActionable || !onAccept}
@@ -184,7 +186,7 @@ export default function ExchangeCard({
             </>
           )
         ) : (
-          <p className={styles.resolvedStatus} role='status'>
+          <p className={styles.resolvedStatus} role="status">
             {EXCHANGE_STATUS_LABELS[status] ?? status}
           </p>
         )}

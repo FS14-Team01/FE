@@ -1,0 +1,36 @@
+.section {
+  width: 100%;
+}
+
+.compact {
+  margin-top: 48px;
+}
+
+.full {
+  margin-top: 100px;
+}
+
+.heading {
+  border-bottom: 2px solid var(--color-gray-200);
+}
+
+.title {
+  margin: 0;
+  padding-bottom: 14px;
+  font-size: 24px;
+}
+
+@media (max-width: 743px) {
+  .section {
+    margin-top: 72px;
+  }
+
+  .heading {
+    border-bottom-width: 1px;
+  }
+
+  .title {
+    padding-bottom: 12px;
+    font-size: 22px;
+  }
+}
