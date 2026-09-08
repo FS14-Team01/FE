@@ -6,10 +6,13 @@ export default function PhotoCard(
     name,
     grade,
     category,
+    creatorNickname,
     price,
     initialQuantity,
     remainingQuantity,
+    quantity,
     status,
+    variant,
     showPrice = true
   }
 ) {
@@ -51,7 +54,7 @@ export default function PhotoCard(
             </div>
           </div>
           <div className={styles.ownerName}>
-            미쓰손
+            {creatorNickname}
           </div>
         </div>
         <div className={styles.saleInfo}>
@@ -69,10 +72,10 @@ export default function PhotoCard(
 
           <div className={styles.supply}>
             <div className={styles.title}>
-              잔여
+              {variant === "ownership" ? "수량" : "잔여"}
             </div>
             <div className={styles.data}>
-              {remainingQuantity}<span> / {initialQuantity}</span>
+              {variant === "ownership" ? quantity : <>{remainingQuantity}<span> / {initialQuantity}</span></>}
             </div>
           </div>
         </div>

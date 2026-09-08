@@ -133,8 +133,7 @@
 .soldOut .dim {
   position: absolute;
   inset: 0;
-
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-overlay-black);
 }
 
 /* SOLD OUT 아이콘 */
