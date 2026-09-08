@@ -108,7 +108,7 @@ export default function PhotoCard({
         </div>
 
         <div className={styles.cardBottom}>
-          <img src="../assets/logo.png" alt="logo" />
+          <img src="/assets/logo.png" alt="logo" />
         </div>
       </div>
     </CardWrapper>
