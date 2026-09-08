@@ -1,7 +1,19 @@
+import {
+  getCardCategoryLabel,
+  getCardGradeLabel,
+} from '@/constants/marketplace-options';
 import styles from './SaleCardOverview.module.css';
+
+const GRADE_CLASS_NAMES = {
+  COMMON: 'common',
+  RARE: 'rare',
+  SUPER_RARE: 'superRare',
+  LEGENDARY: 'legendary',
+};
 
 export default function SaleCardOverview({ sale, children }) {
   const { photoCard, seller } = sale;
+  const gradeClassName = GRADE_CLASS_NAMES[photoCard.grade];
 
   return (
     <section className={styles.section} aria-labelledby="sale-card-title">
@@ -22,8 +34,14 @@ export default function SaleCardOverview({ sale, children }) {
 
         <div className={styles.information}>
           <div className={styles.meta}>
-            <strong className={styles.grade}>{photoCard.grade}</strong>
-            <span className={styles.category}>{photoCard.category}</span>
+            <strong
+              className={`${styles.grade} ${styles[gradeClassName] ?? ''}`}
+            >
+              {getCardGradeLabel(photoCard.grade)}
+            </strong>
+            <span className={styles.category}>
+              {getCardCategoryLabel(photoCard.category)}
+            </span>
             <span className={styles.seller}>{seller.nickname}</span>
           </div>
 

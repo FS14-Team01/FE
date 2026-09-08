@@ -67,6 +67,22 @@
 }
 
 .grade {
+  color: var(--color-white);
+}
+
+.common {
+  color: var(--color-brand-yellow);
+}
+
+.rare {
+  color: var(--color-grade-blue);
+}
+
+.superRare {
+  color: var(--color-grade-purple);
+}
+
+.legendary {
   color: var(--color-grade-pink);
 }
 

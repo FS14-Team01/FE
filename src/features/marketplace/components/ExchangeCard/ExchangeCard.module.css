@@ -51,22 +51,31 @@
 }
 
 .metaLine {
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 10px;
   min-width: 0;
-  height: 23px;
+  height: 56px;
   font-size: 16px;
   line-height: 19px;
 }
 
-.metaStart,
-.purchasePrice {
+.metaStart {
+  grid-column: 1 / -1;
   gap: 10px;
   min-width: 0;
 }
 
 .purchasePrice {
-  margin-right: auto;
-  margin-left: 10px;
+  grid-column: 1;
+  grid-row: 2;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+}
+
+.purchasePrice > .separator {
+  display: none;
 }
 
 .purchasePrice strong {
@@ -110,6 +119,8 @@
 }
 
 .nickname {
+  grid-column: 2;
+  grid-row: 2;
   flex: none;
   margin-left: 12px;
   overflow: hidden;
@@ -235,32 +246,6 @@
     top: 272px;
     right: 20px;
     left: 20px;
-  }
-
-  .metaLine {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    row-gap: 10px;
-    height: 56px;
-  }
-
-  .metaStart {
-    grid-column: 1 / -1;
-  }
-
-  .purchasePrice {
-    grid-column: 1;
-    grid-row: 2;
-    margin: 0;
-  }
-
-  .purchasePrice > .separator {
-    display: none;
-  }
-
-  .nickname {
-    grid-column: 2;
-    grid-row: 2;
   }
 
   .actions {
