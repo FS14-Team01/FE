@@ -61,6 +61,7 @@
 
 .authLink:focus-visible,
 .nickname:focus-visible,
+.randomBoxButton:focus-visible,
 .notificationButton:focus-visible,
 .logoLink:focus-visible,
 .menuButton:focus-visible,
@@ -70,6 +71,7 @@
   outline-offset: 4px;
 }
 
+.randomBoxButton,
 .notificationButton {
   display: inline-flex;
   width: 38px;
@@ -96,6 +98,7 @@
 }
 
 .menuButton,
+.randomBoxButton,
 .notificationButton,
 .mobileNotificationButton {
   padding: 0;
@@ -113,6 +116,7 @@
   justify-content: center;
 }
 
+.mobileActions,
 .backdrop,
 .drawer {
   display: none;
@@ -152,6 +156,17 @@
 
   .navigation {
     display: none;
+  }
+
+  .mobileActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .randomBoxButton .randomBoxIcon {
+    width: 35px;
+    height: auto;
   }
 
   .mobileNotificationButton {
