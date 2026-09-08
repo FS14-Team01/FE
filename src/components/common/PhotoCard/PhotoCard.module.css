@@ -120,7 +120,8 @@
 }
 
 
-/*-------- 솔드아웃 스타일 --------*/
+/*-------- 카드 상태 --------*/
+/* soldout */
 .soldOut {
   position: absolute;
   inset: 0;
@@ -145,6 +146,23 @@
   height: auto;
 }
 
+/* 판매 중 */
+.saleTag {
+  position: absolute;
+  background-color: var(--color-overlay-black);
+  z-index: 999;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 2px;
+
+  box-sizing: border-box;
+}
+
+.onChange {
+  color: var(--color-brand-yellow);
+}
+
 @media (max-width: 1199px) {
   .photoCard {
     padding: 20px;
@@ -152,6 +170,10 @@
 
   .photoCard .cardBottom {
     margin-top: 45px;
+  }
+
+  .saleTag {
+    font-size: 14px;
   }
 }
 
@@ -184,5 +206,11 @@
 
   .photoCard .cardBottom {
     display: none;
+  }
+
+  .saleTag {
+    top: 5px;
+    left: 5px;
+    font-size: 10px;
   }
 }
