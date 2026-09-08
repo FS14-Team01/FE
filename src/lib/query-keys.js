@@ -57,9 +57,6 @@ export const exchangeKeys = {
   sent: () => [...exchangeKeys.all, 'sent'],
   /** filters: { limit } */
   sentList: (filters) => [...exchangeKeys.sent(), filters],
-  // 단건 조회는 제안자와 판매자가 모두 보므로 받은/보낸과 분리합니다
-  details: () => [...exchangeKeys.all, 'detail'],
-  detail: (exchangeOfferId) => [...exchangeKeys.details(), exchangeOfferId],
 };
 
 /* 알림 — GET /notifications */
