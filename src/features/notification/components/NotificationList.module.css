@@ -1,0 +1,12 @@
+.wrapper {
+  width: 300px;
+  max-height: 535px;
+  overflow-y: auto;
+  border-radius: 2px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
