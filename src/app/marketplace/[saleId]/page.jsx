@@ -1,5 +1,5 @@
-import ResponsiveHeader from '@/components/common/ResponsiveHeader/ResponsiveHeader';
-import SaleDetailContent from '@/features/marketplace/components/SaleDetailPage/SaleDetailPage';
+import ResponsiveHeader from "@/components/common/ResponsiveHeader/ResponsiveHeader";
+import SaleDetailContent from "@/features/marketplace/components/SaleDetailPage/SaleDetailPage";
 
 export default async function SaleDetailRoute({ params }) {
   const { saleId } = await params;

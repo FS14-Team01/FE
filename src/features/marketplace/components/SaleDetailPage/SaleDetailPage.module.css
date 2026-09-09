@@ -1,9 +1,7 @@
 .main,
 .state {
   width: 100%;
-  max-width: calc(
-    var(--layout-max-width) + (var(--layout-padding) * 2)
-  );
+  max-width: calc(var(--layout-max-width) + (var(--layout-padding) * 2));
   margin: 0 auto;
   padding: 60px var(--layout-padding) 120px;
 }

@@ -5,12 +5,11 @@ export {
   CARD_CATEGORY_OPTIONS as CATEGORY_OPTIONS,
   SALE_STATUS_OPTIONS,
   EXCHANGE_STATUS_OPTIONS,
-} from '@/constants/marketplace-options';
+} from "@/constants/marketplace-options";
 
 /** 마켓플레이스 목록 정렬 */
 export const MARKET_SORT_OPTIONS = [
-  { value: 'recent', label: '최신순' },
-  { value: 'priceAsc', label: '낮은 가격순' },
-  { value: 'priceDesc', label: '높은 가격순' },
+  { value: "recent", label: "최신순" },
+  { value: "priceAsc", label: "낮은 가격순" },
+  { value: "priceDesc", label: "높은 가격순" },
 ];
-
