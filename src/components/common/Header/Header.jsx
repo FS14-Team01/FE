@@ -148,14 +148,13 @@ export default function Header({
             >
               <RandomBoxIcon />
             </button>
-            <button
-              type="button"
+            <Link
+              href="/notifications"
               className={styles.mobileNotificationButton}
               aria-label="알림 보기"
-              onClick={onNotificationClick}
             >
               <NotificationIcon />
-            </button>
+            </Link>
           </div>
         )}
       </div>
