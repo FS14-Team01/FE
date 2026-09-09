@@ -98,6 +98,7 @@ export default function MarketplacePage() {
 
         <div className={styles.filterRow}>
           <SearchInput
+            className={styles.searchInput}
             value={keyword}
             onChange={setKeyword}
             onSearch={handleSearch}
