@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import styles from './MobilePageHeader.module.css';
+import { useRouter } from "next/navigation";
+import styles from "./MobilePageHeader.module.css";
 
 export default function MobilePageHeader({ title }) {
   const router = useRouter();

@@ -8,13 +8,13 @@
  * 키 이름이 바뀌거나 저장 위치가 바뀌어도 이 파일만 고치면 됩니다.
  */
 
-const ACCESS_TOKEN_KEY = 'accessToken';
+const ACCESS_TOKEN_KEY = "accessToken";
 
 /** localStorage가 막혀도 새로고침 전까지는 로그인이 유지되도록 하는 대체 보관소 */
 let memoryToken = null;
 
 /** SSR·빌드 시점에는 window가 없습니다 */
-const canUseStorage = () => typeof window !== 'undefined';
+const canUseStorage = () => typeof window !== "undefined";
 
 export function getAccessToken() {
   if (!canUseStorage()) return null;

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useQuery } from '@tanstack/react-query';
-import { marketKeys } from '@/lib/query-keys';
-import { getSaleDetail } from '../api/sales-api';
+import { useQuery } from "@tanstack/react-query";
+import { marketKeys } from "@/lib/query-keys";
+import { getSaleDetail } from "../api/sales-api";
 
 export default function useSaleDetail(saleId) {
   return useQuery({

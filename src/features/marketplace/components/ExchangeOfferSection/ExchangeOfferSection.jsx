@@ -1,6 +1,21 @@
-import styles from './ExchangeOfferSection.module.css'
+"use client";
+
+import ExchangeCard from "@/features/marketplace/components/ExchangeCard/ExchangeCard";
+import useExchangeOffers from "@/features/marketplace/hooks/use-exchange-offers";
+import styles from "./ExchangeOfferSection.module.css";
 
 export default function ExchangeOfferSection({ saleId }) {
+  const {
+    data: exchangeOfferData,
+    isPending,
+    isError,
+    error,
+  } = useExchangeOffers(saleId);
+
+  const exchangeOffers = Array.isArray(exchangeOfferData)
+    ? exchangeOfferData
+    : (exchangeOfferData?.items ?? []);
+
   return (
     <section
       className={styles.section}
@@ -14,8 +29,28 @@ export default function ExchangeOfferSection({ saleId }) {
       </div>
 
       <div className={styles.content}>
-        {/* 교환 제시 목록, 승인 및 거절 기능 */}
+        {isPending && <p>교환 제안 목록을 불러오는 중입니다.</p>}
+
+        {isError && (
+          <p role="alert">
+            {error?.message ?? "교환 제안 목록을 불러오지 못했습니다."}
+          </p>
+        )}
+
+        {!isPending && !isError && exchangeOffers.length === 0 && (
+          <p>아직 받은 교환 제안이 없습니다.</p>
+        )}
+
+        {!isPending &&
+          !isError &&
+          exchangeOffers.map((exchangeOffer) => (
+            <ExchangeCard
+              key={exchangeOffer.id}
+              viewerRole="seller"
+              exchangeOffer={exchangeOffer}
+            />
+          ))}
       </div>
     </section>
-  )
+  );
 }

@@ -50,8 +50,8 @@
   width: 18px;
   height: 18px;
   background: var(--color-gray-200);
-  mask: url('/assets/ic_search.png') no-repeat center / contain;
-  -webkit-mask: url('/assets/ic_search.png') no-repeat center / contain;
+  mask: url("/assets/ic_search.png") no-repeat center / contain;
+  -webkit-mask: url("/assets/ic_search.png") no-repeat center / contain;
 }
 
 /* 반응형: 태블릿 */
