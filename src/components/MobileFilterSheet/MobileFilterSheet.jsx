@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Image from "next/image";
 import styles from "./MobileFilterSheet.module.css";
 
@@ -10,8 +10,10 @@ const TABS = [
   { key: "saleStatus", label: "매진 여부" },
 ];
 
+const EMPTY_SELECTION = { tab: undefined, value: undefined };
+
 /**
- * 모바일 전용 통합 필터 바텀시트
+ * 모바일 전용 통합 필터 바텀시트. 등급/장르/매진 여부 중 한 번에 하나의 필터만 적용된다.
  *
  * @param {{ value: string, label: string }[]} gradeOptions
  * @param {{ value: string, label: string }[]} categoryOptions
@@ -36,7 +38,7 @@ export default function MobileFilterSheet({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("grade");
-  const [draft, setDraft] = useState({ grade, category, saleStatus });
+  const [selection, setSelection] = useState(EMPTY_SELECTION);
   const titleId = useId();
 
   const optionsByTab = {
@@ -45,8 +47,25 @@ export default function MobileFilterSheet({
     saleStatus: saleStatusOptions,
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [isOpen]);
+
+  const getCurrentSelection = () => {
+    if (grade) return { tab: "grade", value: grade };
+    if (category) return { tab: "category", value: category };
+    if (saleStatus) return { tab: "saleStatus", value: saleStatus };
+    return EMPTY_SELECTION;
+  };
+
   const handleOpen = () => {
-    setDraft({ grade, category, saleStatus });
+    setSelection(getCurrentSelection());
     setActiveTab("grade");
     setIsOpen(true);
   };
@@ -54,18 +73,23 @@ export default function MobileFilterSheet({
   const handleClose = () => setIsOpen(false);
 
   const handleSelect = (optionValue) => {
-    setDraft((prev) => ({
-      ...prev,
-      [activeTab]: prev[activeTab] === optionValue ? undefined : optionValue,
-    }));
+    setSelection((prev) =>
+      prev.tab === activeTab && prev.value === optionValue
+        ? EMPTY_SELECTION
+        : { tab: activeTab, value: optionValue },
+    );
   };
 
   const handleReset = () => {
-    setDraft((prev) => ({ ...prev, [activeTab]: undefined }));
+    setSelection((prev) => (prev.tab === activeTab ? EMPTY_SELECTION : prev));
   };
 
   const handleApply = () => {
-    onApply?.(draft);
+    onApply?.({
+      grade: selection.tab === "grade" ? selection.value : undefined,
+      category: selection.tab === "category" ? selection.value : undefined,
+      saleStatus: selection.tab === "saleStatus" ? selection.value : undefined,
+    });
     setIsOpen(false);
   };
 
@@ -135,7 +159,10 @@ export default function MobileFilterSheet({
                   <button
                     type="button"
                     role="option"
-                    aria-selected={draft[activeTab] === option.value}
+                    aria-selected={
+                      selection.tab === activeTab &&
+                      selection.value === option.value
+                    }
                     className={`${styles.option} ${activeTab === "grade" ? styles[option.value.toLowerCase()] : ""}`}
                     onClick={() => handleSelect(option.value)}
                   >

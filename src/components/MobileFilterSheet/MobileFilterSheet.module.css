@@ -81,7 +81,8 @@
 }
 
 .tab:focus-visible {
-  outline: none;
+  outline: 2px solid var(--color-white);
+  outline-offset: -2px;
 }
 
 .tabActive {
