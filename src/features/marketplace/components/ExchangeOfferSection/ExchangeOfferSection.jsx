@@ -6,11 +6,15 @@ import styles from "./ExchangeOfferSection.module.css";
 
 export default function ExchangeOfferSection({ saleId }) {
   const {
-    data: exchangeOffers = [],
+    data: exchangeOfferData,
     isPending,
     isError,
     error,
   } = useExchangeOffers(saleId);
+
+  const exchangeOffers = Array.isArray(exchangeOfferData)
+    ? exchangeOfferData
+    : (exchangeOfferData?.items ?? []);
 
   return (
     <section
