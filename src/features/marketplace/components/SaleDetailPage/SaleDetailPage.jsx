@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Modal from "@/components/common/Modal/Modal";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
 import ExchangeOfferSection from "../ExchangeOfferSection/ExchangeOfferSection";
@@ -8,7 +10,23 @@ import SaleCardOverview from "../SaleCardOverview/SaleCardOverview";
 import SellerSaleSection from "../SellerSaleSection/SellerSaleSection";
 import styles from "./SaleDetailPage.module.css";
 
+const EXCHANGE_MODAL_TEXT = {
+  accept: {
+    title: "교환 제시 승인",
+    confirmText: "승인하기",
+    actionText: "승인",
+  },
+  reject: {
+    title: "교환 제시 거절",
+    confirmText: "거절하기",
+    actionText: "거절",
+  },
+};
+
 export default function SaleDetailPage({ saleId }) {
+  const [selectedOffer, setSelectedOffer] = useState(null);
+  const [exchangeAction, setExchangeAction] = useState(null);
+
   const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
 
   if (isPending) {
@@ -23,9 +41,44 @@ export default function SaleDetailPage({ saleId }) {
     );
   }
 
-  //인증 유저 기능과 연결 필요
-  //테스트 단계에서는 판매자 입장: const isOwner = true로 설정 / 구매자 입장 : const isOwner = false로 설정
   const isOwner = sale.isOwner === true;
+
+  const handleAccept = (exchangeOffer) => {
+    setSelectedOffer(exchangeOffer);
+    setExchangeAction("accept");
+  };
+
+  const handleReject = (exchangeOffer) => {
+    setSelectedOffer(exchangeOffer);
+    setExchangeAction("reject");
+  };
+
+  const modalText = EXCHANGE_MODAL_TEXT[exchangeAction];
+
+  const cardGrade =
+    typeof selectedOffer?.offeredCard?.grade === "string"
+      ? selectedOffer.offeredCard.grade.trim()
+      : "";
+
+  const cardName =
+    typeof selectedOffer?.offeredCard?.name === "string"
+      ? selectedOffer.offeredCard.name.trim()
+      : "";
+
+  const hasCardInfo = Boolean(cardGrade || cardName);
+
+  const modalMessage =
+    selectedOffer && modalText ? (
+      <>
+        {hasCardInfo && (
+          <>
+            [{cardGrade || "-"} | {cardName || "-"}]
+            <br />
+          </>
+        )}
+        카드와의 교환을 {modalText.actionText}하시겠습니까?
+      </>
+    ) : null;
 
   return (
     <main className={styles.main}>
@@ -41,7 +94,26 @@ export default function SaleDetailPage({ saleId }) {
 
       {!isOwner && <ExchangePreference variant="full" />}
 
-      {isOwner && <ExchangeOfferSection saleId={saleId} />}
+      {isOwner && (
+        <ExchangeOfferSection
+          saleId={saleId}
+          onAccept={handleAccept}
+          onReject={handleReject}
+        />
+      )}
+
+      {selectedOffer && exchangeAction && modalText && (
+        <Modal
+          title={modalText.title}
+          message={modalMessage}
+          confirmText={modalText.confirmText}
+          onConfirm={() => {}}
+          onClose={() => {
+            setSelectedOffer(null);
+            setExchangeAction(null);
+          }}
+        />
+      )}
     </main>
   );
 }
