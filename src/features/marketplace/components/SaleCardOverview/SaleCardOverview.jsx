@@ -1,14 +1,14 @@
 import {
   getCardCategoryLabel,
   getCardGradeLabel,
-} from '@/constants/marketplace-options';
-import styles from './SaleCardOverview.module.css';
+} from "@/constants/marketplace-options";
+import styles from "./SaleCardOverview.module.css";
 
 const GRADE_CLASS_NAMES = {
-  COMMON: 'common',
-  RARE: 'rare',
-  SUPER_RARE: 'superRare',
-  LEGENDARY: 'legendary',
+  COMMON: "common",
+  RARE: "rare",
+  SUPER_RARE: "superRare",
+  LEGENDARY: "legendary",
 };
 
 export default function SaleCardOverview({ sale, children }) {
@@ -35,7 +35,7 @@ export default function SaleCardOverview({ sale, children }) {
         <div className={styles.information}>
           <div className={styles.meta}>
             <strong
-              className={`${styles.grade} ${styles[gradeClassName] ?? ''}`}
+              className={`${styles.grade} ${styles[gradeClassName] ?? ""}`}
             >
               {getCardGradeLabel(photoCard.grade)}
             </strong>
@@ -46,7 +46,7 @@ export default function SaleCardOverview({ sale, children }) {
           </div>
 
           <p className={styles.description}>
-            {photoCard.description ?? '등록된 포토카드 설명이 없습니다.'}
+            {photoCard.description ?? "등록된 포토카드 설명이 없습니다."}
           </p>
 
           <dl className={styles.summary}>
@@ -59,7 +59,7 @@ export default function SaleCardOverview({ sale, children }) {
               <dd>
                 <strong className={styles.remainingQuantity}>
                   {sale.remainingQuantity}
-                </strong>{' '}
+                </strong>{" "}
                 <span className={styles.initialQuantity}>
                   / {sale.initialQuantity}
                 </span>

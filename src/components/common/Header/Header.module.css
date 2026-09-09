@@ -40,7 +40,9 @@
 
 .authLink,
 .nickname {
-  transition: color 160ms ease, opacity 160ms ease;
+  transition:
+    color 160ms ease,
+    opacity 160ms ease;
 }
 
 .authLink {

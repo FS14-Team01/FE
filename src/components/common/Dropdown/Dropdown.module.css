@@ -39,8 +39,8 @@
   width: 16px;
   height: 16px;
   background: currentColor;
-  mask: url('/assets/ic_down.png') no-repeat center / contain;
-  -webkit-mask: url('/assets/ic_down.png') no-repeat center / contain;
+  mask: url("/assets/ic_down.png") no-repeat center / contain;
+  -webkit-mask: url("/assets/ic_down.png") no-repeat center / contain;
   transition: transform 0.15s ease;
 }
 
@@ -89,7 +89,7 @@
   outline-offset: -2px;
 }
 
-.option[aria-selected='true'] {
+.option[aria-selected="true"] {
   color: var(--color-brand-yellow);
 }
 

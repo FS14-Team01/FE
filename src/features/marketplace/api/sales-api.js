@@ -1,4 +1,4 @@
-import apiClient from '@/lib/axios';
+import apiClient from "@/lib/axios";
 
 export async function getSaleDetail(saleId) {
   const response = await apiClient.get(`/sales/${saleId}`);

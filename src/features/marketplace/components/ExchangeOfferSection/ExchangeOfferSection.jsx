@@ -1,4 +1,4 @@
-import styles from './ExchangeOfferSection.module.css'
+import styles from "./ExchangeOfferSection.module.css";
 
 export default function ExchangeOfferSection({ saleId }) {
   return (
@@ -17,5 +17,5 @@ export default function ExchangeOfferSection({ saleId }) {
         {/* 교환 제시 목록, 승인 및 거절 기능 */}
       </div>
     </section>
-  )
+  );
 }
