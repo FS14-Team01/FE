@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Modal from "@/components/common/Modal/Modal";
 import useSaleDetail from "../../hooks/use-sale-detail";
+import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
 import ExchangeOfferSection from "../ExchangeOfferSection/ExchangeOfferSection";
 import PurchaseSection from "../PurchaseSection/PurchaseSection";
@@ -23,11 +24,18 @@ const EXCHANGE_MODAL_TEXT = {
   },
 };
 
+const EXCHANGE_STATUS_BY_ACTION = {
+  accept: "ACCEPTED",
+  reject: "REJECTED",
+};
+
 export default function SaleDetailPage({ saleId }) {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
 
   const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
+
+  const { mutate: updateExchangeOfferStatus } = useUpdateExchangeOfferStatus();
 
   if (isPending) {
     return <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>;
@@ -54,6 +62,7 @@ export default function SaleDetailPage({ saleId }) {
   };
 
   const modalText = EXCHANGE_MODAL_TEXT[exchangeAction];
+  const exchangeStatus = EXCHANGE_STATUS_BY_ACTION[exchangeAction];
 
   const cardGrade =
     typeof selectedOffer?.offeredCard?.grade === "string"
@@ -79,6 +88,15 @@ export default function SaleDetailPage({ saleId }) {
         카드와의 교환을 {modalText.actionText}하시겠습니까?
       </>
     ) : null;
+
+  const handleConfirmExchange = () => {
+    if (!selectedOffer?.id || !exchangeStatus) return;
+
+    updateExchangeOfferStatus({
+      exchangeOfferId: selectedOffer.id,
+      status: exchangeStatus,
+    });
+  };
 
   return (
     <main className={styles.main}>
@@ -107,7 +125,7 @@ export default function SaleDetailPage({ saleId }) {
           title={modalText.title}
           message={modalMessage}
           confirmText={modalText.confirmText}
-          onConfirm={() => {}}
+          onConfirm={handleConfirmExchange}
           onClose={() => {
             setSelectedOffer(null);
             setExchangeAction(null);
