@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Modal from "@/components/common/Modal/Modal";
+import { useToast } from "@/components/common/Toast/ToastProvider";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
@@ -23,10 +24,15 @@ const EXCHANGE_MODAL_TEXT = {
     actionText: "거절",
   },
 };
-
+// UI 액션값은 accept/reject로 관리하고 API요청시 명세 status 값으로 변환
 const EXCHANGE_STATUS_BY_ACTION = {
   accept: "ACCEPTED",
   reject: "REJECTED",
+};
+
+const TOAST_ACTION_BY_EXCHANGE_ACTION = {
+  accept: "exchangeAccept",
+  reject: "exchangeReject",
 };
 
 export default function SaleDetailPage({ saleId }) {
@@ -36,6 +42,8 @@ export default function SaleDetailPage({ saleId }) {
   const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
 
   const { mutate: updateExchangeOfferStatus } = useUpdateExchangeOfferStatus();
+
+  const { showToast } = useToast();
 
   if (isPending) {
     return <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>;
@@ -63,6 +71,7 @@ export default function SaleDetailPage({ saleId }) {
 
   const modalText = EXCHANGE_MODAL_TEXT[exchangeAction];
   const exchangeStatus = EXCHANGE_STATUS_BY_ACTION[exchangeAction];
+  const toastAction = TOAST_ACTION_BY_EXCHANGE_ACTION[exchangeAction];
 
   const cardGrade =
     typeof selectedOffer?.offeredCard?.grade === "string"
@@ -90,12 +99,25 @@ export default function SaleDetailPage({ saleId }) {
     ) : null;
 
   const handleConfirmExchange = () => {
-    if (!selectedOffer?.id || !exchangeStatus) return;
+    if (!selectedOffer?.id || !exchangeStatus || !toastAction) return;
 
-    updateExchangeOfferStatus({
-      exchangeOfferId: selectedOffer.id,
-      status: exchangeStatus,
-    });
+    updateExchangeOfferStatus(
+      {
+        exchangeOfferId: selectedOffer.id,
+        status: exchangeStatus,
+      },
+      {
+        onSuccess: () => {
+          showToast({ status: "success", action: toastAction });
+
+          setSelectedOffer(null);
+          setExchangeAction(null);
+        },
+        onError: () => {
+          showToast({ status: "failure", action: toastAction });
+        },
+      },
+    );
   };
 
   return (
