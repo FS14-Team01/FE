@@ -56,14 +56,17 @@ export default function MarketplacePage() {
     if (!sentinel || !hasNextPage) return;
 
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, DUMMY_SALES.length));
-      }
+      if (!entry.isIntersecting) return;
+
+      // 한 번 불러온 뒤에는 다음 렌더에서 재관찰하도록 즉시 관찰을 끊는다.
+      // 그렇지 않으면 sentinel이 화면에 남아 있는 동안 연속으로 발화한다.
+      observer.unobserve(sentinel);
+      setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, DUMMY_SALES.length));
     });
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasNextPage]);
+  }, [hasNextPage, visibleCount]);
 
   const handleSearch = (value) => {
     // TODO: marketKeys.list({ keyword: value, ... }) 연동
@@ -103,6 +106,7 @@ export default function MarketplacePage() {
             onChange={setKeyword}
             onSearch={handleSearch}
           />
+          <div className={styles.searchLineBreak} aria-hidden="true" />
 
           <Dropdown
             options={GRADE_OPTIONS}
