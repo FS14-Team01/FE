@@ -65,8 +65,9 @@ export default function MobileFilterSheet({
   };
 
   const handleOpen = () => {
-    setSelection(getCurrentSelection());
-    setActiveTab("grade");
+    const current = getCurrentSelection();
+    setSelection(current);
+    setActiveTab(current.tab ?? "grade");
     setIsOpen(true);
   };
 
