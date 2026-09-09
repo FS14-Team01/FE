@@ -9,19 +9,19 @@
 
 /* 마켓플레이스 판매글 — GET /sales, GET /sales/:saleId */
 export const marketKeys = {
-  all: ['market'],
-  lists: () => [...marketKeys.all, 'list'],
+  all: ["market"],
+  lists: () => [...marketKeys.all, "list"],
   /** filters: { keyword, grade, category, status, sort, limit } */
   list: (filters) => [...marketKeys.lists(), filters],
-  details: () => [...marketKeys.all, 'detail'],
+  details: () => [...marketKeys.all, "detail"],
   detail: (saleId) => [...marketKeys.details(), saleId],
 };
 
 /* 마이갤러리 — GET /users/me/ownerships */
 // 추가한부분
 export const galleryKeys = {
-  all: ['gallery'],
-  lists: () => [...galleryKeys.all, 'list'],
+  all: ["gallery"],
+  lists: () => [...galleryKeys.all, "list"],
   /** filters: { keyword, grade, category, limit } */
   list: (filters) => [...galleryKeys.lists(), filters],
 };
@@ -29,8 +29,8 @@ export const galleryKeys = {
 /* 나의 판매 포토카드 — GET /users/me/sales */
 // 추가한부분
 export const saleKeys = {
-  all: ['sale'],
-  lists: () => [...saleKeys.all, 'list'],
+  all: ["sale"],
+  lists: () => [...saleKeys.all, "list"],
   /** filters: { keyword, grade, category, status, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
 };
@@ -38,23 +38,23 @@ export const saleKeys = {
 /* 포토카드 원본 — GET /photo-cards/:photoCardId */
 // 생성 직후 이동하는 상세는 판매글이 아닌 카드 원본이라 marketKeys와 별개입니다
 export const photoCardKeys = {
-  all: ['photoCard'],
-  details: () => [...photoCardKeys.all, 'detail'],
+  all: ["photoCard"],
+  details: () => [...photoCardKeys.all, "detail"],
   detail: (photoCardId) => [...photoCardKeys.details(), photoCardId],
 };
 
 /* 교환 제안 — GET /sales/:saleId/exchange-offers, GET /users/me/exchange-offers */
 // 추가한부분
 export const exchangeKeys = {
-  all: ['exchange'],
-  received: () => [...exchangeKeys.all, 'received'],
+  all: ["exchange"],
+  received: () => [...exchangeKeys.all, "received"],
   /** filters: { limit } */
   receivedBySale: (saleId, filters) => [
     ...exchangeKeys.received(),
     saleId,
     filters,
   ],
-  sent: () => [...exchangeKeys.all, 'sent'],
+  sent: () => [...exchangeKeys.all, "sent"],
   /** filters: { limit } */
   sentList: (filters) => [...exchangeKeys.sent(), filters],
 };
@@ -63,20 +63,20 @@ export const exchangeKeys = {
 // 추가한부분
 // 안 읽은 알림은 전용 엔드포인트가 없어 { isRead: false } 목록으로 조회합니다
 export const notificationKeys = {
-  all: ['notification'],
-  lists: () => [...notificationKeys.all, 'list'],
+  all: ["notification"],
+  lists: () => [...notificationKeys.all, "list"],
   /** filters: { isRead, limit } */
   list: (filters) => [...notificationKeys.lists(), filters],
 };
 
 /* 유저 — GET /users/me */
 export const userKeys = {
-  all: ['user'],
-  me: () => [...userKeys.all, 'me'],
+  all: ["user"],
+  me: () => [...userKeys.all, "me"],
 };
 
 /* 포인트 — GET /points/me */
 export const pointKeys = {
-  all: ['point'],
-  me: () => [...pointKeys.all, 'me'],
+  all: ["point"],
+  me: () => [...pointKeys.all, "me"],
 };

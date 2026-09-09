@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Header from '@/components/common/Header/Header';
-import MobilePageHeader from '@/components/common/MobilePageHeader/MobilePageHeader';
-import styles from './ResponsiveHeader.module.css';
+import Header from "@/components/common/Header/Header";
+import MobilePageHeader from "@/components/common/MobilePageHeader/MobilePageHeader";
+import styles from "./ResponsiveHeader.module.css";
 
 export default function ResponsiveHeader({
   title,

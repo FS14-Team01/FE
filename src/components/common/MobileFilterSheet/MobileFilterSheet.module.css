@@ -121,7 +121,11 @@
 }
 
 .common {
-  color: color-mix(in srgb, var(--color-brand-yellow) 65%, var(--color-gray-400));
+  color: color-mix(
+    in srgb,
+    var(--color-brand-yellow) 65%,
+    var(--color-gray-400)
+  );
 }
 
 .rare {
@@ -129,7 +133,11 @@
 }
 
 .super_rare {
-  color: color-mix(in srgb, var(--color-grade-purple) 65%, var(--color-gray-400));
+  color: color-mix(
+    in srgb,
+    var(--color-grade-purple) 65%,
+    var(--color-gray-400)
+  );
 }
 
 .legendary {

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useId, useRef, useState } from 'react';
-import styles from './Dropdown.module.css';
+import { useEffect, useId, useRef, useState } from "react";
+import styles from "./Dropdown.module.css";
 
 /**
  * 공통 드롭다운
@@ -17,9 +17,9 @@ export default function Dropdown({
   options = [],
   value,
   onChange,
-  placeholder = '선택',
+  placeholder = "선택",
   label,
-  variant = 'filter',
+  variant = "filter",
   className,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +38,8 @@ export default function Dropdown({
       }
     };
 
-    document.addEventListener('mousedown', handlePointerDown);
-    return () => document.removeEventListener('mousedown', handlePointerDown);
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [isOpen]);
 
   const handleSelect = (optionValue) => {
@@ -48,7 +48,7 @@ export default function Dropdown({
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Escape' && isOpen) {
+    if (event.key === "Escape" && isOpen) {
       setIsOpen(false);
       triggerRef.current?.focus();
     }
@@ -56,39 +56,39 @@ export default function Dropdown({
 
   return (
     <div
-      className={`${styles.container} ${variant === 'sort' ? styles.sort : ''} ${className ?? ''}`}
+      className={`${styles.container} ${variant === "sort" ? styles.sort : ""} ${className ?? ""}`}
       ref={containerRef}
       onKeyDown={handleKeyDown}
     >
       <button
-        type='button'
+        type="button"
         ref={triggerRef}
         className={styles.trigger}
         onClick={() => setIsOpen((prev) => !prev)}
-        aria-haspopup='listbox'
+        aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls={listboxId}
         aria-label={label}
       >
         <span
-          className={`${styles.triggerText} ${selectedOption ? '' : styles.placeholder}`}
+          className={`${styles.triggerText} ${selectedOption ? "" : styles.placeholder}`}
         >
           {selectedOption?.label ?? placeholder}
         </span>
         <span
-          className={`${styles.arrow} ${isOpen ? styles.arrowOpen : ''}`}
-          aria-hidden='true'
+          className={`${styles.arrow} ${isOpen ? styles.arrowOpen : ""}`}
+          aria-hidden="true"
         />
       </button>
 
       {isOpen && (
-        <ul className={styles.list} id={listboxId} role='listbox'>
+        <ul className={styles.list} id={listboxId} role="listbox">
           {options.map((option) => (
-            <li key={option.value} role='none'>
+            <li key={option.value} role="none">
               <button
-                type='button'
+                type="button"
                 className={styles.option}
-                role='option'
+                role="option"
                 aria-selected={option.value === value}
                 onClick={() => handleSelect(option.value)}
               >

@@ -1,4 +1,4 @@
-import styles from './SellerSaleSection.module.css'
+import styles from "./SellerSaleSection.module.css";
 
 export default function SellerSaleSection({ sale }) {
   return (
@@ -26,5 +26,5 @@ export default function SellerSaleSection({ sale }) {
         </button>
       </div>
     </section>
-  )
+  );
 }
