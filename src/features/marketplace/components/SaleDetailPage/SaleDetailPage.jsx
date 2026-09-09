@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
+import { exchangeKeys } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
@@ -41,9 +43,14 @@ export default function SaleDetailPage({ saleId }) {
 
   const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
 
-  const { mutate: updateExchangeOfferStatus } = useUpdateExchangeOfferStatus();
+  const {
+    mutate: updateExchangeOfferStatus,
+    isPending: isUpdatingExchangeOffer,
+  } = useUpdateExchangeOfferStatus();
 
   const { showToast } = useToast();
+
+  const queryClient = useQueryClient();
 
   if (isPending) {
     return <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>;
@@ -99,7 +106,13 @@ export default function SaleDetailPage({ saleId }) {
     ) : null;
 
   const handleConfirmExchange = () => {
-    if (!selectedOffer?.id || !exchangeStatus || !toastAction) return;
+    if (
+      !selectedOffer?.id ||
+      !exchangeStatus ||
+      !toastAction ||
+      isUpdatingExchangeOffer
+    )
+      return;
 
     updateExchangeOfferStatus(
       {
@@ -108,6 +121,10 @@ export default function SaleDetailPage({ saleId }) {
       },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: exchangeKeys.receivedBySale(saleId, {}),
+          });
+
           showToast({ status: "success", action: toastAction });
 
           setSelectedOffer(null);
