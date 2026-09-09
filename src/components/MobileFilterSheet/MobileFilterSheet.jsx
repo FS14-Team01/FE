@@ -24,6 +24,7 @@ const EMPTY_SELECTION = { tab: undefined, value: undefined };
  * @param {Record<string, number>} [counts] value별 표시 개수. 없으면 표시하지 않음
  * @param {number} [totalCount] 하단 버튼에 표시할 전체 개수
  * @param {(next: { grade?: string, category?: string, saleStatus?: string }) => void} onApply
+ * @param {string} [className]
  */
 export default function MobileFilterSheet({
   gradeOptions = [],
@@ -35,6 +36,7 @@ export default function MobileFilterSheet({
   counts,
   totalCount,
   onApply,
+  className,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("grade");
@@ -98,7 +100,7 @@ export default function MobileFilterSheet({
     <>
       <button
         type="button"
-        className={styles.trigger}
+        className={`${styles.trigger} ${className ?? ""}`}
         onClick={handleOpen}
         aria-label="필터"
       >

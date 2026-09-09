@@ -1,0 +1,124 @@
+.main {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 60px var(--layout-padding) 120px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-gray-400);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+  padding: 20px 0;
+}
+
+/* 정렬만 오른쪽 끝으로 밀어냄 */
+.sortArea {
+  margin-left: auto;
+}
+
+.mobileFilter {
+  display: none;
+}
+
+.cardSection {
+  padding-top: 40px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.sentinel {
+  height: 1px;
+}
+
+.sellButtonMobile {
+  display: none;
+}
+
+/* 반응형: 태블릿 */
+@media (max-width: 1199px) {
+  .main {
+    padding-top: 40px;
+    padding-bottom: 80px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .filterRow {
+    gap: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 743px) {
+  .main {
+    padding-top: 20px;
+    padding-bottom: 100px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .filterRow {
+    gap: 12px;
+  }
+
+  .desktopFilter {
+    display: none;
+  }
+
+  .mobileFilter {
+    display: inline-flex;
+  }
+
+  .cardSection {
+    padding-top: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .sellButtonDesktop {
+    display: none;
+  }
+
+  .sellButtonMobile {
+    display: flex;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    z-index: 100;
+    width: calc(100% - 32px);
+  }
+}
