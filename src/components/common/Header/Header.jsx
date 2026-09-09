@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 
 const formatPoints = (points) => new Intl.NumberFormat("ko-KR").format(points);
@@ -36,10 +36,13 @@ export default function Header({
   onLogout,
   onRandomBoxClick,
   onNotificationClick,
+  onNotificationClose,
+  notificationPanel,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = Boolean(user);
   const closeMenu = () => setIsMenuOpen(false);
+  const notificationAreaRef = useRef(null);
 
   useEffect(() => {
     if (!isMenuOpen) return undefined;
@@ -47,6 +50,17 @@ export default function Header({
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!notificationPanel) return undefined;
+    const handleOutsideClick = (event) => {
+      if (!notificationAreaRef.current?.contains(event.target)) {
+        onNotificationClose?.();
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [notificationPanel, onNotificationClose]);
 
   const handleLogout = () => {
     closeMenu();
@@ -78,14 +92,20 @@ export default function Header({
               >
                 <RandomBoxIcon />
               </button>
-              <button
-                type="button"
-                className={styles.notificationButton}
-                aria-label="알림 보기"
-                onClick={onNotificationClick}
+              <div
+                className={styles.notificationArea}
+                ref={notificationAreaRef}
               >
-                <NotificationIcon />
-              </button>
+                <button
+                  type="button"
+                  className={styles.notificationButton}
+                  aria-label="알림 보기"
+                  onClick={onNotificationClick}
+                >
+                  <NotificationIcon />
+                </button>
+                {notificationPanel}
+              </div>
               <Link href="/" className={styles.nickname}>
                 {user.nickname}
               </Link>
