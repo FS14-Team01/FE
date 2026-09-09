@@ -5,3 +5,9 @@ export async function getSaleDetail(saleId) {
 
   return response.data?.data ?? response.data;
 }
+
+export async function getExchangeOffers(saleId) {
+  const res = await apiClient.get(`/sales/${saleId}/exchange-offers`);
+
+  return res.data?.data ?? res.data;
+}
