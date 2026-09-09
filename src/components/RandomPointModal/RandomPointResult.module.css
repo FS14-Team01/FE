@@ -49,7 +49,9 @@
   color: var(--color-gray-300);
 }
 
-.title span, .result span, .nextAvailable span{
+.title span,
+.result span,
+.nextAvailable span {
   color: var(--color-brand-yellow);
 }
 
@@ -61,7 +63,7 @@
   .content {
     width: 400px;
   }
-  
+
   .title {
     font-size: 36px;
   }

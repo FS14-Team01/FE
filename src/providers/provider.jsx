@@ -6,9 +6,7 @@ import { CommonProvider } from "./commonContext";
 export default function Provider({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <CommonProvider>
-        {children}
-      </CommonProvider>
+      <CommonProvider>{children}</CommonProvider>
     </QueryClientProvider>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useMemo } from "react";
 
 const CommonContext = createContext(null);
 
@@ -9,9 +9,7 @@ export function CommonProvider({ children }) {
   const value = useMemo(() => ({}), []);
 
   return (
-    <CommonContext.Provider value={value}>
-      {children}
-    </CommonContext.Provider>
+    <CommonContext.Provider value={value}>{children}</CommonContext.Provider>
   );
 }
 
@@ -21,7 +19,7 @@ export function useCommonContext() {
   // Provider 밖에서 사용하면 바로 원인을 알 수 있도록 에러 발생
   if (context === null) {
     throw new Error(
-      'useCommonContext는 CommonProvider 내부에서 사용해야 합니다.'
+      "useCommonContext는 CommonProvider 내부에서 사용해야 합니다.",
     );
   }
 

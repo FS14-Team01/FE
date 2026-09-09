@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useId, useState } from 'react';
-import Image from 'next/image';
-import styles from './MobileFilterSheet.module.css';
+import { useId, useState } from "react";
+import Image from "next/image";
+import styles from "./MobileFilterSheet.module.css";
 
 const TABS = [
-  { key: 'grade', label: '등급' },
-  { key: 'category', label: '장르' },
-  { key: 'saleStatus', label: '매진 여부' },
+  { key: "grade", label: "등급" },
+  { key: "category", label: "장르" },
+  { key: "saleStatus", label: "매진 여부" },
 ];
 
 /**
@@ -35,7 +35,7 @@ export default function MobileFilterSheet({
   onApply,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('grade');
+  const [activeTab, setActiveTab] = useState("grade");
   const [draft, setDraft] = useState({ grade, category, saleStatus });
   const titleId = useId();
 
@@ -47,7 +47,7 @@ export default function MobileFilterSheet({
 
   const handleOpen = () => {
     setDraft({ grade, category, saleStatus });
-    setActiveTab('grade');
+    setActiveTab("grade");
     setIsOpen(true);
   };
 
@@ -121,7 +121,7 @@ export default function MobileFilterSheet({
                   type="button"
                   role="tab"
                   aria-selected={activeTab === tab.key}
-                  className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ''}`}
+                  className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ""}`}
                   onClick={() => setActiveTab(tab.key)}
                 >
                   {tab.label}
@@ -136,7 +136,7 @@ export default function MobileFilterSheet({
                     type="button"
                     role="option"
                     aria-selected={draft[activeTab] === option.value}
-                    className={`${styles.option} ${activeTab === 'grade' ? styles[option.value.toLowerCase()] : ''}`}
+                    className={`${styles.option} ${activeTab === "grade" ? styles[option.value.toLowerCase()] : ""}`}
                     onClick={() => handleSelect(option.value)}
                   >
                     <span>{option.label}</span>
@@ -178,7 +178,7 @@ export default function MobileFilterSheet({
                 className={styles.applyButton}
                 onClick={handleApply}
               >
-                {totalCount != null ? `${totalCount}개 포토보기` : '포토보기'}
+                {totalCount != null ? `${totalCount}개 포토보기` : "포토보기"}
               </button>
             </div>
           </div>

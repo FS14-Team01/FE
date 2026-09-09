@@ -1,21 +1,21 @@
-'use client'
+"use client";
 
-import { useId } from 'react'
-import Image from 'next/image'
-import styles from './Modal.module.css'
+import { useId } from "react";
+import Image from "next/image";
+import styles from "./Modal.module.css";
 
 function Modal({ title, message, confirmText, onConfirm, onClose }) {
   // 한 페이지에 동시에 여러 공통 모달이 렌더링될 경우 고정 id는 충돌 방지
-  const titleId = useId()
-  const messageId = useId()
+  const titleId = useId();
+  const messageId = useId();
 
-  const hasValidTitle = typeof title === 'string' && title.trim()
+  const hasValidTitle = typeof title === "string" && title.trim();
   // 문자열뿐 아니라  줄바꿈 등 허용
-  const hasValidMessage = Boolean(message)
+  const hasValidMessage = Boolean(message);
   const hasValidConfirmText =
-    typeof confirmText === 'string' && confirmText.trim()
+    typeof confirmText === "string" && confirmText.trim();
 
-  if (!hasValidTitle || !hasValidMessage || !hasValidConfirmText) return null
+  if (!hasValidTitle || !hasValidMessage || !hasValidConfirmText) return null;
 
   return (
     <div
@@ -60,7 +60,7 @@ function Modal({ title, message, confirmText, onConfirm, onClose }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Modal
+export default Modal;
