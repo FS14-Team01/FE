@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import styles from './RandomPointResult.module.css';
+import Image from "next/image";
+import styles from "./RandomPointResult.module.css";
 
 export default function RandomPointResult({ onClose }) {
   return (
@@ -10,7 +10,6 @@ export default function RandomPointResult({ onClose }) {
         aria-labelledby="random-point-result-title"
         className={styles.content}
       >
-
         <button
           className={styles.closeBtn}
           type="button"
@@ -18,12 +17,7 @@ export default function RandomPointResult({ onClose }) {
           aria-label="모달 닫기"
           autoFocus
         >
-          <Image
-            src="/assets/ic_close.svg"
-            width={25}
-            height={25}
-            alt=""
-          />
+          <Image src="/assets/ic_close.svg" width={25} height={25} alt="" />
         </button>
 
         <h2 className={styles.title} id="random-point-result-title">
@@ -38,18 +32,16 @@ export default function RandomPointResult({ onClose }) {
           alt=""
         />
 
-        <p 
-          className={styles.result}
-        >
+        <p className={styles.result}>
           <span>50P</span> 획득!
         </p>
 
         <p className={styles.nextAvailable}>
           다음 랜덤박스는
-          <br className={styles.mobileBreak} /> 
+          <br className={styles.mobileBreak} />
           <span> 오늘 낮 12시</span>에 열려요
         </p>
       </div>
     </div>
-  )
+  );
 }

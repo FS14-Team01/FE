@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import styles from './Header.module.css'
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import styles from "./Header.module.css";
 
-const formatPoints = (points) => new Intl.NumberFormat('ko-KR').format(points)
+const formatPoints = (points) => new Intl.NumberFormat("ko-KR").format(points);
 
 function NotificationIcon() {
   return (
@@ -16,7 +16,7 @@ function NotificationIcon() {
       height={24}
       className={styles.notificationIcon}
     />
-  )
+  );
 }
 
 function RandomBoxIcon() {
@@ -28,25 +28,30 @@ function RandomBoxIcon() {
       height={32}
       className={styles.randomBoxIcon}
     />
-  )
+  );
 }
 
-export default function Header({ user = null, onLogout, onRandomBoxClick, onNotificationClick }) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const isAuthenticated = Boolean(user)
-  const closeMenu = () => setIsMenuOpen(false)
+export default function Header({
+  user = null,
+  onLogout,
+  onRandomBoxClick,
+  onNotificationClick,
+}) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isAuthenticated = Boolean(user);
+  const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
-    if (!isMenuOpen) return undefined
-    const handleEscape = (event) => event.key === 'Escape' && closeMenu()
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [isMenuOpen])
+    if (!isMenuOpen) return undefined;
+    const handleEscape = (event) => event.key === "Escape" && closeMenu();
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isMenuOpen]);
 
   const handleLogout = () => {
-    closeMenu()
-    onLogout?.()
-  }
+    closeMenu();
+    onLogout?.();
+  };
 
   return (
     <header className={styles.header}>
@@ -100,7 +105,7 @@ export default function Header({ user = null, onLogout, onRandomBoxClick, onNoti
         <button
           type="button"
           className={styles.menuButton}
-          aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+          aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-user-menu"
           onClick={() => setIsMenuOpen((current) => !current)}
@@ -116,13 +121,13 @@ export default function Header({ user = null, onLogout, onRandomBoxClick, onNoti
         {isAuthenticated && (
           <div className={styles.mobileActions}>
             <button
-                type="button"
-                className={styles.randomBoxButton}
-                aria-label="랜덤 포인트 뽑기"
-                onClick={onRandomBoxClick}
-              >
-                <RandomBoxIcon />
-              </button>
+              type="button"
+              className={styles.randomBoxButton}
+              aria-label="랜덤 포인트 뽑기"
+              onClick={onRandomBoxClick}
+            >
+              <RandomBoxIcon />
+            </button>
             <button
               type="button"
               className={styles.mobileNotificationButton}
@@ -195,5 +200,5 @@ export default function Header({ user = null, onLogout, onRandomBoxClick, onNoti
         </>
       )}
     </header>
-  )
+  );
 }

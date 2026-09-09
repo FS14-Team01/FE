@@ -1,6 +1,6 @@
-import styles from './ExchangePreference.module.css'
+import styles from "./ExchangePreference.module.css";
 
-export default function ExchangePreference({ variant = 'full' }) {
+export default function ExchangePreference({ variant = "full" }) {
   return (
     <section
       className={`${styles.section} ${styles[variant]}`}
@@ -15,9 +15,7 @@ export default function ExchangePreference({ variant = 'full' }) {
         </h2>
       </div>
 
-      <div className={styles.content}>
-        {/* 교환 희망 정보 기능 */}
-      </div>
+      <div className={styles.content}>{/* 교환 희망 정보 기능 */}</div>
     </section>
-  )
+  );
 }

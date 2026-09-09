@@ -1,10 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-import {
-  clearAccessToken,
-  getAccessToken,
-  setAccessToken,
-} from './auth-token';
+import { clearAccessToken, getAccessToken, setAccessToken } from "./auth-token";
 
 /** 공통 Axios 인스턴스. 기능 코드는 axios 대신 이 파일을 사용 */
 const instance = axios.create({
@@ -31,37 +27,37 @@ instance.interceptors.request.use(
 /** 서버가 응답하지 못한 경우의 status */
 const NO_RESPONSE_STATUS = 0;
 
-const UNKNOWN_ERROR_CODE = 'UNKNOWN_ERROR';
+const UNKNOWN_ERROR_CODE = "UNKNOWN_ERROR";
 
-const REFRESH_ENDPOINT = '/auth/refresh';
+const REFRESH_ENDPOINT = "/auth/refresh";
 
 /** 여기서 나는 401은 토큰 갱신으로 해결되지 않음 */
 const AUTH_ENDPOINTS = [
-  '/auth/login',
-  '/auth/signup',
-  '/auth/logout',
+  "/auth/login",
+  "/auth/signup",
+  "/auth/logout",
   REFRESH_ENDPOINT,
 ];
 
 const DEFAULT_MESSAGES = {
-  timeout: '요청 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.',
-  network: '네트워크에 연결할 수 없습니다.',
-  unknown: '알 수 없는 오류가 발생했습니다.',
+  timeout: "요청 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.",
+  network: "네트워크에 연결할 수 없습니다.",
+  unknown: "알 수 없는 오류가 발생했습니다.",
 };
 
 /** 백엔드가 code/message를 주지 못한 경우에만 사용 */
 const STATUS_FALLBACKS = {
-  400: { code: 'INVALID_REQUEST', message: '요청 데이터가 올바르지 않습니다.' },
-  401: { code: 'UNAUTHORIZED', message: '로그인이 필요합니다.' },
-  403: { code: 'FORBIDDEN', message: '해당 요청에 대한 권한이 없습니다.' },
-  404: { code: 'NOT_FOUND', message: '요청한 데이터를 찾을 수 없습니다.' },
+  400: { code: "INVALID_REQUEST", message: "요청 데이터가 올바르지 않습니다." },
+  401: { code: "UNAUTHORIZED", message: "로그인이 필요합니다." },
+  403: { code: "FORBIDDEN", message: "해당 요청에 대한 권한이 없습니다." },
+  404: { code: "NOT_FOUND", message: "요청한 데이터를 찾을 수 없습니다." },
   409: {
-    code: 'CONFLICT',
-    message: '요청을 처리할 수 없는 상태입니다.',
+    code: "CONFLICT",
+    message: "요청을 처리할 수 없는 상태입니다.",
   },
   500: {
-    code: 'INTERNAL_SERVER_ERROR',
-    message: '서버 오류가 발생했습니다.',
+    code: "INTERNAL_SERVER_ERROR",
+    message: "서버 오류가 발생했습니다.",
   },
 };
 
@@ -69,7 +65,7 @@ const STATUS_FALLBACKS = {
 function isAuthEndpoint(url) {
   if (!url) return false;
 
-  const path = url.split('?')[0];
+  const path = url.split("?")[0];
 
   return AUTH_ENDPOINTS.some(
     (endpoint) => path === endpoint || path.endsWith(endpoint),
@@ -78,9 +74,9 @@ function isAuthEndpoint(url) {
 
 /** 백엔드 계약 확정 전이라 { error: {...} }와 { code, message } 두 형태를 모두 받음 */
 function extractErrorBody(data) {
-  if (!data || typeof data !== 'object') return null;
+  if (!data || typeof data !== "object") return null;
 
-  return data.error && typeof data.error === 'object' ? data.error : data;
+  return data.error && typeof data.error === "object" ? data.error : data;
 }
 
 /** 모든 에러를 { status, code, message, details, requestId, original } 형태로 통일 */
@@ -100,10 +96,10 @@ function normalizeError(error) {
     };
   }
 
-  if (error.code === 'ECONNABORTED') {
+  if (error.code === "ECONNABORTED") {
     return {
       status: NO_RESPONSE_STATUS,
-      code: 'TIMEOUT',
+      code: "TIMEOUT",
       message: DEFAULT_MESSAGES.timeout,
       details: null,
       requestId: null,
@@ -115,7 +111,7 @@ function normalizeError(error) {
   if (error.request) {
     return {
       status: NO_RESPONSE_STATUS,
-      code: 'NETWORK_ERROR',
+      code: "NETWORK_ERROR",
       message: DEFAULT_MESSAGES.network,
       details: null,
       requestId: null,
@@ -150,7 +146,7 @@ function refreshAccessToken() {
       const token = body?.accessToken ?? body?.data?.accessToken;
 
       if (!token) {
-        throw new Error('갱신 응답에 액세스 토큰이 없습니다');
+        throw new Error("갱신 응답에 액세스 토큰이 없습니다");
       }
 
       setAccessToken(token);
@@ -206,7 +202,7 @@ instance.interceptors.response.use(
  * 재시도 시에도 같은 키를 보내야 하므로 호출부에서 만들어 재사용할 것.
  */
 export function createIdempotencyKey() {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
     return crypto.randomUUID();
   }
 

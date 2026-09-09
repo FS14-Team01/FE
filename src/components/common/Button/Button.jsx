@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styles from './Button.module.css';
+import styles from "./Button.module.css";
 
 /**
  * 공통 버튼
@@ -13,9 +13,9 @@ import styles from './Button.module.css';
  * @param {React.ReactNode} children
  */
 export default function Button({
-  variant = 'primary',
-  size = 'md',
-  type = 'button',
+  variant = "primary",
+  size = "md",
+  type = "button",
   disabled = false,
   onClick,
   className,
@@ -25,7 +25,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`${styles.button} ${styles[variant]} ${styles[size]} ${className ?? ''}`}
+      className={`${styles.button} ${styles[variant]} ${styles[size]} ${className ?? ""}`}
       disabled={disabled}
       onClick={onClick}
       {...rest}
@@ -34,4 +34,3 @@ export default function Button({
     </button>
   );
 }
-

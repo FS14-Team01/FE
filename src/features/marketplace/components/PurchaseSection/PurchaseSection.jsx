@@ -1,4 +1,4 @@
-import styles from './PurchaseSection.module.css'
+import styles from "./PurchaseSection.module.css";
 
 export default function PurchaseSection({ sale }) {
   return (
@@ -9,5 +9,5 @@ export default function PurchaseSection({ sale }) {
     >
       {/* 구매 기능 */}
     </section>
-  )
+  );
 }
