@@ -6,6 +6,7 @@ import SearchInput from '@/components/common/SearchInput/SearchInput';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
 import MobileFilterSheet from '@/components/MobileFilterSheet/MobileFilterSheet';
 import PhotoCard from '@/components/common/PhotoCard/PhotoCard';
+import Button from '@/components/common/Button/Button';
 import {
   GRADE_OPTIONS,
   CATEGORY_OPTIONS,
@@ -75,6 +76,10 @@ export default function MarketplacePage() {
     setSaleStatus(next.saleStatus);
   };
 
+  const handleSellClick = () => {
+    // TODO: 판매 등록 페이지 경로 확정 후 연결
+  };
+
   return (
     <>
       <Header />
@@ -82,6 +87,13 @@ export default function MarketplacePage() {
       <main className={styles.main}>
         <div className={styles.titleRow}>
           <h1 className={styles.title}>마켓플레이스</h1>
+
+          <Button
+            className={styles.sellButtonDesktop}
+            onClick={handleSellClick}
+          >
+            나의 포토카드 판매하기
+          </Button>
         </div>
 
         <div className={styles.filterRow}>
@@ -151,6 +163,13 @@ export default function MarketplacePage() {
           {hasNextPage && <div ref={sentinelRef} className={styles.sentinel} />}
         </section>
       </main>
+
+      <Button
+        className={styles.sellButtonMobile}
+        onClick={handleSellClick}
+      >
+        나의 포토카드 판매하기
+      </Button>
     </>
   );
 }
