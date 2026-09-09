@@ -34,8 +34,22 @@
   margin-left: auto;
 }
 
+.mobileFilter {
+  display: none;
+}
+
 .cardSection {
   padding-top: 40px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.sentinel {
+  height: 1px;
 }
 
 /* 반응형: 태블릿 */
@@ -51,6 +65,10 @@
 
   .filterRow {
     gap: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -69,7 +87,20 @@
     gap: 12px;
   }
 
+  .desktopFilter {
+    display: none;
+  }
+
+  .mobileFilter {
+    display: inline-flex;
+  }
+
   .cardSection {
     padding-top: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 }
