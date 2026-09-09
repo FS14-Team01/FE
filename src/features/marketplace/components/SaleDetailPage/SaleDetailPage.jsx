@@ -132,6 +132,9 @@ export default function SaleDetailPage({ saleId }) {
         },
         onError: () => {
           showToast({ status: "failure", action: toastAction });
+
+          setSelectedOffer(null);
+          setExchangeAction(null);
         },
       },
     );
