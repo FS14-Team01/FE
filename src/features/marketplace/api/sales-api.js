@@ -11,3 +11,11 @@ export async function getExchangeOffers(saleId) {
 
   return res.data?.data ?? res.data;
 }
+
+export async function updateExchangeOfferStatus(exchangeOfferId, status) {
+  const res = await apiClient.patch(`/exchange-offers/${exchangeOfferId}`, {
+    status,
+  });
+
+  return res.data?.data ?? res.data;
+}
