@@ -5,7 +5,7 @@ import { CATEGORY_OPTIONS, GRADE_OPTIONS } from "@/components/common/Dropdown/dr
 import SearchInput from "@/components/common/SearchInput/SearchInput";
 import { useState } from "react";
 import styles from "./MyGalleryPage.module.css";
-import MobileFilterSheet from "@/components/common/MobileFilterSheet/MobileFilterSheet";
+import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
 import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 
 export default function MyGalleryPage() {
