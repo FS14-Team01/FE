@@ -20,7 +20,7 @@ export default function MainLayout({ children }) {
         onRandomBoxClick={openRandomPoint}
         onNotificationClick={toggleNotification}
         onNotificationClose={closeNotification}
-        notificationPanel={isNotificationOpen ? <NotificationList variant="popover" /> : null}
+        notificationPanel={isNotificationOpen ? <NotificationList /> : null}
       />
       <main>{children}</main>
 

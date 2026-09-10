@@ -1,8 +1,4 @@
 .wrapper {
-  overflow-y: auto;
-}
-
-.popover {
   position: absolute;
   top: 45px;
   right: 0;
@@ -10,17 +6,25 @@
   width: 300px;
   max-height: 535px;
   border-radius: 2px;
-}
-
-.page {
-  position: static;
-  width: 100%;
-  max-height: none;
-  border-radius: 0;
+  overflow-y: auto;
 }
 
 .list {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+@media (max-width: 743px) {
+  .wrapper {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: none;
+    border-radius: 0;
+    background: var(--color-black);
+  }
 }

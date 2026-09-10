@@ -54,6 +54,8 @@ export default function Header({
   useEffect(() => {
     if (!notificationPanel) return undefined;
     const handleOutsideClick = (event) => {
+      const isMobile = window.matchMedia("(max-width: 743px)").matches;
+      if (isMobile) return;
       if (!notificationAreaRef.current?.contains(event.target)) {
         onNotificationClose?.();
       }
@@ -148,13 +150,17 @@ export default function Header({
             >
               <RandomBoxIcon />
             </button>
-            <Link
-              href="/notifications"
-              className={styles.mobileNotificationButton}
-              aria-label="알림 보기"
-            >
-              <NotificationIcon />
-            </Link>
+            <div className={styles.notificationArea}>
+              <button
+                type="button"
+                className={styles.mobileNotificationButton}
+                aria-label="알림 보기"
+                onClick={onNotificationClick}
+              >
+                <NotificationIcon />
+              </button>
+              {notificationPanel}
+            </div>
           </div>
         )}
       </div>
