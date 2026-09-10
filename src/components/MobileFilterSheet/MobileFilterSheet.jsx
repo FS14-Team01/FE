@@ -87,6 +87,12 @@ export default function MobileFilterSheet({
     setSelection((prev) => (prev.tab === activeTab ? EMPTY_SELECTION : prev));
   };
 
+  // 시트 안에서 옵션을 고르는 동안에도 버튼 개수가 따라 바뀌도록,
+  // 선택이 있으면 그 옵션의 개수를, 없으면 전체 개수를 쓴다
+  const selectedCount = selection.value
+    ? (counts?.[selection.value] ?? 0)
+    : totalCount;
+
   const handleApply = () => {
     onApply?.({
       grade: selection.tab === "grade" ? selection.value : undefined,
@@ -208,7 +214,9 @@ export default function MobileFilterSheet({
                 className={styles.applyButton}
                 onClick={handleApply}
               >
-                {totalCount != null ? `${totalCount}개 포토보기` : "포토보기"}
+                {selectedCount != null
+                  ? `${selectedCount}개 포토보기`
+                  : "포토보기"}
               </button>
             </div>
           </div>

@@ -52,6 +52,14 @@
   gap: 80px;
 }
 
+.empty {
+  margin: 0;
+  padding: 80px 0;
+  color: var(--color-gray-300);
+  font-size: 16px;
+  text-align: center;
+}
+
 .sentinel {
   height: 1px;
 }
