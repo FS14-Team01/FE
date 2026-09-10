@@ -1,0 +1,55 @@
+.PhotoCardCreateWrap {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  box-sizing: border-box;
+}
+
+.titleWrap {
+  padding-bottom: 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.titleWrap .title {
+  font-size: 62px;
+  font-family:var(--font-brand) ;
+}
+
+.createForm {
+  max-width: 520px;
+  margin: 80px auto 0 auto;
+}
+.formTitle {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.formWrap {
+  margin-top:65px;
+}
+.formWrap:first-child {
+  margin-top:0
+}
+.sortArea {
+  width: 100%;
+  
+}
+.createSort {
+  width: 100%;
+  height: 60px;
+}
+.createSort.createSort.createSort button {
+  height: 60px;
+}
+
+.buttonWrap {
+  margin-top: 300px;
+}
+.buttonWrap .btnCreate {
+  width: 100%;
+}
+.buttonWrap .btnCreate:disabled {
+  background-color: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+  color: var(--color-gray-300);
+}
