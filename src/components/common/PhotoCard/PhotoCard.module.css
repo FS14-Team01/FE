@@ -1,7 +1,6 @@
 .photoCard {
   display: block;
   width: 100%;
-  max-width: 440px;
   min-width: 0;
   padding: 40px 20px;
   background-color: var(--color-gray-500);
