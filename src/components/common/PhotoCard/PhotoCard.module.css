@@ -1,12 +1,28 @@
 .photoCard {
+  /* 카드 바깥 너비를 기준으로 내부 글자 크기와 여백을 계산한다. */
+  container-type: inline-size;
   display: block;
   width: 100%;
   max-width: 440px;
   min-width: 0;
-  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.layout {
+  min-width: 0;
+  /* 카드 폭 170px → 342px → 440px에 맞춰 10px → 20px → 40px.
+     두 구간의 계산값 중 큰 값을 사용해 기준 폭 사이를 연속적으로 연결한다. */
+  padding: clamp(
+    10px,
+    max(
+      calc(10px + (100cqi - 170px) * 10 / 172),
+      calc(20px + (100cqi - 342px) * 20 / 98)
+    ),
+    40px
+  );
   background-color: var(--color-gray-500);
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid color-mix(in srgb, var(--color-white) 10%, transparent);
 }
 
 /*-------- 포토카드 이미지 영역 --------*/
@@ -35,11 +51,17 @@
 .photoCard .textWrap {
   color: var(--color-white);
   margin-top: 25px;
+  /* 카드 폭 170px → 342px에서 기존 10px → 16px을 보간한다. */
+  font-size: clamp(0.625rem, calc(0.625rem + (100cqi - 170px) * 6 / 172), 1rem);
 }
 
 .photoCard .textWrap .name {
   margin-bottom: 10px;
-  font-size: 22px;
+  font-size: clamp(
+    0.875rem,
+    calc(0.875rem + (100cqi - 170px) * 8 / 172),
+    1.375rem
+  );
   font-weight: bold;
 }
 
@@ -83,7 +105,11 @@
 }
 
 .photoCard .saleInfo .data {
-  font-size: 18px;
+  font-size: clamp(
+    0.625rem,
+    calc(0.625rem + (100cqi - 170px) * 8 / 172),
+    1.125rem
+  );
 }
 
 .photoCard .saleInfo .supply {
@@ -164,10 +190,6 @@
 }
 
 @media (max-width: 1199px) {
-  .photoCard {
-    padding: 20px;
-  }
-
   .photoCard .cardBottom {
     margin-top: 45px;
   }
@@ -178,12 +200,9 @@
 }
 
 @media (max-width: 743px) {
-  .photoCard {
-    padding: 10px;
-  }
-
-  .photoCard .textWrap .name {
-    font-size: 14px;
+  .layout {
+    /* 카드 폭 170px에서 10px, 342px에서 20px. */
+    padding: clamp(10px, calc(10px + (100cqi - 170px) * 10 / 172), 20px);
   }
 
   .photoCard .infoWrap {
@@ -191,17 +210,12 @@
   }
 
   .photoCard .textWrap {
-    font-size: 10px;
     margin-top: 10px;
   }
 
   .photoCard .gradeCategory .line {
     height: 10px;
     margin: 5px;
-  }
-
-  .photoCard .saleInfo .data {
-    font-size: 10px;
   }
 
   .photoCard .cardBottom {

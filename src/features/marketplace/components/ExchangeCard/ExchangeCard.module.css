@@ -1,9 +1,44 @@
 .card {
-  position: relative;
+  container: exchange-card / inline-size;
   flex: 0 0 auto;
-  width: 440px;
-  height: 626px;
-  overflow: hidden;
+  width: 100%;
+  max-width: 440px;
+  max-height: 628px;
+  min-width: 0;
+}
+
+.layout {
+  /* 모달 카드와 같은 기준: 카드 폭 170px → 342px에서 기존 글꼴 크기를 보간한다. */
+  --card-text-size: clamp(
+    0.625rem,
+    calc(0.625rem + (100cqi - 170px) * 6 / 172),
+    1rem
+  );
+  --card-title-size: clamp(
+    0.875rem,
+    calc(0.875rem + (100cqi - 170px) * 8 / 172),
+    1.375rem
+  );
+  --card-button-size: clamp(
+    0.75rem,
+    calc(0.75rem + (100cqi - 170px) * 4 / 172),
+    1rem
+  );
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-height: 628px;
+  /* PhotoCard와 동일: 카드 폭 170px → 342px → 440px에서 10px → 20px → 40px. */
+  padding: clamp(
+    10px,
+    max(
+      calc(10px + (100cqi - 170px) * 10 / 172),
+      calc(20px + (100cqi - 342px) * 20 / 98)
+    ),
+    40px
+  );
 
   color: var(--color-white);
   background: var(--color-gray-500);
@@ -12,11 +47,9 @@
 }
 
 .image {
-  position: absolute;
-  top: 40px;
-  right: 40px;
-  left: 40px;
-  height: 270px;
+  flex: none;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 
   background-color: var(--color-gray-200);
@@ -26,19 +59,19 @@
 }
 
 .content {
-  position: absolute;
-  top: 335px;
-  right: 40px;
-  left: 40px;
+  min-width: 0;
+  min-height: 0;
+  margin-top: 25px;
+  overflow-y: auto;
 }
 
 .heading h2 {
   overflow: hidden;
   margin: 0 0 10px;
 
-  font-size: 22px;
+  font-size: var(--card-title-size);
   font-weight: 700;
-  line-height: 32px;
+  line-height: 1.45;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -52,12 +85,12 @@
 
 .metaLine {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr);
   row-gap: 10px;
   min-width: 0;
-  height: 56px;
-  font-size: 16px;
-  line-height: 19px;
+  min-height: 56px;
+  font-size: var(--card-text-size);
+  line-height: 1.4;
 }
 
 .metaStart {
@@ -72,6 +105,7 @@
   gap: 10px;
   min-width: 0;
   margin: 0;
+  white-space: nowrap;
 }
 
 .purchasePrice > .separator {
@@ -115,18 +149,24 @@
 }
 
 .category {
+  min-width: 0;
+  overflow: hidden;
   color: var(--color-gray-200);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nickname {
   grid-column: 2;
   grid-row: 2;
   flex: none;
+  min-width: 0;
   margin-left: 12px;
   overflow: hidden;
 
   color: var(--color-white);
   text-decoration: underline;
+  text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -142,9 +182,9 @@
   overflow: hidden;
   margin: 0;
 
-  font-size: 16px;
+  font-size: var(--card-text-size);
   font-weight: 400;
-  line-height: 23px;
+  line-height: 1.45;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -161,23 +201,23 @@
 }
 
 .actions {
-  position: absolute;
-  right: 40px;
-  bottom: 40px;
-  left: 40px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  flex-shrink: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 .actions button {
   height: 60px;
+  min-width: 0;
   padding: 0;
 
   font: inherit;
-  font-size: 18px;
+  font-size: var(--card-button-size);
   font-weight: 500;
-  line-height: 22px;
+  line-height: 1.25;
   cursor: pointer;
   border-radius: 2px;
 }
@@ -221,7 +261,7 @@
   border-radius: 2px;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: var(--card-button-size);
   font-weight: 700;
 }
 
@@ -229,74 +269,43 @@
   display: none;
 }
 
+@container exchange-card (min-width: 342px) {
+  .layout {
+    /* 기존 버튼 글꼴도 유지: 342px에서 16px, 440px에서 18px. */
+    --card-button-size: clamp(
+      1rem,
+      calc(1rem + (100cqi - 342px) * 2 / 98),
+      1.125rem
+    );
+  }
+}
+
 @media (max-width: 1199px) {
-  .card {
-    width: 342px;
-    height: 561px;
-  }
-
-  .image {
-    top: 20px;
-    right: 20px;
-    left: 20px;
-    height: 226.5px;
-  }
-
-  .content {
-    top: 272px;
-    right: 20px;
-    left: 20px;
-  }
-
-  .actions {
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
-    gap: 20px;
-  }
-
   .actions button {
     height: 55px;
-    font-size: 16px;
-    line-height: 19px;
   }
 
   .resolvedStatus {
     height: 55px;
-    font-size: 16px;
   }
 }
 
 @media (max-width: 743px) {
-  .card {
-    width: 170px;
-    height: 308px;
-  }
-
-  .image {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-    height: 112px;
+  .layout {
+    padding: clamp(10px, calc(10px + (100cqi - 170px) * 10 / 172), 20px);
   }
 
   .content {
-    top: 132px;
-    right: 10px;
-    left: 10px;
+    margin-top: 10px;
   }
 
   .heading h2 {
     margin-bottom: 5px;
-    font-size: 14px;
-    line-height: 20px;
   }
 
   .metaLine {
     row-gap: 5px;
-    height: 33px;
-    font-size: 10px;
-    line-height: 12px;
+    min-height: 33px;
   }
 
   .metaStart,
@@ -309,7 +318,6 @@
   }
 
   .nickname {
-    max-width: 72px;
     margin-left: 5px;
   }
 
@@ -317,27 +325,16 @@
     margin: 10px 0;
   }
 
-  .description {
-    font-size: 10px;
-    line-height: 14px;
-  }
-
   .actions {
-    right: 10px;
-    bottom: 10px;
-    left: 10px;
     gap: 5px;
   }
 
   .actions button {
     height: 40px;
-    font-size: 12px;
-    line-height: 14px;
   }
 
   .resolvedStatus {
     height: 40px;
-    font-size: 12px;
   }
 
   .desktopButtonText {

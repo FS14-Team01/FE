@@ -1,0 +1,207 @@
+/* 카드 선택/입력 등 교환 모달 전용 레이아웃 */
+.contentDialog {
+  position: fixed;
+  inset: 0;
+  width: 1160px;
+  max-width: calc(100% - 80px);
+  min-height: min(800px, calc(100dvh - 80px));
+  max-height: min(1000px, calc(100dvh - 80px));
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-gray-500);
+  color: var(--color-white);
+  scrollbar-color: var(--color-gray-400) var(--color-gray-500);
+  scrollbar-width: thin;
+}
+
+.contentDialog::backdrop {
+  background: var(--color-overlay-black);
+}
+
+.dialogBody {
+  position: relative;
+  padding: 60px 120px;
+}
+
+.contentDialog[data-contained-scroll] {
+  overflow-y: hidden;
+}
+
+.contentDialog[data-contained-scroll] .dialogBody {
+  display: flex;
+  flex-direction: column;
+  min-height: inherit;
+  max-height: inherit;
+  padding-bottom: 16px;
+}
+
+.contentDialog[data-contained-scroll] .dialogBody > header {
+  flex-shrink: 0;
+}
+
+.dialogClose,
+.dialogBack {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.dialogClose:focus-visible,
+.dialogBack:focus-visible {
+  outline: 2px solid var(--color-grade-blue);
+}
+
+.dialogBack,
+.handle {
+  display: none;
+}
+
+.eyebrow {
+  margin: 0 0 40px;
+  color: var(--color-gray-300);
+  font-family: var(--font-brand);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.dialogTitle {
+  margin: 0;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--color-gray-100);
+  font-family: var(--font-brand);
+  font-size: 46px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  outline: none;
+}
+
+.contentDialog[data-mobile-layout="page"] .dialogTitle {
+  font-family: var(--font-main);
+  font-size: 40px;
+}
+
+@media (max-width: 1199px) {
+  .contentDialog {
+    inset: auto 0 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: min(800px, calc(100dvh - 40px));
+    max-height: calc(100dvh - 40px);
+    margin: 0 auto;
+  }
+
+  .dialogBody {
+    padding: 50px 20px 60px;
+  }
+
+  .contentDialog[data-contained-scroll] {
+    overflow-y: auto;
+  }
+
+  .contentDialog[data-contained-scroll] .dialogBody {
+    display: block;
+    min-height: auto;
+    max-height: none;
+    padding-bottom: 60px;
+  }
+
+  .handle {
+    position: absolute;
+    top: 15px;
+    left: calc(50% - 24px);
+    display: block;
+    width: 48px;
+    height: 6px;
+    border-radius: 50px;
+    background: var(--color-gray-400);
+  }
+
+  .dialogClose {
+    top: 25px;
+    right: 10px;
+  }
+
+  .eyebrow {
+    font-size: 16px;
+  }
+
+  .dialogTitle {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 743px) {
+  .contentDialog {
+    min-height: min(720px, calc(100dvh - 30px));
+    max-height: calc(100dvh - 30px);
+  }
+
+  .dialogBody {
+    padding: 50px 15px 30px;
+  }
+
+  .contentDialog[data-contained-scroll] .dialogBody {
+    padding-bottom: 30px;
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .dialogTitle {
+    padding-bottom: 0;
+    border: 0;
+    font-size: 26px;
+  }
+
+  .contentDialog[data-mobile-layout="page"] {
+    inset: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    background: var(--color-black);
+  }
+
+  .contentDialog[data-mobile-layout="page"] .dialogBody {
+    padding: 0 15px 40px;
+  }
+
+  .contentDialog[data-mobile-layout="page"] .handle,
+  .contentDialog[data-mobile-layout="page"] .dialogClose {
+    display: none;
+  }
+
+  .dialogBack {
+    top: 8px;
+    left: 8px;
+    display: grid;
+    color: var(--color-white);
+  }
+
+  .contentDialog[data-mobile-layout="page"] .eyebrow {
+    display: grid;
+    place-items: center;
+    height: 60px;
+    margin: 0 40px 20px;
+    color: var(--color-white);
+    font-size: 20px;
+  }
+
+  .contentDialog[data-mobile-layout="page"] .dialogTitle {
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-gray-100);
+    font-size: 24px;
+  }
+}
