@@ -4,7 +4,7 @@ import ExchangeCard from "@/features/marketplace/components/ExchangeCard/Exchang
 import useExchangeOffers from "@/features/marketplace/hooks/use-exchange-offers";
 import styles from "./ExchangeOfferSection.module.css";
 
-export default function ExchangeOfferSection({ saleId }) {
+export default function ExchangeOfferSection({ saleId, onAccept, onReject }) {
   const {
     data: exchangeOfferData,
     isPending,
@@ -41,6 +41,7 @@ export default function ExchangeOfferSection({ saleId }) {
           <p>아직 받은 교환 제안이 없습니다.</p>
         )}
 
+        {/* 상위에서 이미 분기가 끝난 "seller"결과를 명시 */}
         {!isPending &&
           !isError &&
           exchangeOffers.map((exchangeOffer) => (
@@ -48,6 +49,8 @@ export default function ExchangeOfferSection({ saleId }) {
               key={exchangeOffer.id}
               viewerRole="seller"
               exchangeOffer={exchangeOffer}
+              onAccept={() => onAccept(exchangeOffer)}
+              onReject={() => onReject(exchangeOffer)}
             />
           ))}
       </div>
