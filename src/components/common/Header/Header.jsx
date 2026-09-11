@@ -38,6 +38,7 @@ export default function Header({
   onNotificationClick,
   onNotificationClose,
   notificationPanel,
+  isNotificationDisabled = false,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = Boolean(user);
@@ -103,6 +104,7 @@ export default function Header({
                   className={styles.notificationButton}
                   aria-label="알림 보기"
                   onClick={onNotificationClick}
+                  disabled={isNotificationDisabled}
                 >
                   <NotificationIcon />
                 </button>
@@ -156,6 +158,7 @@ export default function Header({
                 className={styles.mobileNotificationButton}
                 aria-label="알림 보기"
                 onClick={onNotificationClick}
+                disabled={isNotificationDisabled}
               >
                 <NotificationIcon />
               </button>

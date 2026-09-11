@@ -103,6 +103,12 @@
   position: relative;
 }
 
+.notificationButton:disabled,
+.mobileNotificationButton:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
 .menuButton,
 .randomBoxButton,
 .notificationButton,
