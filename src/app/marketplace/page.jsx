@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/common/Header/Header';
+import Modal from '@/components/common/Modal/Modal';
 import SearchInput from '@/components/common/SearchInput/SearchInput';
 import Dropdown from '@/components/common/Dropdown/Dropdown';
 import MobileFilterSheet from '@/components/MobileFilterSheet/MobileFilterSheet';
@@ -15,6 +17,7 @@ import {
 } from '@/components/common/Dropdown/dropdownOptions';
 // TODO: GET /sales 연동 후 제거
 import { MOCK_SALE_LIST_RESPONSE } from '@/features/marketplace/marketplace-mock';
+import { getAccessToken } from '@/lib/auth-token';
 import styles from './page.module.css';
 
 const PAGE_SIZE = 12;
@@ -36,7 +39,9 @@ export default function MarketplacePage() {
   const [saleStatus, setSaleStatus] = useState();
   const [sort, setSort] = useState('recent');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [isLoginRequiredOpen, setIsLoginRequiredOpen] = useState(false);
   const sentinelRef = useRef(null);
+  const router = useRouter();
 
   const filteredSales = useMemo(() => {
     const normalizedKeyword = searchedKeyword.trim().toLowerCase();
@@ -116,6 +121,17 @@ export default function MarketplacePage() {
     // TODO: 판매 등록 페이지 경로 확정 후 연결
   };
 
+  // 토큰 조회는 클릭 시점에만 해야 SSR 결과와 어긋나지 않는다
+  const handleCardClick = (event) => {
+    // 그리드 여백이 아니라 카드를 눌렀을 때만 반응한다
+    if (!event.target.closest('a')) return;
+    if (getAccessToken()) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    setIsLoginRequiredOpen(true);
+  };
+
   return (
     <>
       <Header />
@@ -183,7 +199,8 @@ export default function MarketplacePage() {
           </div>
         </div>
         <section className={styles.cardSection} aria-label="판매 중인 포토카드">
-          <div className={styles.cardGrid}>
+          {/* Link의 이동보다 먼저 잡아야 해서 캡처 단계에서 가로챈다 */}
+          <div className={styles.cardGrid} onClickCapture={handleCardClick}>
             {visibleSales.map((sale) => (
               <PhotoCard
                 key={sale.id}
@@ -213,6 +230,22 @@ export default function MarketplacePage() {
       >
         나의 포토카드 판매하기
       </Button>
+
+      {isLoginRequiredOpen && (
+        <Modal
+          title="로그인이 필요합니다."
+          message={
+            <>
+              로그인 하시겠습니까?
+              <br />
+              다양한 서비스를 편리하게 이용하실 수 있습니다.
+            </>
+          }
+          confirmText="확인"
+          onConfirm={() => router.push('/login')}
+          onClose={() => setIsLoginRequiredOpen(false)}
+        />
+      )}
     </>
   );
 }
