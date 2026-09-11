@@ -15,6 +15,10 @@
   list-style: none;
 }
 
+.sentinel {
+  height: 1px;
+}
+
 @media (max-width: 743px) {
   .wrapper {
     position: fixed;
