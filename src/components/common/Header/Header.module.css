@@ -99,6 +99,10 @@
   letter-spacing: -0.54px;
 }
 
+.notificationArea {
+  position: relative;
+}
+
 .menuButton,
 .randomBoxButton,
 .notificationButton,
