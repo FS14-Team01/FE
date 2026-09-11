@@ -135,14 +135,10 @@ export default function ExchangeCardSelect({
           <ul className={styles.cardGrid} aria-label="교환할 보유 포토카드">
             {ownerships.map((ownership) => (
               <li key={ownership.id} className={styles.cardOption}>
-                <OwnedExchangeCard ownership={ownership} />
-                <button
-                  type="button"
-                  className={styles.selectButton}
-                  aria-label={`${ownership.photoCard.name} 선택`}
-                  title={ownership.photoCard.name}
+                <OwnedExchangeCard
+                  ownership={ownership}
                   disabled={ownership.quantity < 1}
-                  onClick={() => onSelect(ownership)}
+                  onSelect={() => onSelect(ownership)}
                 />
               </li>
             ))}

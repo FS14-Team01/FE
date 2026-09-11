@@ -70,105 +70,103 @@ export default function ExchangeCard({
       aria-label={`${offeredCard.name}, ${gradeLabel} 등급 교환 제안 카드`}
       aria-busy={isProcessing}
     >
-      <div className={styles.layout}>
-        <div
-          className={styles.image}
-          role="img"
-          aria-label={`${offeredCard.name} 포토카드 이미지`}
-          style={imageStyle}
-        />
+      <div
+        className={styles.image}
+        role="img"
+        aria-label={`${offeredCard.name} 포토카드 이미지`}
+        style={imageStyle}
+      />
 
-        <div className={styles.content}>
-          <div className={styles.heading}>
-            <h2 title={offeredCard.name}>{offeredCard.name}</h2>
+      <div className={styles.content}>
+        <div className={styles.heading}>
+          <h2 title={offeredCard.name}>{offeredCard.name}</h2>
 
-            <div className={styles.metaLine}>
-              <span className={styles.metaStart}>
-                <span className={`${styles.grade} ${styles[gradeClassName]}`}>
-                  {gradeLabel}
-                </span>
-                <Divider />
-                <span className={styles.category}>{categoryLabel}</span>
+          <div className={styles.metaLine}>
+            <span className={styles.metaStart}>
+              <span className={`${styles.grade} ${styles[gradeClassName]}`}>
+                {gradeLabel}
               </span>
+              <Divider />
+              <span className={styles.category}>{categoryLabel}</span>
+            </span>
 
-              <span className={styles.purchasePrice}>
-                <Divider />
-                <strong>{formatPoints(saleListing.price)}</strong>
-                <span>에 구매</span>
-              </span>
+            <span className={styles.purchasePrice}>
+              <Divider />
+              <strong>{formatPoints(saleListing.price)}</strong>
+              <span>에 구매</span>
+            </span>
 
-              <span className={styles.nickname}>{requester.nickname}</span>
-            </div>
+            <span className={styles.nickname}>{requester.nickname}</span>
           </div>
-
-          <div className={styles.rule} />
-          {offeredCard.description && (
-            <p className={styles.description}>{offeredCard.description}</p>
-          )}
-          {/* 추후 공통 에러 객체로 리팩터링 */}
-          {errorMessage && (
-            <p className={styles.errorMessage} role="alert">
-              {errorMessage}
-            </p>
-          )}
         </div>
 
-        <div
-          className={`${styles.actions} ${
-            isRequester ? styles.requesterActions : ""
-          }`.trim()}
-        >
-          {isPending ? (
-            isRequester ? (
+        <div className={styles.rule} />
+        {offeredCard.description && (
+          <p className={styles.description}>{offeredCard.description}</p>
+        )}
+        {/* 추후 공통 에러 객체로 리팩터링 */}
+        {errorMessage && (
+          <p className={styles.errorMessage} role="alert">
+            {errorMessage}
+          </p>
+        )}
+      </div>
+
+      <div
+        className={`${styles.actions} ${
+          isRequester ? styles.requesterActions : ""
+        }`.trim()}
+      >
+        {isPending ? (
+          isRequester ? (
+            <button
+              type="button"
+              className={styles.cancel}
+              onClick={() => onCancel?.({ exchangeOfferId })}
+              disabled={!isActionable || !onCancel}
+            >
+              <span className={styles.desktopButtonText}>
+                {isProcessing ? "처리 중" : "취소하기"}
+              </span>
+              <span className={styles.mobileButtonText}>
+                {isProcessing ? "처리 중" : "취소"}
+              </span>
+            </button>
+          ) : (
+            <>
               <button
                 type="button"
-                className={styles.cancel}
-                onClick={() => onCancel?.({ exchangeOfferId })}
-                disabled={!isActionable || !onCancel}
+                className={styles.reject}
+                onClick={() => onReject?.({ exchangeOfferId })}
+                disabled={!isActionable || !onReject}
               >
                 <span className={styles.desktopButtonText}>
-                  {isProcessing ? "처리 중" : "취소하기"}
+                  {isProcessing ? "처리 중" : "거절하기"}
                 </span>
                 <span className={styles.mobileButtonText}>
-                  {isProcessing ? "처리 중" : "취소"}
+                  {isProcessing ? "처리 중" : "거절"}
                 </span>
               </button>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className={styles.reject}
-                  onClick={() => onReject?.({ exchangeOfferId })}
-                  disabled={!isActionable || !onReject}
-                >
-                  <span className={styles.desktopButtonText}>
-                    {isProcessing ? "처리 중" : "거절하기"}
-                  </span>
-                  <span className={styles.mobileButtonText}>
-                    {isProcessing ? "처리 중" : "거절"}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className={styles.accept}
-                  onClick={() => onAccept?.({ exchangeOfferId })}
-                  disabled={!isActionable || !onAccept}
-                >
-                  <span className={styles.desktopButtonText}>
-                    {isProcessing ? "처리 중" : "승인하기"}
-                  </span>
-                  <span className={styles.mobileButtonText}>
-                    {isProcessing ? "처리 중" : "승인"}
-                  </span>
-                </button>
-              </>
-            )
-          ) : (
-            <p className={styles.resolvedStatus} role="status">
-              {getExchangeStatusLabel(status)}
-            </p>
-          )}
-        </div>
+              <button
+                type="button"
+                className={styles.accept}
+                onClick={() => onAccept?.({ exchangeOfferId })}
+                disabled={!isActionable || !onAccept}
+              >
+                <span className={styles.desktopButtonText}>
+                  {isProcessing ? "처리 중" : "승인하기"}
+                </span>
+                <span className={styles.mobileButtonText}>
+                  {isProcessing ? "처리 중" : "승인"}
+                </span>
+              </button>
+            </>
+          )
+        ) : (
+          <p className={styles.resolvedStatus} role="status">
+            {getExchangeStatusLabel(status)}
+          </p>
+        )}
       </div>
     </article>
   );

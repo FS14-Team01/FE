@@ -23,8 +23,9 @@
 }
 
 .dialogBody {
+  --dialog-inline-padding: 120px;
   position: relative;
-  padding: 60px 120px;
+  padding: 60px var(--dialog-inline-padding);
 }
 
 .contentDialog[data-contained-scroll] {
@@ -103,7 +104,8 @@
   }
 
   .dialogBody {
-    padding: 50px 20px 60px;
+    --dialog-inline-padding: 20px;
+    padding: 50px var(--dialog-inline-padding) 60px;
   }
 
   .contentDialog[data-contained-scroll] {
@@ -149,7 +151,8 @@
   }
 
   .dialogBody {
-    padding: 50px 15px 30px;
+    --dialog-inline-padding: 15px;
+    padding: 50px var(--dialog-inline-padding) 30px;
   }
 
   .contentDialog[data-contained-scroll] .dialogBody {
@@ -175,7 +178,7 @@
   }
 
   .contentDialog[data-mobile-layout="page"] .dialogBody {
-    padding: 0 15px 40px;
+    padding: 0 var(--dialog-inline-padding) 40px;
   }
 
   .contentDialog[data-mobile-layout="page"] .handle,

@@ -2,7 +2,7 @@ import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 import { getCardCategoryLabel } from "@/constants/marketplace-options";
 import styles from "./OwnedExchangeCard.module.css";
 
-export default function OwnedExchangeCard({ ownership }) {
+export default function OwnedExchangeCard({ ownership, onSelect, disabled }) {
   const { photoCard, quantity } = ownership;
 
   return (
@@ -15,6 +15,8 @@ export default function OwnedExchangeCard({ ownership }) {
         quantity={quantity}
         variant="ownership"
         showPrice={false}
+        onSelect={onSelect}
+        disabled={disabled}
       />
     </div>
   );
