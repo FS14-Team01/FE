@@ -1,11 +1,50 @@
 .photoCard {
+  position: relative;
   display: block;
   width: 100%;
   min-width: 0;
-  padding: 40px 20px;
+  padding: 40px;
   background-color: var(--color-gray-500);
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.selectable {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  appearance: none;
+  border-radius: 2px;
+  color: var(--color-white);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.selectable > .imgWrap,
+.selectable > .textWrap {
+  flex: 0 0 auto;
+}
+
+.selectable:hover:not(:disabled),
+.selectable:focus-visible {
+  border-color: var(--color-brand-yellow);
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: -2px;
+}
+
+.selectable:disabled {
+  cursor: not-allowed;
+}
+
+.selectable:disabled::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-overlay-black);
+  content: "";
+  pointer-events: none;
 }
 
 /*-------- 포토카드 이미지 영역 --------*/
@@ -94,12 +133,18 @@
 }
 
 .photoCard .cardBottom {
-  margin-top: 55px;
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
+  left: 40px;
   text-align: center;
 }
 
 .photoCard .cardBottom img {
+  display: block;
   width: 100px;
+  height: auto;
+  margin: 0 auto;
 }
 
 /*-------- 카드 등급 --------*/
@@ -164,11 +209,15 @@
 
 @media (max-width: 1199px) {
   .photoCard {
+    width: 342px;
+    height: 561px;
     padding: 20px;
   }
 
   .photoCard .cardBottom {
-    margin-top: 45px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
   }
 
   .saleTag {
@@ -178,29 +227,47 @@
 
 @media (max-width: 743px) {
   .photoCard {
+    width: 170px;
+    height: 234px;
     padding: 10px;
   }
 
   .photoCard .textWrap .name {
+    margin-bottom: 5px;
     font-size: 14px;
+    line-height: 17px;
   }
 
   .photoCard .infoWrap {
     padding-bottom: 10px;
+    line-height: 14px;
   }
 
   .photoCard .textWrap {
     font-size: 10px;
+    line-height: 12px;
     margin-top: 10px;
   }
 
   .photoCard .gradeCategory .line {
     height: 10px;
-    margin: 5px;
+    margin: 0 5px;
+  }
+
+  .photoCard .saleInfo {
+    margin-top: 10px;
   }
 
   .photoCard .saleInfo .data {
     font-size: 10px;
+  }
+
+  .photoCard .saleInfo .supply {
+    margin-top: 5px;
+  }
+
+  .photoCard .saleInfo .supply:first-child {
+    margin-top: 0;
   }
 
   .photoCard .cardBottom {
