@@ -1,9 +1,7 @@
 .photoCard {
   position: relative;
   display: block;
-  flex: 0 0 auto;
-  width: 440px;
-  height: 626px;
+  width: 100%;
   min-width: 0;
   padding: 40px;
   background-color: var(--color-gray-500);
