@@ -14,6 +14,9 @@ import SaleCardOverview from "../SaleCardOverview/SaleCardOverview";
 import SellerSaleSection from "../SellerSaleSection/SellerSaleSection";
 import styles from "./SaleDetailPage.module.css";
 
+// query key 정책에 따라 limit은 queryKey filter에 포함하고 목록 노출 개수는 페이지 정책으로 관리
+const PAGE_SIZE = 12;
+
 const EXCHANGE_MODAL_TEXT = {
   accept: {
     title: "교환 제시 승인",
@@ -63,7 +66,6 @@ export default function SaleDetailPage({ saleId }) {
       </main>
     );
   }
-
   const isOwner = sale.isOwner === true;
 
   const handleAccept = (exchangeOffer) => {
@@ -122,7 +124,7 @@ export default function SaleDetailPage({ saleId }) {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: exchangeKeys.receivedBySale(saleId, {}),
+            queryKey: exchangeKeys.receivedBySale(saleId, { limit: PAGE_SIZE }),
           });
 
           if (exchangeAction === "accept") {
@@ -163,6 +165,7 @@ export default function SaleDetailPage({ saleId }) {
       {isOwner && (
         <ExchangeOfferSection
           saleId={saleId}
+          pageSize={PAGE_SIZE}
           onAccept={handleAccept}
           onReject={handleReject}
         />
