@@ -18,13 +18,47 @@
   height: 60px;
   line-height: 60px;
   padding: 0 20px;
+  border-radius: 2px;
   box-sizing: border-box;
+  max-height: 60px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
-
+.errorInput {
+  border-color: var(--color-error);
+}
 .selectButton {
   width: 120px;
   height: 60px;
   margin-left: 10px;
   color: var(--color-brand-yellow);
   border-color: var(--color-brand-yellow);
+  border-radius: 2px;
+  background-color: transparent;
+}
+
+@media(max-width:1199px) {
+
+  .fileName {
+    height: 55px;
+    line-height: 55px;
+    font-size: 14px;
+  }
+
+  .selectButton {
+    height: 55px;
+    font-size: 14px;
+  }
+}
+
+@media(max-width:743px) {
+  .fileName {
+    width: calc(100% - 115px);
+  }
+
+  .selectButton {
+    width: 105px;
+  }
 }

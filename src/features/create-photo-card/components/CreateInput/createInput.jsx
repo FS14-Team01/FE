@@ -6,6 +6,7 @@ export default function CreateInput({
   value,
   variant,
   onChange,
+  onBlur,
   type,
   max,
   min,
@@ -30,6 +31,7 @@ export default function CreateInput({
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        onBlur={onBlur}
         type={type}
         max={max}
         min={min}

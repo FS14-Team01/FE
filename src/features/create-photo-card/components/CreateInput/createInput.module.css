@@ -16,6 +16,7 @@
   line-height: normal;
   outline: none;
   box-sizing: border-box;
+  border-radius: 2px;
 }
 
 .createInput[type="number"]::-webkit-inner-spin-button,
@@ -36,4 +37,11 @@
   color: var(--color-error);
   margin-top: 10px;
   margin-bottom: 0;
+}
+
+@media(max-width:1199px) {
+  .createInput {
+    font-size: 14px;
+    height: 55px;
+  }
 }
