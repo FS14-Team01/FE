@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
-import { exchangeKeys } from "@/lib/query-keys";
+import { exchangeKeys, marketKeys } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
@@ -13,6 +13,9 @@ import PurchaseSection from "../PurchaseSection/PurchaseSection";
 import SaleCardOverview from "../SaleCardOverview/SaleCardOverview";
 import SellerSaleSection from "../SellerSaleSection/SellerSaleSection";
 import styles from "./SaleDetailPage.module.css";
+
+// query key 정책에 따라 limit은 queryKey filter에 포함하고 목록 노출 개수는 페이지 정책으로 관리
+const PAGE_SIZE = 12;
 
 const EXCHANGE_MODAL_TEXT = {
   accept: {
@@ -63,7 +66,6 @@ export default function SaleDetailPage({ saleId }) {
       </main>
     );
   }
-
   const isOwner = sale.isOwner === true;
 
   const handleAccept = (exchangeOffer) => {
@@ -122,8 +124,14 @@ export default function SaleDetailPage({ saleId }) {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: exchangeKeys.receivedBySale(saleId, {}),
+            queryKey: exchangeKeys.receivedBySale(saleId, { limit: PAGE_SIZE }),
           });
+
+          if (exchangeAction === "accept") {
+            queryClient.invalidateQueries({
+              queryKey: marketKeys.detail(saleId),
+            });
+          }
 
           showToast({ status: "success", action: toastAction });
 
@@ -157,6 +165,7 @@ export default function SaleDetailPage({ saleId }) {
       {isOwner && (
         <ExchangeOfferSection
           saleId={saleId}
+          pageSize={PAGE_SIZE}
           onAccept={handleAccept}
           onReject={handleReject}
         />
