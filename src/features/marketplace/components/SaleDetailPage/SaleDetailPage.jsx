@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
-import { exchangeKeys } from "@/lib/query-keys";
+import { exchangeKeys, marketKeys } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
@@ -124,6 +124,12 @@ export default function SaleDetailPage({ saleId }) {
           queryClient.invalidateQueries({
             queryKey: exchangeKeys.receivedBySale(saleId, {}),
           });
+
+          if (exchangeAction === "accept") {
+            queryClient.invalidateQueries({
+              queryKey: marketKeys.detail(saleId),
+            });
+          }
 
           showToast({ status: "success", action: toastAction });
 
