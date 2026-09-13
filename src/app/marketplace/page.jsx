@@ -7,6 +7,7 @@ import Dropdown from '@/components/common/Dropdown/Dropdown';
 import MobileFilterSheet from '@/components/MobileFilterSheet/MobileFilterSheet';
 import PhotoCard from '@/components/common/PhotoCard/PhotoCard';
 import Button from '@/components/common/Button/Button';
+import SaleCreateModal from '@/features/marketplace/components/SaleCreateModal/SaleCreateModal';
 import {
   GRADE_OPTIONS,
   CATEGORY_OPTIONS,
@@ -40,6 +41,7 @@ const DUMMY_SALES = Array.from({ length: 42 }, (_, index) => {
 });
 
 export default function MarketplacePage() {
+  const [isSaleCreateModalOpen, setIsSaleCreateModalOpen] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [grade, setGrade] = useState();
   const [category, setCategory] = useState();
@@ -77,7 +79,7 @@ export default function MarketplacePage() {
   };
 
   const handleSellClick = () => {
-    // TODO: 판매 등록 페이지 경로 확정 후 연결
+    setIsSaleCreateModalOpen(true);
   };
 
   return (
@@ -170,6 +172,10 @@ export default function MarketplacePage() {
       >
         나의 포토카드 판매하기
       </Button>
+
+      {isSaleCreateModalOpen && (
+        <SaleCreateModal onClose={() => setIsSaleCreateModalOpen(false)} />
+      )}
     </>
   );
 }

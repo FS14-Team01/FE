@@ -31,3 +31,17 @@ export async function stopSale(saleId) {
 
   return response.data?.data ?? response.data;
 }
+
+export async function getMyOwnerships(filters = {}) {
+  const response = await apiClient.get("/users/me/ownerships", {
+    params: filters,
+  });
+
+  return response.data?.data ?? response.data;
+}
+
+export async function createSale(saleData) {
+  const response = await apiClient.post("/sales", saleData);
+
+  return response.data?.data ?? response.data;
+}

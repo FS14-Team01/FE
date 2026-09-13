@@ -1,0 +1,55 @@
+.overlay { position: fixed; inset: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 32px; background: var(--color-overlay-black); }
+.modal { position: relative; width: min(920px, 100%); max-height: calc(100vh - 64px); overflow-y: auto; padding: 48px 64px 60px; background: var(--color-gray-500); }
+.close { position: absolute; top: 24px; right: 28px; border: 0; color: var(--color-gray-300); background: none; font-size: 38px; cursor: pointer; }
+.eyebrow { margin: 0 0 28px; color: var(--color-gray-300); font-size: 18px; font-weight: 700; }
+.title { margin: 0; padding-bottom: 20px; border-bottom: 2px solid var(--color-gray-200); font-size: 36px; }
+.filters { display: grid; grid-template-columns: 1.4fr 0.8fr 0.8fr; gap: 28px; margin-top: 16px; }
+.state { padding: 72px 0; color: var(--color-gray-300); text-align: center; }
+.cardGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-top: 32px; }
+.card { padding: 28px; border: 1px solid var(--color-gray-400); color: var(--color-white); background: transparent; text-align: left; cursor: pointer; }
+.card > img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.card > strong { display: block; margin-top: 18px; font-size: 20px; }
+.cardMeta, .quantity { display: flex; justify-content: space-between; margin-top: 12px; }
+.cardMeta { padding-bottom: 18px; border-bottom: 1px solid var(--color-gray-400); color: var(--color-gray-300); }
+.quantity span { color: var(--color-gray-300); }
+.loadMore { display: block; width: 180px; height: 48px; margin: 32px auto 0; border: 1px solid var(--color-gray-200); color: var(--color-white); background: transparent; cursor: pointer; }
+.loadMore:disabled { cursor: not-allowed; opacity: 0.6; }
+.summary { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 40px; margin-top: 38px; }
+.summary > img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.saleFields { min-width: 0; }
+.meta { display: flex; gap: 18px; padding: 6px 0 28px; border-bottom: 1px solid var(--color-gray-400); font-size: 20px; }
+.meta b { color: var(--color-grade-pink); }
+.meta span { color: var(--color-gray-300); }
+.saleFields > label { display: grid; grid-template-columns: 115px 1fr auto; align-items: center; gap: 12px; margin-top: 24px; }
+.stepper, .price { display: flex; height: 50px; align-items: center; justify-content: space-between; border: 1px solid var(--color-gray-200); }
+.stepper button { width: 48px; height: 100%; border: 0; color: var(--color-white); background: transparent; font-size: 20px; cursor: pointer; }
+.price { grid-column: 2 / 4; padding: 0 18px; }
+.price input { width: 100%; border: 0; outline: 0; color: var(--color-white); background: transparent; }
+.preference { margin-top: 72px; }
+.preference h3 { margin: 0 0 38px; padding-bottom: 18px; border-bottom: 2px solid var(--color-gray-200); font-size: 24px; }
+.selects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+.selects label > span, .description > span { display: block; margin-bottom: 10px; font-weight: 700; }
+.description { display: block; margin-top: 28px; }
+.description textarea { width: 100%; min-height: 120px; padding: 16px; resize: vertical; border: 1px solid var(--color-gray-200); color: var(--color-white); background: transparent; }
+.actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 42px; }
+.actions button { height: 58px; border: 1px solid var(--color-gray-200); color: var(--color-white); background: transparent; font-weight: 700; cursor: pointer; }
+.actions button:last-child { border-color: var(--color-brand-yellow); color: var(--color-black); background: var(--color-brand-yellow); }
+.actions button:disabled { cursor: not-allowed; opacity: 0.6; }
+
+@media (max-width: 743px) {
+  .overlay { align-items: flex-start; padding: 0; }
+  .modal { width: 100%; max-height: 100dvh; min-height: 100dvh; padding: 28px 16px 40px; }
+  .close { top: 16px; right: 16px; }
+  .eyebrow { margin-bottom: 22px; font-size: 14px; }
+  .title { font-size: 26px; }
+  .filters { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .filters > :first-child { grid-column: 1 / -1; }
+  .cardGrid { gap: 12px; margin-top: 20px; }
+  .card { padding: 10px; }
+  .card > strong { margin-top: 10px; font-size: 14px; }
+  .cardMeta, .quantity { font-size: 11px; }
+  .summary { grid-template-columns: 1fr; gap: 24px; }
+  .saleFields > label { grid-template-columns: 100px 1fr auto; }
+  .preference { margin-top: 48px; }
+  .selects { grid-template-columns: 1fr; gap: 20px; }
+}
