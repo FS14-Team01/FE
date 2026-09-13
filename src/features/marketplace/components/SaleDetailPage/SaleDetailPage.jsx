@@ -181,6 +181,7 @@ export default function SaleDetailPage({ saleId }) {
             setSelectedOffer(null);
             setExchangeAction(null);
           }}
+          isPending={isUpdatingExchangeOffer}
         />
       )}
     </main>
