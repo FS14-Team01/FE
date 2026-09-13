@@ -1,21 +1,68 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import Image from "next/image";
 import styles from "./Modal.module.css";
 
-function Modal({ title, message, confirmText, onConfirm, onClose }) {
+function Modal({
+  title,
+  message,
+  confirmText,
+  onConfirm,
+  onClose,
+  isPending = false,
+}) {
   // 한 페이지에 동시에 여러 공통 모달이 렌더링될 경우 고정 id는 충돌 방지
   const titleId = useId();
   const messageId = useId();
 
+  const titleRef = useRef(null);
+  const previousFocusRef = useRef(null);
+
   const hasValidTitle = typeof title === "string" && title.trim();
-  // 문자열뿐 아니라  줄바꿈 등 허용
+  // 문자열뿐 아니라 줄바꿈 등 허용
   const hasValidMessage = Boolean(message);
   const hasValidConfirmText =
     typeof confirmText === "string" && confirmText.trim();
 
-  if (!hasValidTitle || !hasValidMessage || !hasValidConfirmText) return null;
+  const isValid = hasValidTitle && hasValidMessage && hasValidConfirmText;
+
+  useEffect(() => {
+    if (!isValid) return;
+
+    previousFocusRef.current = document.activeElement;
+
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    titleRef.current?.focus({ preventScroll: true });
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+
+      if (previousFocusRef.current?.isConnected) {
+        previousFocusRef.current.focus({ preventScroll: true });
+      }
+    };
+  }, [isValid]);
+
+  useEffect(() => {
+    if (!isValid) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && !isPending) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isValid, isPending, onClose]);
+
+  if (!isValid) return null;
 
   return (
     <div
@@ -30,6 +77,7 @@ function Modal({ title, message, confirmText, onConfirm, onClose }) {
           type="button"
           className={styles.closeButton}
           onClick={onClose}
+          disabled={isPending}
           aria-label="모달 닫기"
         >
           <Image
@@ -42,7 +90,12 @@ function Modal({ title, message, confirmText, onConfirm, onClose }) {
         </button>
 
         <div className={styles.content}>
-          <h2 id={titleId} className={styles.title}>
+          <h2
+            ref={titleRef}
+            id={titleId}
+            className={styles.title}
+            tabIndex={-1}
+          >
             {title}
           </h2>
 
@@ -54,6 +107,7 @@ function Modal({ title, message, confirmText, onConfirm, onClose }) {
             type="button"
             className={styles.confirmButton}
             onClick={onConfirm}
+            disabled={isPending}
           >
             {confirmText}
           </button>
