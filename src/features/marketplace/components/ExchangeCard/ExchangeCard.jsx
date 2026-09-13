@@ -39,10 +39,12 @@ export default function ExchangeCard({
 }) {
   const {
     id: exchangeOfferId,
+    offeredDescription,
     offeredCard,
     requester,
     saleListing,
   } = exchangeOffer;
+
   const status = normalizeEnum(exchangeOffer.status);
   const gradeClassName = getGradeClassName(offeredCard.grade);
   const gradeLabel = getCardGradeLabel(normalizeEnum(offeredCard.grade));
@@ -56,6 +58,7 @@ export default function ExchangeCard({
   const imageStyle = offeredCard.imageUrl
     ? { "--photo-card-image": `url("${offeredCard.imageUrl}")` }
     : undefined;
+
   // 구조적으로는 isSeller가 크게 필요하지 않지만 두 역할을 명시적으로 검증하려는 목적
   if (!isRequester && !isSeller) {
     return null;
@@ -101,10 +104,11 @@ export default function ExchangeCard({
         </div>
 
         <div className={styles.rule} />
-        {offeredCard.description && (
-          <p className={styles.description}>{offeredCard.description}</p>
+
+        {offeredDescription && (
+          <p className={styles.description}>{offeredDescription}</p>
         )}
-        {/* 추후 공통 에러 객체로 리팩터링 */}
+
         {errorMessage && (
           <p className={styles.errorMessage} role="alert">
             {errorMessage}
@@ -147,6 +151,7 @@ export default function ExchangeCard({
                   {isProcessing ? "처리 중" : "거절"}
                 </span>
               </button>
+
               <button
                 type="button"
                 className={styles.accept}
