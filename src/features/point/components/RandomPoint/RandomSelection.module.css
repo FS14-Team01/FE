@@ -12,14 +12,16 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
+  box-sizing: border-box;
   width: 1034px;
+  max-height: calc(100dvh - 60px);
   padding: 50px 0;
   color: var(--color-white);
   border-radius: 20px;
   background: var(--color-gray-500);
+  overflow-y: auto;
 }
 
 .closeBtn {
@@ -145,6 +147,7 @@
 .selectBtn {
   width: 520px;
   height: 60px;
+  padding: 17px 0;
   border: none;
   border-radius: 2px;
   background: var(--color-brand-yellow);

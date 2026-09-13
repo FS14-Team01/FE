@@ -42,6 +42,16 @@ export default function RandomPointModal({ onClose }) {
     };
   }, [isPending, isRevealing, onClose]);
 
+  // 모달 배경 스크롤 막기
+  useEffect(() => {
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, []);
+
   // 화면에 보여줄 모달 선택
   if (step === "selecting") {
     return (
