@@ -1,68 +1,51 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
-import styles from "./MobileFilterSheet.module.css";
+import styles from "@/components/MobileFilterSheet/MobileFilterSheet.module.css";
+import modalStyles from "./ExchangeModal.module.css";
 
 const TABS = [
   { key: "grade", label: "등급" },
   { key: "category", label: "장르" },
-  { key: "saleStatus", label: "매진 여부" },
 ];
 
 const EMPTY_SELECTION = { tab: undefined, value: undefined };
 
-/**
- * 모바일 전용 통합 필터 바텀시트. 등급/장르/매진 여부 중 한 번에 하나의 필터만 적용된다.
- *
- * @param {{ value: string, label: string }[]} gradeOptions
- * @param {{ value: string, label: string }[]} categoryOptions
- * @param {{ value: string, label: string }[]} saleStatusOptions
- * @param {string} [grade] 선택된 등급
- * @param {string} [category] 선택된 장르
- * @param {string} [saleStatus] 선택된 매진 여부
- * @param {Record<string, number>} [counts] value별 표시 개수. 없으면 표시하지 않음
- * @param {number} [totalCount] 하단 버튼에 표시할 전체 개수
- * @param {(next: { grade?: string, category?: string, saleStatus?: string }) => void} onApply
- * @param {string} [className]
- */
-export default function MobileFilterSheet({
+/** 교환 모달 안에서만 사용하는 등급/카테고리 필터. */
+export default function ExchangeMobileFilter({
   gradeOptions = [],
   categoryOptions = [],
-  saleStatusOptions = [],
   grade,
   category,
-  saleStatus,
-  counts,
-  totalCount,
   onApply,
-  className,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("grade");
   const [selection, setSelection] = useState(EMPTY_SELECTION);
   const titleId = useId();
+  const dialogRef = useRef(null);
 
   const optionsByTab = {
     grade: gradeOptions,
     category: categoryOptions,
-    saleStatus: saleStatusOptions,
   };
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const { overflow } = document.body.style;
-    document.body.style.overflow = "hidden";
+    const dialog = dialogRef.current;
+    const returnFocus = document.activeElement;
+    dialog.showModal();
     return () => {
-      document.body.style.overflow = overflow;
+      dialog.close();
+      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
     };
   }, [isOpen]);
 
   const getCurrentSelection = () => {
     if (grade) return { tab: "grade", value: grade };
     if (category) return { tab: "category", value: category };
-    if (saleStatus) return { tab: "saleStatus", value: saleStatus };
     return EMPTY_SELECTION;
   };
 
@@ -87,17 +70,10 @@ export default function MobileFilterSheet({
     setSelection((prev) => (prev.tab === activeTab ? EMPTY_SELECTION : prev));
   };
 
-  // 시트 안에서 옵션을 고르는 동안에도 버튼 개수가 따라 바뀌도록,
-  // 선택이 있으면 그 옵션의 개수를, 없으면 전체 개수를 쓴다
-  const selectedCount = selection.value
-    ? (counts?.[selection.value] ?? 0)
-    : totalCount;
-
   const handleApply = () => {
     onApply?.({
       grade: selection.tab === "grade" ? selection.value : undefined,
       category: selection.tab === "category" ? selection.value : undefined,
-      saleStatus: selection.tab === "saleStatus" ? selection.value : undefined,
     });
     setIsOpen(false);
   };
@@ -106,7 +82,7 @@ export default function MobileFilterSheet({
     <>
       <button
         type="button"
-        className={`${styles.trigger} ${className ?? ""}`}
+        className={styles.trigger}
         onClick={handleOpen}
         aria-label="필터"
       >
@@ -114,11 +90,15 @@ export default function MobileFilterSheet({
       </button>
 
       {isOpen && (
-        <div
-          className={styles.overlay}
-          role="dialog"
-          aria-modal="true"
+        <dialog
+          ref={dialogRef}
+          className={`${styles.overlay} ${modalStyles.filterDialog}`}
           aria-labelledby={titleId}
+          onCancel={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            handleClose();
+          }}
         >
           <button
             type="button"
@@ -148,18 +128,20 @@ export default function MobileFilterSheet({
             </div>
 
             <div className={styles.tabs} role="tablist">
-              {TABS.map((tab) => (
-                <button
-                  key={tab.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={activeTab === tab.key}
-                  className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ""}`}
-                  onClick={() => setActiveTab(tab.key)}
-                >
-                  {tab.label}
-                </button>
-              ))}
+              {TABS.filter((tab) => optionsByTab[tab.key].length > 0).map(
+                (tab) => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeTab === tab.key}
+                    className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ""}`}
+                    onClick={() => setActiveTab(tab.key)}
+                  >
+                    {tab.label}
+                  </button>
+                ),
+              )}
             </div>
 
             <ul className={styles.optionList} role="listbox">
@@ -176,11 +158,6 @@ export default function MobileFilterSheet({
                     onClick={() => handleSelect(option.value)}
                   >
                     <span>{option.label}</span>
-                    {counts?.[option.value] != null && (
-                      <span className={styles.count}>
-                        {counts[option.value]}개
-                      </span>
-                    )}
                   </button>
                 </li>
               ))}
@@ -214,13 +191,11 @@ export default function MobileFilterSheet({
                 className={styles.applyButton}
                 onClick={handleApply}
               >
-                {selectedCount != null
-                  ? `${selectedCount}개 포토보기`
-                  : "포토보기"}
+                포토보기
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </>
   );

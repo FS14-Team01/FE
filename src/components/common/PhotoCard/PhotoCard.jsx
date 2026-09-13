@@ -16,6 +16,8 @@ export default function PhotoCard({
   showPrice = true,
   href,
   hasPendingExchange,
+  onSelect,
+  disabled = false,
 }) {
   const gradeClass = {
     COMMON: styles.gradeCommon,
@@ -24,10 +26,23 @@ export default function PhotoCard({
     LEGENDARY: styles.gradeLegendary,
   };
 
-  const CardWrapper = href ? Link : "div";
+  const isSelectable = !href && Boolean(onSelect);
+  const CardWrapper = href ? Link : isSelectable ? "button" : "div";
 
   return (
-    <CardWrapper className={styles.photoCard} {...(href ? { href } : {})}>
+    <CardWrapper
+      className={`${styles.photoCard}${isSelectable ? ` ${styles.selectable}` : ""}`}
+      {...(href ? { href } : {})}
+      {...(isSelectable
+        ? {
+            type: "button",
+            onClick: onSelect,
+            disabled,
+            "aria-label": `${name} 선택`,
+            title: name,
+          }
+        : {})}
+    >
       <div className={styles.imgWrap}>
         <img src={imageUrl} alt={name} />
 
