@@ -6,14 +6,25 @@ import ImageCrop from "@/features/create-photo-card/components/ImageCrop/ImageCr
 import styles from "@/features/create-photo-card/components/ImageUpload/ImageUpload.module.css";
 
 const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-export default function ImageUpload({ imageFile, onChange, onTouched, error }) {
+export default function ImageUpload({
+  imageFile,
+  onChange,
+  onTouched,
+  error,
+}) {
   const fileInputRef = useRef(null);
   const [draftFile, setDraftFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [fileError, setFileError] = useState("");
+
+  // 파일 검사 오류를 우선 표시
+  const displayedError = fileError || error;
 
   // 현재 편집 파일과 일치하는 주소만 사용
-  const imageUrl = draftFile && preview?.file === draftFile ? preview.url : "";
+  const imageUrl =
+    draftFile && preview?.file === draftFile ? preview.url : "";
 
   useEffect(() => {
     if (!draftFile) return;
@@ -22,18 +33,33 @@ export default function ImageUpload({ imageFile, onChange, onTouched, error }) {
     setPreview({ file: draftFile, url });
 
     return () => {
+      // 사용이 끝난 임시 주소 정리
       URL.revokeObjectURL(url);
     };
   }, [draftFile]);
 
   const handleFileChange = (event) => {
     const file = event.target.files?.[0];
-    event.target.value = ""; // 같은 파일도 다시 선택 가능
+
+    // 같은 파일도 다시 선택 가능
+    event.target.value = "";
+
     if (!file) return;
-    console.log("파일 형식:", file.type);
-    console.log("파일 용량:", file.size);
-    console.log(ALLOWED_IMAGE_TYPES.includes(file.type));
-    // 이미지 확정하지 않음
+
+    // 허용 형식 검사
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setFileError("PNG, JPG, JPEG, WEBP 파일만 선택해 주세요.");
+      return;
+    }
+
+    // 원본 파일 용량 검사
+    if (file.size > MAX_IMAGE_SIZE) {
+      setFileError("5MB 이하의 파일을 업로드해 주세요.");
+      return;
+    }
+
+    // 검사를 통과하면 편집용 파일로 저장
+    setFileError("");
     setDraftFile(file);
   };
 
@@ -42,11 +68,23 @@ export default function ImageUpload({ imageFile, onChange, onTouched, error }) {
   };
 
   const handleCropClose = () => {
-    setDraftFile(null); // 취소하면 기존 확정 이미지 유지
+    // 취소하면 기존 확정 이미지 유지
+    setDraftFile(null);
   };
 
   const handleCropApply = (croppedFile) => {
-    onChange(croppedFile); // 잘린 파일을 부모에 전달
+    // 실제 업로드할 크롭 결과도 용량 검사
+    if (croppedFile.size > MAX_IMAGE_SIZE) {
+      setFileError(
+        "자른 이미지가 5MB를 초과했어요. 더 작은 영역이나 다른 사진을 선택해 주세요."
+      );
+      setDraftFile(null);
+      return;
+    }
+
+    // 정상 결과만 부모에 전달
+    setFileError("");
+    onChange(croppedFile);
     onTouched?.();
     setDraftFile(null);
   };
@@ -56,8 +94,13 @@ export default function ImageUpload({ imageFile, onChange, onTouched, error }) {
       <label className={styles.formTitle}>사진 업로드</label>
 
       <div className={styles.imageUploadForm}>
-        {/* 선택된 파일명 표시 */}
-        <div title={imageFile?.name} className={`${styles.fileName} ${error ? styles.errorInput : ""}`}>
+        {/* 확정된 파일명 표시 */}
+        <div
+          title={imageFile?.name}
+          className={`${styles.fileName} ${
+            displayedError ? styles.errorInput : ""
+          }`}
+        >
           {imageFile ? imageFile.name : "사진 업로드"}
         </div>
 
@@ -65,7 +108,7 @@ export default function ImageUpload({ imageFile, onChange, onTouched, error }) {
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept=".png,.jpg,.jpeg,.webp"
           className={styles.fileInput}
           onChange={handleFileChange}
         />
@@ -80,6 +123,14 @@ export default function ImageUpload({ imageFile, onChange, onTouched, error }) {
         </Button>
       </div>
 
+      {/* 파일 검사 오류 또는 부모의 오류 표시 */}
+      {displayedError && (
+        <p className={styles.errorMessage} role="alert">
+          {displayedError}
+        </p>
+      )}
+
+      {/* 편집할 이미지가 있을 때만 모달 표시 */}
       {imageUrl && (
         <ImageCrop
           key={imageUrl}

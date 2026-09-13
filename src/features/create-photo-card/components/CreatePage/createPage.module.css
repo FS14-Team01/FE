@@ -77,6 +77,7 @@
   background: var(--color-gray-400);
   border-radius: 10px;
 }
+
 .createDetail::-webkit-scrollbar-button {
   width: 0;
   height: 0;
@@ -102,9 +103,11 @@
   color: var(--color-error);
   font-size: 14px;
 }
+
 .errorInput {
   border-color: var(--color-error);
 }
+
 @media(max-width:1199px) {
   .PhotoCardCreateWrap {
     padding: 40px 24px;
@@ -117,23 +120,24 @@
   .createForm {
     max-width: 440px;
   }
+
   .createSort {
     font-size: 14px;
   }
+
   .createSort.createSort.createSort button {
-  height: 55px;
-}
+    height: 55px;
+  }
+
   .createDetail {
     height: 140px;
     padding: 12px 20px;
     font-size: 14px;
   }
+
   .errorMessage {
-  margin-top: 10px;
-  margin-bottom: 0;
-  color: var(--color-error);
-  font-size: 12px;
-}
+    font-size: 12px;
+  }
 }
 
 @media(max-width:743px) {

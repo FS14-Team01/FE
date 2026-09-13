@@ -20,15 +20,24 @@
   padding: 0 20px;
   border-radius: 2px;
   box-sizing: border-box;
-  max-height: 60px;
+  max-ßheight: 60px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
 }
+
 .errorInput {
   border-color: var(--color-error);
 }
+
+.errorMessage {
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: var(--color-error);
+  font-size: 14px;
+}
+
 .selectButton {
   width: 120px;
   height: 60px;
@@ -37,6 +46,7 @@
   border-color: var(--color-brand-yellow);
   border-radius: 2px;
   background-color: transparent;
+  padding: 0;
 }
 
 @media(max-width:1199px) {
