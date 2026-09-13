@@ -4,11 +4,13 @@ import Dropdown from "@/components/common/Dropdown/Dropdown";
 import { CATEGORY_OPTIONS, GRADE_OPTIONS } from "@/components/common/Dropdown/dropdownOptions";
 import SearchInput from "@/components/common/SearchInput/SearchInput";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./MyGalleryPage.module.css";
 import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
 import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 
 export default function MyGalleryPage() {
+  const router = useRouter(); // 페이지 이동에 사용할 객체
   const nickname = "유디"
   const totalCount = "40"
   const gradeCounts = [
@@ -42,6 +44,7 @@ export default function MyGalleryPage() {
             type="button"
             variant="primary"
             size="lg"
+            onClick={() => router.push("/my-gallery/create")}
           >포토카드 생성하기</Button>
         </div>
         <div className={styles.ownershipWrap}>
