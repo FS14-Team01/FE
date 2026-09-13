@@ -31,6 +31,7 @@ export default function CreatePage() {
     description: false,
   });
 
+  // 특정 필드를 touched 상태로 변경
   const handleTouched = (field) => {
     setTouched((prev) => ({
       ...prev,
@@ -38,29 +39,39 @@ export default function CreatePage() {
     }));
   };
 
-  // 필드별 오류 메시지
+  // API 연결 전 form 기본 submit 방지
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  // 포토카드 이름 오류
   const nameError =
     touched.name && !name.trim()
       ? "포토카드 이름을 입력해 주세요."
       : "";
 
+  // 등급 오류
   const gradeError =
     touched.grade && !grade
       ? "등급을 선택해 주세요."
       : "";
 
+  // 장르 오류
   const categoryError =
     touched.category && !category
       ? "장르를 선택해 주세요."
       : "";
 
+  // 가격 오류
   const priceError =
     touched.price && price === ""
       ? "가격을 입력해 주세요."
-      : price !== "" && Number(price) > 1000
-        ? "가격은 1,000P 이하로 입력 가능합니다."
+      : price !== "" &&
+          (Number(price) < 0 || Number(price) > 1000)
+        ? "가격은 0P 이상 1,000P 이하로 입력 가능합니다."
         : "";
 
+  // 총 발행량 오류
   const totalSupplyError =
     touched.totalSupply && totalSupply === ""
       ? "총 발행량을 입력해 주세요."
@@ -69,11 +80,13 @@ export default function CreatePage() {
         ? "총 발행량은 1장 이상 10장 이하로 선택 가능합니다."
         : "";
 
+  // 이미지 오류
   const imageError =
     touched.image && !imageFile
       ? "이미지를 업로드해 주세요."
       : "";
 
+  // 설명 오류
   const descriptionError =
     touched.description && !description.trim()
       ? "포토카드 설명을 입력해 주세요."
@@ -85,6 +98,7 @@ export default function CreatePage() {
     !grade ||
     !category ||
     price === "" ||
+    Number(price) < 0 ||
     Number(price) > 1000 ||
     totalSupply === "" ||
     Number(totalSupply) < 1 ||
@@ -98,7 +112,10 @@ export default function CreatePage() {
         <div className={styles.title}>포토카드 생성</div>
       </div>
 
-      <form className={styles.createForm}>
+      <form
+        className={styles.createForm}
+        onSubmit={handleSubmit}
+      >
         {/* 포토카드 이름 */}
         <div className={styles.formWrap}>
           <CreateInput
@@ -141,7 +158,9 @@ export default function CreatePage() {
           </div>
 
           {gradeError && (
-            <p className={styles.errorMessage}>{gradeError}</p>
+            <p className={styles.errorMessage}>
+              {gradeError}
+            </p>
           )}
         </div>
 
@@ -174,7 +193,9 @@ export default function CreatePage() {
           </div>
 
           {categoryError && (
-            <p className={styles.errorMessage}>{categoryError}</p>
+            <p className={styles.errorMessage}>
+              {categoryError}
+            </p>
           )}
         </div>
 
@@ -208,7 +229,7 @@ export default function CreatePage() {
           />
         </div>
 
-        {/* 이미지 오류 메시지는 ImageUpload에서 표시 */}
+        {/* 이미지 */}
         <div className={styles.formWrap}>
           <ImageUpload
             imageFile={imageFile}
@@ -218,7 +239,7 @@ export default function CreatePage() {
           />
         </div>
 
-        {/* 설명 */}
+        {/* 포토카드 설명 */}
         <div className={styles.formWrap}>
           <div className={styles.formTitle}>포토카드 설명</div>
 
