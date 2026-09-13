@@ -10,15 +10,17 @@ const RANDOM_BOXES = [
   { id: "red", src: "/assets/ic_random_box_red.png" },
 ];
 
-// 테스트용 랜덤 포인트 api 호출 결과
-const RANDOM_POINT_RESULT = {
-  amount: 50,
-  unselectedAmounts: [20, 200],
-};
-
-export default function RandomSelection({ setStep, onClose }) {
+export default function RandomSelection({
+  setStep,
+  isRevealing,
+  setIsRevealing,
+  onClose,
+  onDrawRandomPoint,
+  isDrawing,
+  amount,
+  unselectedAmounts,
+}) {
   const [selectedBox, setSelectedBox] = useState(null);
-  const [isFadingOut, setIsFadingOut] = useState(false);
   const [isSelectConfirmed, setIsSelectConfirmed] = useState(false);
 
   const unselectedBoxes = RANDOM_BOXES.filter(
@@ -26,7 +28,7 @@ export default function RandomSelection({ setStep, onClose }) {
   );
 
   useEffect(() => {
-    if (!isFadingOut) return undefined;
+    if (!isRevealing) return undefined;
 
     const revealTimer = setTimeout(() => {
       setIsSelectConfirmed(true);
@@ -40,7 +42,16 @@ export default function RandomSelection({ setStep, onClose }) {
       clearTimeout(revealTimer);
       clearTimeout(resultTimer);
     };
-  }, [isFadingOut, setStep]);
+  }, [isRevealing, setStep]);
+
+  const handleConfirm = async () => {
+    try {
+      await onDrawRandomPoint();
+      setIsRevealing(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -56,6 +67,7 @@ export default function RandomSelection({ setStep, onClose }) {
           onClick={onClose}
           aria-label="모달 닫기"
           autoFocus
+          disabled={isRevealing || isDrawing}
         >
           <Image src="/assets/ic_close.svg" width={25} height={25} alt="" />
         </button>
@@ -83,12 +95,12 @@ export default function RandomSelection({ setStep, onClose }) {
                     type="button"
                     aria-label={`${index + 1}번째 랜덤 포인트 박스`}
                     aria-pressed={isSelected}
-                    disabled={isFadingOut}
+                    disabled={isRevealing || isDrawing}
                     className={`
                     ${styles.boxBtn}
                     ${isSelected ? styles.selectedBox : ""}
                     ${isUnselected ? styles.unselectedBox : ""}
-                    ${isFadingOut ? styles.fadeOut : ""}
+                    ${isRevealing ? styles.fadeOut : ""}
                   `}
                     onClick={() => setSelectedBox(randomBox.id)}
                   >
@@ -105,12 +117,12 @@ export default function RandomSelection({ setStep, onClose }) {
             : RANDOM_BOXES.map((randomBox) =>
                 randomBox.id === selectedBox ? (
                   <p key={randomBox.id} className={styles.selectedPoint}>
-                    {RANDOM_POINT_RESULT.amount}P
+                    {amount}P
                   </p>
                 ) : (
                   <p key={randomBox.id} className={styles.unselectedPoint}>
                     {
-                      RANDOM_POINT_RESULT.unselectedAmounts[
+                      unselectedAmounts[
                         unselectedBoxes.findIndex(
                           (box) => box.id === randomBox.id,
                         )
@@ -126,8 +138,8 @@ export default function RandomSelection({ setStep, onClose }) {
           <button
             type="button"
             className={styles.selectBtn}
-            onClick={() => setIsFadingOut(true)}
-            disabled={isFadingOut}
+            onClick={handleConfirm}
+            disabled={isRevealing || isDrawing}
           >
             선택 완료
           </button>
