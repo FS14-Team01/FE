@@ -19,16 +19,19 @@ function Modal({
   const titleRef = useRef(null);
   const previousFocusRef = useRef(null);
 
-  const hasValidTitle = typeof title === "string" && title.trim();
+  const hasValidTitle = typeof title === "string" && Boolean(title.trim());
+
   // 문자열뿐 아니라 줄바꿈 등 허용
   const hasValidMessage = Boolean(message);
-  const hasValidConfirmText =
-    typeof confirmText === "string" && confirmText.trim();
 
-  const isValid = hasValidTitle && hasValidMessage && hasValidConfirmText;
+  const hasValidConfirmText =
+    typeof confirmText === "string" && Boolean(confirmText.trim());
+
+  const isModalContentValid =
+    hasValidTitle && hasValidMessage && hasValidConfirmText;
 
   useEffect(() => {
-    if (!isValid) return;
+    if (!isModalContentValid) return;
 
     previousFocusRef.current = document.activeElement;
 
@@ -44,10 +47,10 @@ function Modal({
         previousFocusRef.current.focus({ preventScroll: true });
       }
     };
-  }, [isValid]);
+  }, [isModalContentValid]);
 
   useEffect(() => {
-    if (!isValid) return;
+    if (!isModalContentValid) return;
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && !isPending) {
@@ -60,9 +63,9 @@ function Modal({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isValid, isPending, onClose]);
+  }, [isModalContentValid, isPending, onClose]);
 
-  if (!isValid) return null;
+  if (!isModalContentValid) return null;
 
   return (
     <div
