@@ -106,6 +106,15 @@
     gap: 20px;
   }
 
+  /*
+   * 공통 컴포넌트에 작성된 비율(342px:561px)은 유지하면서 칸 너비에 맞춘다.
+   */
+  .cardGrid > * {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 342 / 561;
+  }
+
   .sellButtonDesktop {
     width: 342px;
     height: 60px !important;
@@ -172,6 +181,11 @@
   .cardGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+  }
+
+  /* 모바일 카드 비율(170px:234px) 유지 */
+  .cardGrid > * {
+    aspect-ratio: 170 / 234;
   }
 
   .sellButtonDesktop {
