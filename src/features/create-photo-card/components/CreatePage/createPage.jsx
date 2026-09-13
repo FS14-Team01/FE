@@ -7,9 +7,9 @@ import {
   GRADE_OPTIONS,
 } from "@/components/common/Dropdown/dropdownOptions";
 import Button from "@/components/common/Button/Button";
+import CreateInput from "@/features/create-photo-card/components/CreateInput/createInput";
+import ImageUpload from "@/features/create-photo-card/components/ImageUpload/ImageUpload";
 import styles from "@/features/create-photo-card/components/CreatePage/createPage.module.css";
-import CreateInput from "../CreateInput/createInput";
-import ImageUpload from "../ImageUpload/ImageUpload";
 
 export default function CreatePage() {
   const [name, setName] = useState("");
@@ -38,7 +38,7 @@ export default function CreatePage() {
     }));
   };
 
-  // 에러 메시지
+  // 필드별 오류 메시지
   const nameError =
     touched.name && !name.trim()
       ? "포토카드 이름을 입력해 주세요."
@@ -208,7 +208,7 @@ export default function CreatePage() {
           />
         </div>
 
-        {/* 이미지 */}
+        {/* 이미지 오류 메시지는 ImageUpload에서 표시 */}
         <div className={styles.formWrap}>
           <ImageUpload
             imageFile={imageFile}
@@ -216,10 +216,6 @@ export default function CreatePage() {
             onTouched={() => handleTouched("image")}
             error={imageError}
           />
-
-          {imageError && (
-            <p className={styles.errorMessage}>{imageError}</p>
-          )}
         </div>
 
         {/* 설명 */}
