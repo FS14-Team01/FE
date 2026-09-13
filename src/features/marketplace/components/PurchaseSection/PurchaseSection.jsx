@@ -83,11 +83,7 @@ export default function PurchaseSection({ sale }) {
         <Modal
           title="포토카드 구매"
           message={
-            <>
-              [{getCardGradeLabel(sale.photoCard.grade)} | {sale.photoCard.name}]
-              <br />
-              {quantity}장을 구매하시겠습니까?
-            </>
+            `[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${quantity}장을 구매하시겠습니까?`
           }
           confirmText="구매하기"
           onConfirm={handleConfirmPurchase}
@@ -96,20 +92,18 @@ export default function PurchaseSection({ sale }) {
       )}
 
       {purchasedQuantity !== null && (
-        <Modal
-          title="구매 성공"
-          message={
-            <>
-              [{getCardGradeLabel(sale.photoCard.grade)} | {sale.photoCard.name}]
-              <br />
-              {purchasedQuantity}장 구매에 성공했습니다!
-            </>
-          }
-          confirmText="마이갤러리에서 확인하기"
-          // TODO: 마이갤러리 라우트 경로 확정 후 수정
-          onConfirm={() => router.push("/my-gallery")}
-          onClose={() => setPurchasedQuantity(null)}
-        />
+        <div className={styles.successModal}>
+          <Modal
+            title="구매 성공"
+            message={
+              `[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${purchasedQuantity}장 구매에 성공했습니다!`
+            }
+            confirmText="마이갤러리에서 확인하기"
+            // TODO: 마이갤러리 라우트 경로 확정 후 수정
+            onConfirm={() => router.push("/my-gallery")}
+            onClose={() => setPurchasedQuantity(null)}
+          />
+        </div>
       )}
     </section>
   );
