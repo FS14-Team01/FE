@@ -25,6 +25,11 @@
   cursor: pointer;
 }
 
+.closeButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .iconClose {
   width: 32px;
   height: 32px;
@@ -71,6 +76,11 @@
   font-weight: 700;
   line-height: normal;
   cursor: pointer;
+}
+
+.confirmButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 @media (max-width: 1199px) {

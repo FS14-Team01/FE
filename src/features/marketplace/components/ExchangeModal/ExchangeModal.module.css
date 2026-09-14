@@ -1,0 +1,209 @@
+.toolbar {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 60px;
+  margin-top: 20px;
+}
+
+.desktopFilters {
+  display: flex;
+  align-items: center;
+  gap: 45px;
+}
+
+.mobileFilter {
+  display: none;
+}
+
+/* 공통 모바일 필터 스타일은 그대로 재사용하고 dialog 크기만 여기서 지정한다. */
+.filterDialog {
+  width: 100%;
+  height: 100dvh;
+  max-width: 100%;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--color-white);
+  background: transparent;
+}
+
+.filterDialog::backdrop {
+  background: transparent;
+}
+
+.cardListViewport {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  margin-top: 40px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--color-gray-400) var(--color-gray-500);
+  scrollbar-width: thin;
+}
+
+.cardGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, max-content);
+  justify-content: space-evenly;
+  align-items: start;
+  row-gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cardOption {
+  min-width: 0;
+}
+
+.offerLayout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.offerForm {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.description {
+  width: 100%;
+  min-height: 125px;
+  padding: 18px 20px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 2px;
+  background: var(--color-gray-500);
+  color: var(--color-white);
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.description::placeholder {
+  color: var(--color-gray-200);
+  font-weight: 300;
+}
+
+.description:focus-visible {
+  outline: 2px solid var(--color-grade-blue);
+  outline-offset: 2px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 60px;
+}
+
+.notice {
+  margin: 40px 0;
+  color: var(--color-gray-300);
+  text-align: center;
+}
+
+.sentinel {
+  height: 1px;
+  margin-top: -1px;
+}
+
+@media (max-width: 1199px) {
+  .cardListViewport {
+    margin-top: 0;
+    overflow-y: visible;
+  }
+
+  .cardGrid {
+    margin-top: 40px;
+  }
+
+  .sentinel {
+    margin-top: 0;
+  }
+
+  .toolbar {
+    gap: 20px 30px;
+  }
+
+  .desktopFilters {
+    gap: 25px;
+  }
+
+  .offerLayout {
+    /* 태블릿에서는 카드 폭과 왼쪽 위치를 유지하고 입력 영역만 늘린다. */
+    grid-template-columns: 342px minmax(0, 1fr);
+    margin-top: 40px;
+  }
+
+  .label {
+    font-size: 16px;
+  }
+
+  .description {
+    min-height: 124px;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 743px) {
+  .toolbar {
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .mobileFilter {
+    display: flex;
+    flex: 0 0 40px;
+  }
+
+  .desktopFilters {
+    display: none;
+  }
+
+  .toolbar .search {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+  }
+
+  .cardGrid {
+    margin-top: 20px;
+  }
+
+  .offerLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 60px;
+    margin-top: 25px;
+  }
+
+  .offerLayout > :first-child {
+    max-width: 342px;
+    justify-self: center;
+  }
+
+  .description {
+    min-height: 140px;
+  }
+
+  .actions {
+    gap: 15px;
+    margin-top: 44px;
+  }
+}
