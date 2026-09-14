@@ -42,9 +42,15 @@ export default function MainLayout({ children }) {
     }
   };
 
+  const mockUser = {
+    nickname: "뽀또야",
+    points: 1200,
+  }
+
   return (
     <>
       <Header
+        user={mockUser}
         onRandomBoxClick={openRandomPoint}
         onNotificationClick={toggleNotification}
         onNotificationClose={closeNotification}

@@ -6,7 +6,44 @@
   width: 300px;
   max-height: 535px;
   border-radius: 2px;
+  background: var(--color-gray-500);
   overflow-y: auto;
+}
+
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  min-height: 200px;
+  color: var(--color-gray-100);
+}
+
+.loadMoreStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  padding: 24px 0;
+  color: var(--color-gray-100);
+}
+
+.statusContainer p, .loadMoreStatus p {
+  margin: 0;
+}
+
+.retryBtn {
+  width: 120px;
+  height: 53px;
+  border: none;
+  background-color: var(--color-brand-yellow);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .list {
@@ -29,6 +66,9 @@
     width: 100%;
     max-height: none;
     border-radius: 0;
-    background: var(--color-black);
+  }
+
+  .statusContainer {
+    min-height: 100%;
   }
 }
