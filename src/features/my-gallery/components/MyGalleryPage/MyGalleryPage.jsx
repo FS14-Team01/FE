@@ -96,6 +96,7 @@ export default function MyGalleryPage() {
           {photoCardList.map((photoCard) => (
             <PhotoCard
               variant="ownership"
+              showPrice={false}
               key={photoCard.id}
               name={photoCard.name}
               imageUrl={photoCard.imageUrl}
