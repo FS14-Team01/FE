@@ -18,6 +18,7 @@ export default function ExchangeOfferSection({
     error,
     fetchNextPage,
     hasNextPage,
+    isFetching,
     isFetchingNextPage,
     isFetchNextPageError,
   } = useExchangeOffers(saleId, pageSize);
@@ -37,6 +38,7 @@ export default function ExchangeOfferSection({
     if (
       !loadMoreTarget ||
       !hasNextPage ||
+      isFetching ||
       isFetchingNextPage ||
       isFetchNextPageError
     )
@@ -53,7 +55,13 @@ export default function ExchangeOfferSection({
     loadMoreObserver.observe(loadMoreTarget);
 
     return () => loadMoreObserver.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError]);
+  }, [
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  ]);
 
   return (
     <section
