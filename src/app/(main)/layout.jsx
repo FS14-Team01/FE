@@ -18,10 +18,6 @@ export default function MainLayout({ children }) {
   const closeNotification = () => setIsNotificationOpen(false);
   const toggleNotification = () => setIsNotificationOpen((current) => !current);
 
-  const mockUser = {
-    nickname: "뽀또야",
-  };
-
   // 유저 포인트 조회 hook
   const { data } = useGetPoints();
   const canUseRandomBox = data?.canUseRandomBox ?? false;
@@ -30,7 +26,6 @@ export default function MainLayout({ children }) {
   return (
     <>
       <Header
-        user={mockUser}
         points={points}
         canUseRandomBox={canUseRandomBox}
         onRandomBoxClick={openRandomPoint}
