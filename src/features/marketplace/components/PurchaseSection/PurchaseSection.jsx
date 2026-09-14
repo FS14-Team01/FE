@@ -8,6 +8,11 @@ import styles from "./PurchaseSection.module.css";
 
 const MIN_QUANTITY = 1;
 
+// TODO: 다른 화면과 중복 정의라 공통 유틸로 분리 필요
+function formatPoints(points) {
+  return `${new Intl.NumberFormat("ko-KR").format(points)} P`;
+}
+
 export default function PurchaseSection({ sale }) {
   const [quantity, setQuantity] = useState(MIN_QUANTITY);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -15,20 +20,24 @@ export default function PurchaseSection({ sale }) {
   const router = useRouter();
 
   const isSoldOut = sale.status !== "ON_SALE" || sale.remainingQuantity === 0;
-  const totalPrice = sale.price * quantity;
+
+  // 선택 후 재고가 줄어들 수 있어 표시 시점에 잔여 수량으로 다시 제한한다
+  const maxQuantity = Math.max(MIN_QUANTITY, sale.remainingQuantity);
+  const selectedQuantity = Math.min(quantity, maxQuantity);
+  const totalPrice = sale.price * selectedQuantity;
 
   const handleDecrease = () => {
-    setQuantity((prev) => Math.max(MIN_QUANTITY, prev - 1));
+    setQuantity(Math.max(MIN_QUANTITY, selectedQuantity - 1));
   };
 
   const handleIncrease = () => {
-    setQuantity((prev) => Math.min(sale.remainingQuantity, prev + 1));
+    setQuantity(Math.min(maxQuantity, selectedQuantity + 1));
   };
 
   // TODO: POST /sales/:saleId/purchases 연동 후 실제 성공/실패로 교체
   const handleConfirmPurchase = () => {
     setIsConfirmOpen(false);
-    setPurchasedQuantity(quantity);
+    setPurchasedQuantity(selectedQuantity);
   };
 
   return (
@@ -45,17 +54,17 @@ export default function PurchaseSection({ sale }) {
             type="button"
             className={styles.stepperButton}
             onClick={handleDecrease}
-            disabled={isSoldOut || quantity <= MIN_QUANTITY}
+            disabled={isSoldOut || selectedQuantity <= MIN_QUANTITY}
             aria-label="구매수량 감소"
           >
             −
           </button>
-          <span className={styles.stepperValue}>{quantity}</span>
+          <span className={styles.stepperValue}>{selectedQuantity}</span>
           <button
             type="button"
             className={styles.stepperButton}
             onClick={handleIncrease}
-            disabled={isSoldOut || quantity >= sale.remainingQuantity}
+            disabled={isSoldOut || selectedQuantity >= maxQuantity}
             aria-label="구매수량 증가"
           >
             +
@@ -66,7 +75,8 @@ export default function PurchaseSection({ sale }) {
       <div className={styles.priceRow}>
         <span className={styles.label}>총 가격</span>
         <span className={styles.totalPrice}>
-          {totalPrice} P <span className={styles.quantityHint}>({quantity}장)</span>
+          {formatPoints(totalPrice)}{" "}
+          <span className={styles.quantityHint}>({selectedQuantity}장)</span>
         </span>
       </div>
 
@@ -83,7 +93,7 @@ export default function PurchaseSection({ sale }) {
         <Modal
           title="포토카드 구매"
           message={
-            `[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${quantity}장을 구매하시겠습니까?`
+            `[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${selectedQuantity}장을 구매하시겠습니까?`
           }
           confirmText="구매하기"
           onConfirm={handleConfirmPurchase}
