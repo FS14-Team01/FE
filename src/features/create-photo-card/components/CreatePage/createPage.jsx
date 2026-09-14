@@ -15,7 +15,6 @@ export default function CreatePage() {
   const [name, setName] = useState("");
   const [grade, setGrade] = useState("");
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
   const [totalSupply, setTotalSupply] = useState("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState(null);
@@ -25,7 +24,6 @@ export default function CreatePage() {
     name: false,
     grade: false,
     category: false,
-    price: false,
     totalSupply: false,
     image: false,
     description: false,
@@ -62,15 +60,6 @@ export default function CreatePage() {
       ? "장르를 선택해 주세요."
       : "";
 
-  // 가격 오류
-  const priceError =
-    touched.price && price === ""
-      ? "가격을 입력해 주세요."
-      : price !== "" &&
-          (Number(price) < 0 || Number(price) > 1000)
-        ? "가격은 0P 이상 1,000P 이하로 입력 가능합니다."
-        : "";
-
   // 총 발행량 오류
   const totalSupplyError =
     touched.totalSupply && totalSupply === ""
@@ -97,9 +86,6 @@ export default function CreatePage() {
     !name.trim() ||
     !grade ||
     !category ||
-    price === "" ||
-    Number(price) < 0 ||
-    Number(price) > 1000 ||
     totalSupply === "" ||
     Number(totalSupply) < 1 ||
     Number(totalSupply) > 10 ||
@@ -197,21 +183,6 @@ export default function CreatePage() {
               {categoryError}
             </p>
           )}
-        </div>
-
-        {/* 가격 */}
-        <div className={styles.formWrap}>
-          <CreateInput
-            label="가격"
-            type="number"
-            min={0}
-            max={1000}
-            placeholder="가격을 입력해 주세요"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-            onBlur={() => handleTouched("price")}
-            error={priceError}
-          />
         </div>
 
         {/* 총 발행량 */}

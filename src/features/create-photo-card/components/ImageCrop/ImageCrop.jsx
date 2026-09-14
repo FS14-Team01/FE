@@ -76,12 +76,12 @@ export default function ImageCrop({ imageUrl, fileName, onClose, onApply }) {
         canvas.toBlob((result) => {
           if (result) resolve(result);
           else reject(new Error("이미지 생성에 실패했습니다. 다시 시도해 주세요."));
-        }, "image/webp");
+        }, "image/webp"); // WEBP로 생성 요청
       });
 
+      const extension = blob.type === "image/webp" ? "webp" : "png";
       const name = (fileName || "photo").replace(/\.[^.]+$/, "");
-      const file = new File([blob], `${name}-cropped.webp`, { type: "image/webp" });
-      console.log("크롭 결과:", file.name, file.type, file.size);
+      const file = new File([blob], `${name}-cropped.${extension}`, { type: blob.type });
       onApply(file);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "이미지 처리에 실패했습니다.");
