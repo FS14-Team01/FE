@@ -75,11 +75,6 @@ export default function CreatePage() {
       ? "이미지를 업로드해 주세요."
       : "";
 
-  // 설명 오류
-  const descriptionError =
-    touched.description && !description.trim()
-      ? "포토카드 설명을 입력해 주세요."
-      : "";
 
   // 모든 필드가 정상이어야 생성 버튼 활성화
   const isFormInvalid =
@@ -89,8 +84,7 @@ export default function CreatePage() {
     totalSupply === "" ||
     Number(totalSupply) < 1 ||
     Number(totalSupply) > 10 ||
-    !imageFile ||
-    !description.trim();
+    !imageFile;
 
   return (
     <div className={styles.PhotoCardCreateWrap}>
@@ -215,20 +209,11 @@ export default function CreatePage() {
           <div className={styles.formTitle}>포토카드 설명</div>
 
           <textarea
-            className={`${styles.createDetail} ${
-              descriptionError ? styles.errorInput : ""
-            }`}
+            className={styles.createDetail}
             placeholder="카드 설명을 입력해 주세요"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            onBlur={() => handleTouched("description")}
           />
-
-          {descriptionError && (
-            <p className={styles.errorMessage}>
-              {descriptionError}
-            </p>
-          )}
         </div>
 
         {/* 생성하기 */}

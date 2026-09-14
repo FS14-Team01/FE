@@ -32,15 +32,20 @@ export default function CreateInput({
         value={value}
         onChange={handleChange}
         onBlur={onBlur}
-        type={type}
+        type={type === "number" ? "text" : type}
+        inputMode={type === "number" ? "numeric" : undefined}
         max={max}
         min={min}
-        className={`${styles.createInput} ${
-          variant ? styles[variant] : ""
-        } ${error ? styles.errorInput : ""}`}
+        className={`${styles.createInput} ${variant ? styles[variant] : ""
+          } ${error ? styles.errorInput : ""}`}
         onKeyDown={(event) => {
           if (type === "number" && ["-", ".", "e", "E"].includes(event.key)) {
             event.preventDefault();
+          }
+        }}
+        onWheel={(event) => {
+          if (type === "number") {
+            event.currentTarget.blur(); // 휠로 값이 바뀌지 않도록 포커스 해제
           }
         }}
       />
