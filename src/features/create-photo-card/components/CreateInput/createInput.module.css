@@ -33,10 +33,12 @@
 .errorInput {
   border-color: var(--color-error);
 }
+
 .errorMessage {
   color: var(--color-error);
   margin-top: 10px;
   margin-bottom: 0;
+  font-size: 14px;
 }
 
 @media(max-width:1199px) {
