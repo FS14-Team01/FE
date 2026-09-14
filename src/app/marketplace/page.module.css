@@ -58,10 +58,13 @@
   padding-top: 40px;
 }
 
+/* 카드 너비와 간격을 고정하고 목록 전체를 가운데 정렬한다 */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 440px);
+  justify-content: center;
   gap: 80px;
+  width: 100%;
 }
 
 .empty {
@@ -86,6 +89,13 @@
   font-size: 16px !important;
 }
 
+/* 반응형: 데스크톱 (1200px ~ 1599px) */
+@media (max-width: 1599px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 440px);
+  }
+}
+
 /* 반응형: 태블릿 */
 @media (max-width: 1199px) {
   .main {
@@ -102,17 +112,8 @@
   }
 
   .cardGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 342px);
     gap: 20px;
-  }
-
-  /*
-   * 공통 컴포넌트에 작성된 비율(342px:561px)은 유지하면서 칸 너비에 맞춘다.
-   */
-  .cardGrid > * {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 342 / 561;
   }
 
   .sellButtonDesktop {
@@ -178,14 +179,13 @@
     padding-top: 20px;
   }
 
+  /* 모바일 카드 너비가 170px이라
+     600~743px 구간에서는 3열 배치도 가능하지만,
+     공통 반응형 기준 유지를 위해 현재는 2열로 유지한다.
+     통합 QA 후 필요 시 리팩터링 여부를 논의한다. */
   .cardGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  /* 모바일 카드 비율(170px:234px) 유지 */
-  .cardGrid > * {
-    aspect-ratio: 170 / 234;
+    grid-template-columns: repeat(2, 170px);
+    gap: 15px;
   }
 
   .sellButtonDesktop {
