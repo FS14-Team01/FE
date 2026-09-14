@@ -16,6 +16,7 @@ export default function ExchangeOfferSection({
     isPending,
     isError,
     error,
+    refetch,
     fetchNextPage,
     hasNextPage,
     isFetching,
@@ -23,7 +24,10 @@ export default function ExchangeOfferSection({
     isFetchNextPageError,
   } = useExchangeOffers(saleId, pageSize);
 
-  const isInitialError = isError && !isFetchNextPageError;
+  const isUnauthorized =
+    error?.status === 401 && error?.code === "UNAUTHORIZED";
+
+  const isInitialError = isError && !isFetchNextPageError && !isUnauthorized;
 
   const exchangeOffers =
     exchangeOfferData?.pages.flatMap((page) => page.items) ?? [];
@@ -76,40 +80,76 @@ export default function ExchangeOfferSection({
       </div>
 
       <div className={styles.content}>
-        {isPending && <p>교환 제시 목록을 불러오는 중입니다.</p>}
-
-        {isInitialError && (
-          <p role="alert">
-            {error?.message ?? "교환 제시 목록을 불러오지 못했습니다."}
+        {isPending && (
+          <p className={styles.statusMessage}>
+            교환 제시 목록을 불러오는 중입니다.
           </p>
         )}
 
-        {!isPending && !isInitialError && exchangeOffers.length === 0 && (
-          <p>아직 받은 교환 제안이 없습니다.</p>
+        {isInitialError && (
+          <div className={styles.statusContainer}>
+            <p className={styles.statusMessage} role="alert">
+              {error?.message ?? "교환 제시 목록을 불러오지 못했습니다."}
+            </p>
+
+            <button
+              type="button"
+              className={styles.retryButton}
+              onClick={() => refetch()}
+              disabled={isFetching}
+            >
+              다시 시도
+            </button>
+          </div>
         )}
+
+        {!isPending &&
+          !isInitialError &&
+          !isUnauthorized &&
+          exchangeOffers.length === 0 && (
+            <p className={styles.statusMessage}>
+              아직 받은 교환 제안이 없습니다.
+            </p>
+          )}
 
         {/* 상위에서 이미 분기가 끝난 "seller"결과를 명시 */}
         {!isPending &&
           !isInitialError &&
-          exchangeOffers.map((exchangeOffer) => (
-            <ExchangeCard
-              key={exchangeOffer.id}
-              viewerRole="seller"
-              exchangeOffer={exchangeOffer}
-              onAccept={() => onAccept(exchangeOffer)}
-              onReject={() => onReject(exchangeOffer)}
-            />
-          ))}
+          !isUnauthorized &&
+          exchangeOffers.length > 0 && (
+            <div className={styles.cardList}>
+              {exchangeOffers.map((exchangeOffer) => (
+                <ExchangeCard
+                  key={exchangeOffer.id}
+                  viewerRole="seller"
+                  exchangeOffer={exchangeOffer}
+                  onAccept={() => onAccept(exchangeOffer)}
+                  onReject={() => onReject(exchangeOffer)}
+                />
+              ))}
+            </div>
+          )}
 
         {hasNextPage && <div ref={loadMoreRef} />}
 
-        {isFetchingNextPage && <p>교환 제시 목록을 더 불러오는 중입니다.</p>}
+        {isFetchingNextPage && (
+          <p className={styles.statusMessage}>
+            교환 제시 목록을 더 불러오는 중입니다.
+          </p>
+        )}
 
         {isFetchNextPageError && (
-          <div>
-            <p role="alert">교환 제시 목록을 추가로 불러오지 못했습니다.</p>
+          <div className={styles.statusContainer}>
+            <p className={styles.statusMessage} role="alert">
+              교환 제시 목록을 추가로 불러오지 못했습니다.
+            </p>
 
-            <button type="button" onClick={() => fetchNextPage()}>
+            <button
+              type="button"
+              className={styles.retryButton}
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+            >
               다시 시도
             </button>
           </div>
