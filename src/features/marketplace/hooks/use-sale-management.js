@@ -1,7 +1,12 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { exchangeKeys, marketKeys, saleKeys } from "@/lib/query-keys";
+import {
+  exchangeKeys,
+  galleryKeys,
+  marketKeys,
+  saleKeys,
+} from "@/lib/query-keys";
 import { stopSale, updateSale } from "../api/sales-api";
 
 function mergeSaleDetail(queryClient, saleId, updatedSale) {
@@ -13,6 +18,7 @@ function mergeSaleDetail(queryClient, saleId, updatedSale) {
 function invalidateRelatedQueries(queryClient) {
   queryClient.invalidateQueries({ queryKey: marketKeys.lists() });
   queryClient.invalidateQueries({ queryKey: saleKeys.lists() });
+  queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
   queryClient.invalidateQueries({ queryKey: exchangeKeys.received() });
 }
 
