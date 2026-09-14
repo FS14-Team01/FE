@@ -112,7 +112,7 @@ export default function ExchangeOfferSection({
             </p>
           )}
 
-        {/* 상위에서 이미 분기가 끝난 "seller"결과를 명시 */}
+        {/* 상위에서 이미 분기가 끝난 "seller" 결과를 명시 */}
         {!isPending &&
           !isInitialError &&
           !isUnauthorized &&
