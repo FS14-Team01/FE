@@ -11,6 +11,7 @@ export default function NotificationList() {
     data,
     isPending,
     isError,
+    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -25,21 +26,21 @@ export default function NotificationList() {
     if (
       sentinelRef.current == null ||
       !hasNextPage ||
-      isFetchingNextPage ||
+      isFetching||
       isFetchNextPageError
     ) {
       return;
     }
 
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+      if (entry?.isIntersecting && hasNextPage && !isFetching) {
         fetchNextPage();
       }
     });
     observer.observe(sentinelRef.current);
 
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError]);
+  }, [fetchNextPage, hasNextPage, isFetching, isFetchNextPageError]);
 
   // 팝업 안에 보여줄 내용 설정
   let content;
