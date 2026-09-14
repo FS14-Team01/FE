@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
@@ -41,6 +42,8 @@ const TOAST_ACTION_BY_EXCHANGE_ACTION = {
 };
 
 export default function SaleDetailPage({ saleId }) {
+  const router = useRouter();
+
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
 
@@ -137,6 +140,10 @@ export default function SaleDetailPage({ saleId }) {
 
           setSelectedOffer(null);
           setExchangeAction(null);
+
+          if (exchangeAction === "accept") {
+            router.push("/my-gallery");
+          }
         },
         onError: () => {
           showToast({ status: "failure", action: toastAction });
