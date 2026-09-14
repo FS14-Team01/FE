@@ -1,0 +1,181 @@
+.cropModal {
+  box-sizing: border-box;
+  width: min(600px, calc(100vw - 40px));
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: var(--color-white);
+  background: var(--color-gray-500);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 45%);
+}
+
+/* 모달 뒤의 반투명 배경 */
+.cropModal::backdrop {
+  background: rgb(0 0 0 / 75%);
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 48px);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.description {
+  margin: 6px 0 0;
+  color: var(--color-gray-200);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.closeButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* 높이가 부족하면 이미지 영역만 스크롤 */
+.body {
+  min-height: 0;
+  padding: 0 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.imageStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 12px;
+  background: var(--color-black);
+}
+
+.cropContent {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* 원본 비율을 유지하면서 화면 안에 맞춤 */
+.image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(420px, 45dvh);
+}
+
+.hint {
+  margin: 10px 0 0;
+  color: var(--color-gray-200);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.error {
+  margin: 8px 0 0;
+  color: var(--color-error);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 16px 24px 20px;
+}
+
+.actionButton {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+}
+
+.actionButton.applyButton {
+  border: 1px solid var(--color-brand-yellow);
+  background: var(--color-brand-yellow);
+  color: var(--color-black);
+}
+
+.closeButton:focus-visible,
+.actionButton:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 3px;
+}
+
+.closeButton:disabled,
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .cropModal {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 32px);
+  }
+
+  .layout {
+    max-height: calc(100dvh - 32px);
+  }
+
+  .header {
+    gap: 8px;
+    padding: 16px 16px 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 12px;
+  }
+
+  .body {
+    padding: 0 16px;
+  }
+
+  .imageStage {
+    padding: 8px;
+  }
+
+  .image {
+    max-height: 40dvh;
+  }
+
+  .footer {
+    gap: 8px;
+    padding: 14px 16px 16px;
+  }
+}
