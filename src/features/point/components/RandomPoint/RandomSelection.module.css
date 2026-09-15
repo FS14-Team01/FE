@@ -12,14 +12,16 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
+  box-sizing: border-box;
   width: 1034px;
+  max-height: calc(100dvh - 60px);
   padding: 50px 0;
   color: var(--color-white);
   border-radius: 20px;
   background: var(--color-gray-500);
+  overflow-y: auto;
 }
 
 .closeBtn {
@@ -29,6 +31,10 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+.closeBtn:disabled {
+  cursor: wait;
 }
 
 .title {
@@ -65,6 +71,10 @@
   transition:
     opacity 0.4s ease,
     transform 0.4s ease;
+}
+
+.boxBtn:disabled {
+  cursor: default;
 }
 
 .selectedBox {
@@ -134,9 +144,15 @@
   font-weight: 500;
 }
 
+.errorMessage {
+  color: var(--color-error);
+  font-size: 14px;
+}
+
 .selectBtn {
   width: 520px;
   height: 60px;
+  padding: 17px 0;
   border: none;
   border-radius: 2px;
   background: var(--color-brand-yellow);
@@ -144,6 +160,10 @@
   font-weight: 700;
   color: var(--color-black);
   cursor: pointer;
+}
+
+.selectBtn:disabled {
+  cursor: not-allowed;
 }
 
 .closeBtn:focus-visible,
@@ -234,5 +254,10 @@
   .selectBtn {
     width: 300px;
     height: 55px;
+  }
+
+  .errorMessage {
+    color: var(--color-error);
+    font-size: 12px;
   }
 }
