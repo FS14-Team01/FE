@@ -296,6 +296,13 @@
   text-align: center;
 }
 
+.saleForm > fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 .summary {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 350px;

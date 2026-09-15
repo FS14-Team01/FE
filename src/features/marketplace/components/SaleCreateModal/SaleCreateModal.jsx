@@ -285,26 +285,28 @@ export default function SaleCreateModal({ onClose }) {
           </>
         ) : (
           <form className={styles.saleForm} onSubmit={submitSale} aria-busy={createSaleMutation.isPending}>
-            <div className={styles.summary}>
-              <img src={selected.photoCard.imageUrl} alt={selected.photoCard.name} />
-              <div className={styles.saleFields}>
-                <div className={styles.meta}><b className={styles[GRADE_CLASS_NAMES[selected.photoCard.grade]]}>{selected.photoCard.grade?.replace("_", " ")}</b><span>{getCardCategoryLabel(selected.photoCard.category)}</span></div>
-                <label><span>총 판매 수량</span><div className={styles.stepper}><button type="button" onClick={() => setQuantity((value) => Math.max(1, value - 1))}>−</button><b>{quantity}</b><button type="button" onClick={() => setQuantity((value) => Math.min(selected.quantity, value + 1))}>+</button></div><small>/ {selected.quantity}<em>최대 {selected.quantity}장</em></small></label>
-                <label><span>장당 가격</span><div className={styles.price}><input value={price} onChange={(event) => setPrice(event.target.value.replace(/\D/g, ""))} inputMode="numeric" placeholder="숫자만 입력" /><b>P</b></div></label>
+            <fieldset disabled={createSaleMutation.isPending}>
+              <div className={styles.summary}>
+                <img src={selected.photoCard.imageUrl} alt={selected.photoCard.name} />
+                <div className={styles.saleFields}>
+                  <div className={styles.meta}><b className={styles[GRADE_CLASS_NAMES[selected.photoCard.grade]]}>{selected.photoCard.grade?.replace("_", " ")}</b><span>{getCardCategoryLabel(selected.photoCard.category)}</span></div>
+                  <label><span>총 판매 수량</span><div className={styles.stepper}><button type="button" onClick={() => setQuantity((value) => Math.max(1, value - 1))}>−</button><b>{quantity}</b><button type="button" onClick={() => setQuantity((value) => Math.min(selected.quantity, value + 1))}>+</button></div><small>/ {selected.quantity}<em>최대 {selected.quantity}장</em></small></label>
+                  <label><span>장당 가격</span><div className={styles.price}><input value={price} onChange={(event) => setPrice(event.target.value.replace(/\D/g, ""))} inputMode="numeric" placeholder="숫자만 입력" /><b>P</b></div></label>
+                </div>
               </div>
-            </div>
-            <section className={styles.preference}>
-              <h3>교환 희망 정보</h3>
-              <div className={styles.selects}>
-                <label><span>등급</span><Dropdown className={styles.preferenceDropdown} variant="sort" options={CARD_GRADE_OPTIONS} value={desiredGrade} onChange={(value) => setDesiredGrade((current) => current === value ? "" : value)} placeholder="등급을 선택해 주세요" label="교환 희망 등급" /></label>
-                <label><span>장르</span><Dropdown className={styles.preferenceDropdown} variant="sort" options={CARD_CATEGORY_OPTIONS} value={desiredCategory} onChange={(value) => setDesiredCategory((current) => current === value ? "" : value)} placeholder="장르를 선택해 주세요" label="교환 희망 장르" /></label>
+              <section className={styles.preference}>
+                <h3>교환 희망 정보</h3>
+                <div className={styles.selects}>
+                  <label><span>등급</span><Dropdown className={styles.preferenceDropdown} variant="sort" options={CARD_GRADE_OPTIONS} value={desiredGrade} onChange={(value) => setDesiredGrade((current) => current === value ? "" : value)} placeholder="등급을 선택해 주세요" label="교환 희망 등급" /></label>
+                  <label><span>장르</span><Dropdown className={styles.preferenceDropdown} variant="sort" options={CARD_CATEGORY_OPTIONS} value={desiredCategory} onChange={(value) => setDesiredCategory((current) => current === value ? "" : value)} placeholder="장르를 선택해 주세요" label="교환 희망 장르" /></label>
+                </div>
+                <label className={styles.description}><span>교환 희망 설명</span><textarea value={desiredDescription} onChange={(event) => setDesiredDescription(event.target.value)} placeholder="교환 희망 내용을 입력해 주세요." /></label>
+              </section>
+              <div className={styles.actions}>
+                <button type="button" onClick={() => setStep("select")}>취소하기</button>
+                <button type="submit">{createSaleMutation.isPending ? "등록 중..." : "판매하기"}</button>
               </div>
-              <label className={styles.description}><span>교환 희망 설명</span><textarea value={desiredDescription} onChange={(event) => setDesiredDescription(event.target.value)} placeholder="교환 희망 내용을 입력해 주세요." /></label>
-            </section>
-            <div className={styles.actions}>
-              <button type="button" disabled={createSaleMutation.isPending} onClick={() => setStep("select")}>취소하기</button>
-              <button type="submit" disabled={createSaleMutation.isPending}>{createSaleMutation.isPending ? "등록 중..." : "판매하기"}</button>
-            </div>
+            </fieldset>
           </form>
         )}
       </div>
