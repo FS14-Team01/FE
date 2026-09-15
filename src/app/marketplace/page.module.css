@@ -39,8 +39,6 @@
 }
 
 /*
- * 마켓플레이스 시안에 맞춘 드롭다운 간격·화살표 크기.
- * 공통 Dropdown의 기본값을 바꾸면 다른 페이지까지 영향을 받아 여기서만 덮어쓴다.
  * Dropdown 내부 클래스는 CSS Modules로 해시되어 선택할 수 없으므로 태그로 지정한다.
  */
 .desktopFilter button {
@@ -60,10 +58,13 @@
   padding-top: 40px;
 }
 
+/* 카드 너비와 간격을 고정하고 목록 전체를 가운데 정렬한다 */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 440px);
+  justify-content: center;
   gap: 80px;
+  width: 100%;
 }
 
 .empty {
@@ -88,6 +89,13 @@
   font-size: 16px !important;
 }
 
+/* 반응형: 데스크톱 (1200px ~ 1599px) */
+@media (max-width: 1599px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 440px);
+  }
+}
+
 /* 반응형: 태블릿 */
 @media (max-width: 1199px) {
   .main {
@@ -104,13 +112,8 @@
   }
 
   .cardGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 342px);
     gap: 20px;
-  }
-
-  .desktopFilter button span:last-child {
-    width: 11px;
-    height: 11px;
   }
 
   .sellButtonDesktop {
@@ -176,9 +179,13 @@
     padding-top: 20px;
   }
 
+  /* 모바일 카드 너비가 170px이라
+     600~743px 구간에서는 3열 배치도 가능하지만,
+     공통 반응형 기준 유지를 위해 현재는 2열로 유지한다.
+     통합 QA 후 필요 시 리팩터링 여부를 논의한다. */
   .cardGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 170px);
+    gap: 15px;
   }
 
   .sellButtonDesktop {
