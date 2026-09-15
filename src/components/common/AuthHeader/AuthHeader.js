@@ -2,7 +2,7 @@
 
 import Header from "@/components/common/Header/Header";
 import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
-import { useLogout } from "../../hooks/use-logout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
 export default function AuthHeader({
   points,
