@@ -47,6 +47,7 @@ export default function SaleCreateModal({ onClose }) {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const modalRef = useRef(null);
   const loadMoreRef = useRef(null);
+  const isSubmittingRef = useRef(false);
   const dragStartYRef = useRef(0);
   const isDraggingRef = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
@@ -136,18 +137,27 @@ export default function SaleCreateModal({ onClose }) {
     setDesiredGrade("");
     setDesiredCategory("");
     setDesiredDescription("");
+    setIsMobileFilterOpen(false);
     setStep("form");
   };
 
   const submitSale = (event) => {
     event.preventDefault();
+    if (isSubmittingRef.current) return;
+
     const numericPrice = Number(price);
 
-    if (!Number.isInteger(numericPrice) || numericPrice < 0 || numericPrice > 1000) {
+    if (
+      price === "" ||
+      !Number.isInteger(numericPrice) ||
+      numericPrice < 0 ||
+      numericPrice > 1000
+    ) {
       showToast({ status: "info", message: "가격은 0P 이상 1,000P 이하로 입력해 주세요." });
       return;
     }
 
+    isSubmittingRef.current = true;
     createSaleMutation.mutate(
       {
         photoCardId: String(selected.photoCard.id),
@@ -165,6 +175,9 @@ export default function SaleCreateModal({ onClose }) {
         },
         onError: () => {
           showToast({ status: "failure", action: "sale" });
+        },
+        onSettled: () => {
+          isSubmittingRef.current = false;
         },
       },
     );
