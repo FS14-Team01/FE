@@ -1,15 +1,19 @@
 "use client";
 
 import Header from "@/components/common/Header/Header";
-import RandomPointModal from "@/components/RandomPointModal/RandomPointModal";
 import NotificationList from "@/features/notification/components/NotificationList";
 import {
   useGetNotifications,
   useReadAllNotifications,
 } from "@/features/notification/hooks/use-notification";
+import RandomPointModal from "@/features/point/components/RandomPoint/RandomPointModal";
+import { useGetPoints } from "@/features/point/hooks/use-point";
+import { useRandomPointRefresh } from "@/features/point/hooks/use-random-point-refresh";
 import { useState } from "react";
 
 export default function MainLayout({ children }) {
+  useRandomPointRefresh();
+
   const [isRandomPointOpen, setIsRandomPointOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
@@ -42,9 +46,16 @@ export default function MainLayout({ children }) {
     }
   };
 
+  // 유저 포인트 조회 hook
+  const { data } = useGetPoints();
+  const canUseRandomBox = data?.canUseRandomBox ?? false;
+  const points = data?.points ?? 0;
+
   return (
     <>
       <Header
+        points={points}
+        canUseRandomBox={canUseRandomBox}
         onRandomBoxClick={openRandomPoint}
         onNotificationClick={toggleNotification}
         onNotificationClose={closeNotification}
