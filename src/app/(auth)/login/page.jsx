@@ -24,7 +24,15 @@ export default function LoginPage() {
       },
       {
         onSuccess: () => {
-          router.replace("/marketplace");
+          const redirect = new URLSearchParams(window.location.search).get(
+            "redirect",
+          );
+          const safeRedirect =
+            redirect?.startsWith("/") && !redirect.startsWith("//")
+              ? redirect
+              : "/marketplace";
+
+          router.replace(safeRedirect);
         },
       },
     );
