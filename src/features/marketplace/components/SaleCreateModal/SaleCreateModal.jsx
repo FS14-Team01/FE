@@ -130,6 +130,10 @@ export default function SaleCreateModal({ onClose }) {
     if (ownership.quantity < 1) return;
     setSelected(ownership);
     setQuantity(1);
+    setPrice("");
+    setDesiredGrade("");
+    setDesiredCategory("");
+    setDesiredDescription("");
     setStep("form");
   };
 
