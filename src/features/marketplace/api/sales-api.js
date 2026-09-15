@@ -50,3 +50,23 @@ export async function createSale(saleData) {
 
   return response.data?.data ?? response.data;
 }
+
+export async function getMySales(filters = {}) {
+  const response = await apiClient.get("/users/me/sales", {
+    params: filters,
+  });
+
+  return response.data?.data ?? response.data;
+}
+
+export async function getMySalesSummary() {
+  const response = await apiClient.get("/users/me/sales/summary");
+
+  return response.data?.data ?? response.data;
+}
+
+export async function getMyInfo() {
+  const response = await apiClient.get("/users/me");
+
+  return response.data?.data ?? response.data;
+}
