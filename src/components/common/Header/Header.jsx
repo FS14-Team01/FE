@@ -33,6 +33,8 @@ function RandomBoxIcon() {
 
 export default function Header({
   user = null,
+  points,
+  canUseRandomBox,
   onLogout,
   onRandomBoxClick,
   onNotificationClick,
@@ -86,14 +88,16 @@ export default function Header({
         <nav className={styles.navigation} aria-label="주요 메뉴">
           {isAuthenticated ? (
             <>
-              <button
-                type="button"
-                className={styles.randomBoxButton}
-                aria-label="랜덤 포인트 뽑기"
-                onClick={onRandomBoxClick}
-              >
-                <RandomBoxIcon />
-              </button>
+              {canUseRandomBox && (
+                <button
+                  type="button"
+                  className={styles.randomBoxButton}
+                  aria-label="랜덤 포인트 뽑기"
+                  onClick={onRandomBoxClick}
+                >
+                  <RandomBoxIcon />
+                </button>
+              )}
               <div
                 className={styles.notificationArea}
                 ref={notificationAreaRef}
@@ -142,14 +146,16 @@ export default function Header({
         )}
         {isAuthenticated && (
           <div className={styles.mobileActions}>
-            <button
-              type="button"
-              className={styles.randomBoxButton}
-              aria-label="랜덤 포인트 뽑기"
-              onClick={onRandomBoxClick}
-            >
-              <RandomBoxIcon />
-            </button>
+            {canUseRandomBox && (
+              <button
+                type="button"
+                className={styles.randomBoxButton}
+                aria-label="랜덤 포인트 뽑기"
+                onClick={onRandomBoxClick}
+              >
+                <RandomBoxIcon />
+              </button>
+            )}
             <div className={styles.notificationArea}>
               <button
                 type="button"
@@ -183,7 +189,7 @@ export default function Header({
                 <strong>안녕하세요, {user.nickname}님!</strong>
                 <div className={styles.pointRow}>
                   <span>보유 포인트</span>
-                  <strong>{formatPoints(user.points ?? 0)} P</strong>
+                  <strong>{formatPoints(points ?? 0)} P</strong>
                 </div>
               </div>
             ) : (
