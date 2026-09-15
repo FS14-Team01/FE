@@ -69,6 +69,15 @@ export default function SaleDetailPage({ saleId }) {
       </main>
     );
   }
+
+  if (sale.status === "SOLD_OUT" || sale.status === "CANCELLED") {
+    return (
+      <main className={styles.state} role="alert">
+        판매 정보를 찾을 수 없습니다.
+      </main>
+    );
+  }
+
   const isOwner = sale.isOwner === true;
 
   const handleAccept = (exchangeOffer) => {
