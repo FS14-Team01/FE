@@ -32,12 +32,7 @@ const UNKNOWN_ERROR_CODE = "UNKNOWN_ERROR";
 const REFRESH_ENDPOINT = "/auth/refresh";
 
 /** 여기서 나는 401은 토큰 갱신으로 해결되지 않음 */
-const AUTH_ENDPOINTS = [
-  "/auth/login",
-  "/auth/signup",
-  "/auth/logout",
-  REFRESH_ENDPOINT,
-];
+const AUTH_ENDPOINTS = ["/auth/login", "/auth/signup", REFRESH_ENDPOINT];
 
 const DEFAULT_MESSAGES = {
   timeout: "요청 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.",
