@@ -256,7 +256,6 @@ export default function SaleCreateModal({ onClose }) {
                     )}
                   </div>
                   <div className={styles.cardSaleInfo}>
-                    {ownership.price != null && <div><span>가격</span><b>{ownership.price} P</b></div>}
                     <div><span>수량</span><b>{ownership.quantity}</b></div>
                   </div>
                   <img className={styles.cardLogo} src="/assets/logo.png" alt="최애의 포토" />
