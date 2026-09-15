@@ -7,7 +7,7 @@ import { useToast } from "@/components/common/Toast/ToastProvider";
 import { exchangeKeys, marketKeys } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
-import ExchangePreference from "../ExchangePreference/ExchangePreference";
+import RequesterExchangeSection from "../RequesterExchangeSection/RequesterExchangeSection";
 import ExchangeOfferSection from "../ExchangeOfferSection/ExchangeOfferSection";
 import PurchaseSection from "../PurchaseSection/PurchaseSection";
 import SaleCardOverview from "../SaleCardOverview/SaleCardOverview";
@@ -63,6 +63,14 @@ export default function SaleDetailPage({ saleId }) {
     return (
       <main className={styles.state} role="alert">
         {error?.message ?? "판매 정보를 불러오지 못했습니다."}
+        {sale && !sale.isOwner && (
+          <RequesterExchangeSection
+            key={saleId}
+            saleId={saleId}
+            sale={sale}
+            saleError={error}
+          />
+        )}
       </main>
     );
   }
@@ -169,7 +177,13 @@ export default function SaleDetailPage({ saleId }) {
         )}
       </SaleCardOverview>
 
-      {!isOwner && <ExchangePreference variant="full" />}
+      {!isOwner && (
+        <RequesterExchangeSection
+          key={saleId}
+          saleId={saleId}
+          sale={sale}
+        />
+      )}
 
       {isOwner && (
         <ExchangeOfferSection
