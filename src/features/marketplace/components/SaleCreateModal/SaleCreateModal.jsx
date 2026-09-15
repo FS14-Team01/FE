@@ -157,12 +157,12 @@ export default function SaleCreateModal({ onClose }) {
       },
       {
         onSuccess: (sale) => {
-          showToast({ status: "info", message: "포토카드가 판매 등록되었습니다." });
+          showToast({ status: "success", action: "sale" });
           onClose();
           router.push(`/marketplace/${sale.id}`);
         },
-        onError: (error) => {
-          showToast({ status: "info", message: error?.message ?? "판매를 등록하지 못했습니다." });
+        onError: () => {
+          showToast({ status: "failure", action: "sale" });
         },
       },
     );
