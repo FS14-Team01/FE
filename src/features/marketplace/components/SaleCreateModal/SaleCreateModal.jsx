@@ -78,6 +78,8 @@ export default function SaleCreateModal({ onClose }) {
   }, []);
 
   useEffect(() => {
+    if (step !== "select") return;
+
     const target = loadMoreRef.current;
     if (!target || !hasNextPage) return;
 
@@ -89,7 +91,7 @@ export default function SaleCreateModal({ onClose }) {
 
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [step, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
     modalRef.current?.scrollTo({ top: 0 });
