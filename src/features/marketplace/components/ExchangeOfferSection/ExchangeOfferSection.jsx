@@ -130,7 +130,11 @@ export default function ExchangeOfferSection({
             </div>
           )}
 
-        {hasNextPage && <div ref={loadMoreRef} />}
+        {!isPending &&
+          !isInitialError &&
+          !isUnauthorized &&
+          !isFetchNextPageError &&
+          hasNextPage && <div ref={loadMoreRef} />}
 
         {isFetchingNextPage && (
           <p className={styles.statusMessage}>
