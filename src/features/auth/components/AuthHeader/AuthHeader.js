@@ -5,6 +5,8 @@ import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
 import { useLogout } from "../../hooks/use-logout";
 
 export default function AuthHeader({
+  points,
+  canUseRandomBox,
   onRandomBoxClick,
   onNotificationClick,
   onNotificationClose,
@@ -22,6 +24,8 @@ export default function AuthHeader({
 
   return (
     <Header
+      points={points ?? user?.points ?? 0}
+      canUseRandomBox={canUseRandomBox}
       onRandomBoxClick={onRandomBoxClick}
       onNotificationClick={onNotificationClick}
       onNotificationClose={onNotificationClose}
