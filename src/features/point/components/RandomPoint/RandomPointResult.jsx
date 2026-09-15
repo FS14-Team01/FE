@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./RandomPointResult.module.css";
 
-export default function RandomPointResult({ onClose }) {
+export default function RandomPointResult({ amount, nextAvailable, onClose }) {
   return (
     <div className={styles.wrapper}>
       <div
@@ -33,13 +33,13 @@ export default function RandomPointResult({ onClose }) {
         />
 
         <p className={styles.result}>
-          <span>50P</span> 획득!
+          <span>{amount}P</span> 획득!
         </p>
 
         <p className={styles.nextAvailable}>
           다음 랜덤박스는
           <br className={styles.mobileBreak} />
-          <span> 오늘 낮 12시</span>에 열려요
+          <span> {nextAvailable}</span>에 열려요
         </p>
       </div>
     </div>
