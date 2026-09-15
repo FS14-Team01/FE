@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import AuthHeader from "@/features/auth/components/AuthHeader/AuthHeader";
+import AuthHeader from "@/components/common/AuthHeader/AuthHeader";
 import Modal from "@/components/common/Modal/Modal";
 import SearchInput from "@/components/common/SearchInput/SearchInput";
 import Dropdown from "@/components/common/Dropdown/Dropdown";
