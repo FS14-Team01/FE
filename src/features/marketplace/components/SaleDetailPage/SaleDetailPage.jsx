@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
-import { exchangeKeys, marketKeys } from "@/lib/query-keys";
+import { exchangeKeys, marketKeys, galleryKeys } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
@@ -41,6 +42,8 @@ const TOAST_ACTION_BY_EXCHANGE_ACTION = {
 };
 
 export default function SaleDetailPage({ saleId }) {
+  const router = useRouter();
+
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
 
@@ -136,9 +139,18 @@ export default function SaleDetailPage({ saleId }) {
             queryKey: exchangeKeys.receivedBySale(saleId, { limit: PAGE_SIZE }),
           });
 
+          // 교환 승인 시 판매 상세/마켓플레이스/마이갤러리 데이터가 변경되므로 관련 캐시 갱신
           if (exchangeAction === "accept") {
             queryClient.invalidateQueries({
               queryKey: marketKeys.detail(saleId),
+            });
+
+            queryClient.invalidateQueries({
+              queryKey: marketKeys.lists(),
+            });
+
+            queryClient.invalidateQueries({
+              queryKey: galleryKeys.lists(),
             });
           }
 
@@ -146,6 +158,10 @@ export default function SaleDetailPage({ saleId }) {
 
           setSelectedOffer(null);
           setExchangeAction(null);
+
+          if (exchangeAction === "accept") {
+            router.push("/my-gallery");
+          }
         },
         onError: () => {
           showToast({ status: "failure", action: toastAction });
