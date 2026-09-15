@@ -12,14 +12,16 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
+  box-sizing: border-box;
   width: 455px;
+  max-height: calc(100dvh - 60px);
   padding: 50px 0;
   color: var(--color-white);
   border-radius: 20px;
   background: var(--color-black);
+  overflow-y: auto;
 }
 
 .closeBtn {
