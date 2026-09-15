@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Header from '@/components/common/Header/Header';
-import Modal from '@/components/common/Modal/Modal';
-import SearchInput from '@/components/common/SearchInput/SearchInput';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
-import MobileFilterSheet from '@/components/MobileFilterSheet/MobileFilterSheet';
-import PhotoCard from '@/components/common/PhotoCard/PhotoCard';
-import Button from '@/components/common/Button/Button';
-import SaleCreateModal from '@/features/marketplace/components/SaleCreateModal/SaleCreateModal';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import AuthHeader from "@/components/common/AuthHeader/AuthHeader";
+import Modal from "@/components/common/Modal/Modal";
+import SearchInput from "@/components/common/SearchInput/SearchInput";
+import Dropdown from "@/components/common/Dropdown/Dropdown";
+import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
+import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
+import Button from "@/components/common/Button/Button";
+import SaleCreateModal from "@/features/marketplace/components/SaleCreateModal/SaleCreateModal";
 import {
   GRADE_OPTIONS,
   CATEGORY_OPTIONS,
   SALE_STATUS_OPTIONS,
   MARKET_SORT_OPTIONS,
-} from '@/components/common/Dropdown/dropdownOptions';
+} from "@/components/common/Dropdown/dropdownOptions";
 // TODO: GET /sales 연동 후 제거
-import { MOCK_SALE_LIST_RESPONSE } from '@/features/marketplace/marketplace-mock';
-import { getAccessToken } from '@/lib/auth-token';
-import styles from './page.module.css';
+import { MOCK_SALE_LIST_RESPONSE } from "@/features/marketplace/marketplace-mock";
+import { getAccessToken } from "@/lib/auth-token";
+import styles from "./page.module.css";
 
 const PAGE_SIZE = 12;
 
@@ -34,12 +34,12 @@ const SORT_COMPARATORS = {
 
 export default function MarketplacePage() {
   const [isSaleCreateModalOpen, setIsSaleCreateModalOpen] = useState(false);
-  const [keyword, setKeyword] = useState('');
-  const [searchedKeyword, setSearchedKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
+  const [searchedKeyword, setSearchedKeyword] = useState("");
   const [grade, setGrade] = useState();
   const [category, setCategory] = useState();
   const [saleStatus, setSaleStatus] = useState();
-  const [sort, setSort] = useState('recent');
+  const [sort, setSort] = useState("recent");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [isLoginRequiredOpen, setIsLoginRequiredOpen] = useState(false);
   const sentinelRef = useRef(null);
@@ -97,7 +97,9 @@ export default function MarketplacePage() {
       // 한 번 불러온 뒤에는 다음 렌더에서 재관찰하도록 즉시 관찰을 끊는다.
       // 그렇지 않으면 sentinel이 화면에 남아 있는 동안 연속으로 발화한다.
       observer.unobserve(sentinel);
-      setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredSales.length));
+      setVisibleCount((prev) =>
+        Math.min(prev + PAGE_SIZE, filteredSales.length),
+      );
     });
 
     observer.observe(sentinel);
@@ -143,7 +145,7 @@ export default function MarketplacePage() {
   // 토큰 조회는 클릭 시점에만 해야 SSR 결과와 어긋나지 않는다
   const handleCardClick = (event) => {
     // 그리드 여백이 아니라 카드를 눌렀을 때만 반응한다
-    if (!event.target.closest('a')) return;
+    if (!event.target.closest("a")) return;
     if (getAccessToken()) return;
 
     event.preventDefault();
@@ -153,7 +155,7 @@ export default function MarketplacePage() {
 
   return (
     <>
-      <Header />
+      <AuthHeader />
 
       <main className={styles.main}>
         <div className={styles.titleRow}>
@@ -243,10 +245,7 @@ export default function MarketplacePage() {
         </section>
       </main>
 
-      <Button
-        className={styles.sellButtonMobile}
-        onClick={handleSellClick}
-      >
+      <Button className={styles.sellButtonMobile} onClick={handleSellClick}>
         나의 포토카드 판매하기
       </Button>
 
@@ -265,7 +264,7 @@ export default function MarketplacePage() {
             </>
           }
           confirmText="확인"
-          onConfirm={() => router.push('/login')}
+          onConfirm={() => router.push("/login")}
           onClose={() => setIsLoginRequiredOpen(false)}
         />
       )}
