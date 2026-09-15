@@ -99,6 +99,8 @@ export default function SaleCreateModal({ onClose }) {
   }, [step]);
 
   const handleDragStart = (event) => {
+    if (createSaleMutation.isPending) return;
+
     dragStartYRef.current = event.clientY;
     isDraggingRef.current = true;
     setIsDragging(true);
@@ -194,6 +196,7 @@ export default function SaleCreateModal({ onClose }) {
           type="button"
           className={styles.dragHandle}
           aria-label="아래로 밀어서 모달 닫기"
+          disabled={createSaleMutation.isPending}
           onPointerDown={handleDragStart}
           onPointerMove={handleDragMove}
           onPointerUp={handleDragEnd}
@@ -201,13 +204,13 @@ export default function SaleCreateModal({ onClose }) {
         />
         {step === "form" && (
           <div className={styles.mobileFormHeader}>
-            <button type="button" onClick={() => setStep("select")} aria-label="포토카드 선택으로 돌아가기">
+            <button type="button" disabled={createSaleMutation.isPending} onClick={() => setStep("select")} aria-label="포토카드 선택으로 돌아가기">
               ‹
             </button>
             <strong>나의 포토카드 판매하기</strong>
           </div>
         )}
-        <button type="button" className={styles.close} onClick={onClose} aria-label="닫기">×</button>
+        <button type="button" className={styles.close} disabled={createSaleMutation.isPending} onClick={onClose} aria-label="닫기">×</button>
         <p className={styles.eyebrow}>{step === "select" ? "마이갤러리" : "나의 포토카드 판매하기"}</p>
         <h2 className={`${styles.title} ${step === "select" ? styles.selectionTitle : ""}`}>{step === "select" ? "나의 포토카드 판매하기" : selected.photoCard.name}</h2>
 
@@ -281,7 +284,7 @@ export default function SaleCreateModal({ onClose }) {
             {ownershipsQuery.isFetchingNextPage && <p className={styles.fetching}>불러오는 중...</p>}
           </>
         ) : (
-          <form className={styles.saleForm} onSubmit={submitSale}>
+          <form className={styles.saleForm} onSubmit={submitSale} aria-busy={createSaleMutation.isPending}>
             <div className={styles.summary}>
               <img src={selected.photoCard.imageUrl} alt={selected.photoCard.name} />
               <div className={styles.saleFields}>
@@ -299,7 +302,7 @@ export default function SaleCreateModal({ onClose }) {
               <label className={styles.description}><span>교환 희망 설명</span><textarea value={desiredDescription} onChange={(event) => setDesiredDescription(event.target.value)} placeholder="교환 희망 내용을 입력해 주세요." /></label>
             </section>
             <div className={styles.actions}>
-              <button type="button" onClick={() => setStep("select")}>취소하기</button>
+              <button type="button" disabled={createSaleMutation.isPending} onClick={() => setStep("select")}>취소하기</button>
               <button type="submit" disabled={createSaleMutation.isPending}>{createSaleMutation.isPending ? "등록 중..." : "판매하기"}</button>
             </div>
           </form>
