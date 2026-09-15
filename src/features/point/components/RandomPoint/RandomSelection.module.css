@@ -144,6 +144,11 @@
   font-weight: 500;
 }
 
+.errorMessage {
+  color: var(--color-error);
+  font-size: 14px;
+}
+
 .selectBtn {
   width: 520px;
   height: 60px;
@@ -249,5 +254,10 @@
   .selectBtn {
     width: 300px;
     height: 55px;
+  }
+
+  .errorMessage {
+    color: var(--color-error);
+    font-size: 12px;
   }
 }

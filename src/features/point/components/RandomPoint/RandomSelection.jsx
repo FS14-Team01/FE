@@ -17,6 +17,8 @@ export default function RandomSelection({
   onClose,
   onDrawRandomPoint,
   isDrawing,
+  isError,
+  isAlreadyUsed,
   amount,
   unselectedAmounts,
 }) {
@@ -45,6 +47,7 @@ export default function RandomSelection({
   }, [isRevealing, setStep]);
 
   const handleConfirm = async () => {
+    if (isDrawing || isRevealing) return;
     try {
       await onDrawRandomPoint();
       setIsRevealing(true);
@@ -52,6 +55,15 @@ export default function RandomSelection({
       console.error(error);
     }
   };
+
+  const buttonText = isDrawing
+    ? "추첨 중..."
+    : isAlreadyUsed
+      ? "닫기"
+      : isError
+        ? "다시 시도"
+        : "선택 완료";
+  const handleButtonClick = isAlreadyUsed ? onClose : handleConfirm;
 
   return (
     <div className={styles.wrapper}>
@@ -95,7 +107,7 @@ export default function RandomSelection({
                     type="button"
                     aria-label={`${index + 1}번째 랜덤 포인트 박스`}
                     aria-pressed={isSelected}
-                    disabled={isRevealing || isDrawing}
+                    disabled={isRevealing || isDrawing || isAlreadyUsed}
                     className={`
                     ${styles.boxBtn}
                     ${isSelected ? styles.selectedBox : ""}
@@ -133,15 +145,21 @@ export default function RandomSelection({
                 ),
               )}
         </div>
-
+        {isError && (
+          <p className={styles.errorMessage} role="alert">
+            {isAlreadyUsed
+              ? "현재 시간대의 랜덤 포인트 기회를 이미 사용했습니다."
+              : "랜덤 포인트 뽑기에 실패했습니다."}
+          </p>
+        )}
         {selectedBox && !isSelectConfirmed && (
           <button
             type="button"
             className={styles.selectBtn}
-            onClick={handleConfirm}
+            onClick={handleButtonClick}
             disabled={isRevealing || isDrawing}
           >
-            선택 완료
+            {buttonText}
           </button>
         )}
       </div>

@@ -19,5 +19,10 @@ export function useDrawRandomPoint() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: pointKeys.me() });
     },
+    onError: (error) => {
+      if (error.code === "RANDOM_BOX_ALREADY_USED") {
+        queryClient.invalidateQueries({ queryKey: pointKeys.me() });
+      }
+    },
   });
 }

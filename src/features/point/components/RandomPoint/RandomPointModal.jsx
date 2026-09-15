@@ -10,7 +10,7 @@ export default function RandomPointModal({ onClose }) {
   const [isRevealing, setIsRevealing] = useState(false);
 
   // 랜덤포인트 뽑기 hook
-  const { mutateAsync, data, isPending } = useDrawRandomPoint();
+  const { mutateAsync, data, isPending, isError, error } = useDrawRandomPoint();
 
   const handleDrawRandomPoint = () => mutateAsync();
 
@@ -25,6 +25,9 @@ export default function RandomPointModal({ onClose }) {
     unselectedAmounts: data?.randomPointDraw?.unselectedAmounts,
     nextAvailable,
   };
+
+  const errorCode = error?.code;
+  const isAlreadyUsed = errorCode === "RANDOM_BOX_ALREADY_USED";
 
   // esc로 모달 닫기
   useEffect(() => {
@@ -62,6 +65,8 @@ export default function RandomPointModal({ onClose }) {
         onClose={onClose}
         onDrawRandomPoint={handleDrawRandomPoint}
         isDrawing={isPending}
+        isError={isError}
+        isAlreadyUsed={isAlreadyUsed}
         amount={drawResult.amount}
         unselectedAmounts={drawResult.unselectedAmounts}
       />
