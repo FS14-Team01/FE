@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
-import { exchangeKeys, marketKeys, galleryKeys } from "@/lib/query-keys";
+import {
+  exchangeKeys,
+  marketKeys,
+  galleryKeys,
+  saleKeys,
+} from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
 import ExchangePreference from "../ExchangePreference/ExchangePreference";
@@ -151,6 +156,10 @@ export default function SaleDetailPage({ saleId }) {
 
             queryClient.invalidateQueries({
               queryKey: galleryKeys.lists(),
+            });
+
+            queryClient.invalidateQueries({
+              queryKey: saleKeys.all,
             });
           }
 
