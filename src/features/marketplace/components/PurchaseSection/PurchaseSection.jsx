@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/common/Modal/Modal";
+import { useToast } from "@/components/common/Toast/ToastProvider";
 import { getCardGradeLabel } from "@/constants/marketplace-options";
+import usePurchaseSale from "../../hooks/use-purchase-sale";
 import styles from "./PurchaseSection.module.css";
 
 const MIN_QUANTITY = 1;
@@ -18,6 +20,8 @@ export default function PurchaseSection({ sale }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [purchasedQuantity, setPurchasedQuantity] = useState(null);
   const router = useRouter();
+  const { showToast } = useToast();
+  const purchaseMutation = usePurchaseSale(sale.id);
 
   const isSoldOut = sale.status !== "ON_SALE" || sale.remainingQuantity === 0;
 
@@ -34,10 +38,24 @@ export default function PurchaseSection({ sale }) {
     setQuantity(Math.min(maxQuantity, selectedQuantity + 1));
   };
 
-  // TODO: POST /sales/:saleId/purchases 연동 후 실제 성공/실패로 교체
   const handleConfirmPurchase = () => {
-    setIsConfirmOpen(false);
-    setPurchasedQuantity(selectedQuantity);
+    // 성공 모달에 표시할 수량이라 요청 시점 값을 따로 잡아둔다
+    const requestedQuantity = selectedQuantity;
+
+    purchaseMutation.mutate(requestedQuantity, {
+      onSuccess: () => {
+        setIsConfirmOpen(false);
+        setPurchasedQuantity(requestedQuantity);
+      },
+      onError: (error) => {
+        setIsConfirmOpen(false);
+        showToast({
+          status: "failure",
+          action: "purchase",
+          message: error.message,
+        });
+      },
+    });
   };
 
   return (
@@ -98,6 +116,7 @@ export default function PurchaseSection({ sale }) {
           confirmText="구매하기"
           onConfirm={handleConfirmPurchase}
           onClose={() => setIsConfirmOpen(false)}
+          isPending={purchaseMutation.isPending}
         />
       )}
 
