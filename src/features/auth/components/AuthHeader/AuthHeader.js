@@ -2,6 +2,7 @@
 
 import Header from "@/components/common/Header/Header";
 import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
+import { useLogout } from "../../hooks/use-logout";
 
 export default function AuthHeader({
   onRandomBoxClick,
@@ -10,6 +11,14 @@ export default function AuthHeader({
   notificationPanel,
 }) {
   const { data: user } = useCurrentUser();
+  const logoutMutation = useLogout();
+
+  function handleLogout() {
+    if (logoutMutation.isPending) {
+      return;
+    }
+    logoutMutation.mutate();
+  }
 
   return (
     <Header
@@ -18,6 +27,7 @@ export default function AuthHeader({
       onNotificationClose={onNotificationClose}
       notificationPanel={notificationPanel}
       user={user ?? null}
+      onLogout={handleLogout}
     />
   );
 }
