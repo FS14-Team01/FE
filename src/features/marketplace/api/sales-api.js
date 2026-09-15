@@ -36,3 +36,28 @@ export async function stopSale(saleId) {
 
   return response.data?.data ?? response.data;
 }
+
+export async function getSales({
+  keyword,
+  grade,
+  category,
+  status,
+  sort,
+  cursor,
+  limit,
+}) {
+  const response = await apiClient.get("/sales", {
+    // 빈 문자열을 그대로 보내면 서버가 400으로 막으므로 미선택은 키를 빼서 보낸다
+    params: {
+      keyword: keyword || undefined,
+      grade: grade || undefined,
+      category: category || undefined,
+      status: status || undefined,
+      sort,
+      cursor,
+      limit,
+    },
+  });
+
+  return response.data?.data ?? response.data;
+}
