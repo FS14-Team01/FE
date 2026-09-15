@@ -1,3 +1,4 @@
+import { getAccessToken } from "@/lib/auth-token";
 import { notificationKeys } from "@/lib/query-keys";
 import {
   useInfiniteQuery,
@@ -17,6 +18,7 @@ export function useGetNotifications({ isRead, limit }) {
       getNotifications({ isRead, cursor: pageParam, limit }),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    enabled: Boolean(getAccessToken()),
   });
 }
 
