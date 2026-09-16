@@ -10,7 +10,7 @@ import {
 import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
 import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 import SearchInput from "@/components/common/SearchInput/SearchInput";
-import useMyInfo from "../../hooks/use-my-info";
+import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
 import useSalesList from "../../hooks/use-sales-list";
 import useSalesSummary from "../../hooks/use-sales-summary";
 import styles from "./MySalesPage.module.css";
@@ -38,7 +38,7 @@ export default function MySalesPage() {
 
   const salesQuery = useSalesList(filters);
   const summaryQuery = useSalesSummary();
-  const userQuery = useMyInfo();
+  const userQuery = useCurrentUser();
   const {
     fetchNextPage,
     hasNextPage,

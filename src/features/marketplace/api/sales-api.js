@@ -49,9 +49,3 @@ export async function getMySalesSummary() {
 
   return response.data?.data ?? response.data;
 }
-
-export async function getMyInfo() {
-  const response = await apiClient.get("/users/me");
-
-  return response.data?.data ?? response.data;
-}
