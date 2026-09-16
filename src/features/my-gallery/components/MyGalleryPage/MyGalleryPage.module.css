@@ -20,7 +20,18 @@
   font-family: "YeogiOttaeJalnan";
 }
 
-.titleWrap .btnCreate {
+.createInfoWrap {
+  display: flex;
+  align-items: flex-end;
+}
+
+.createInfoWrap .createCountInfo {
+  font-size: 14px;
+  color: var(--color-gray-300);
+  margin-right: 12px;
+}
+
+.createInfoWrap .btnCreate {
   width: 440px;
 }
 
