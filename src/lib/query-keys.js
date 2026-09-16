@@ -25,6 +25,7 @@ export const marketKeys = {
 };
 
 /* 마이갤러리 — GET /users/me/ownerships */
+/* 마이갤러리 — GET /users/me/ownerships */
 export const galleryKeys = {
   all: ["gallery"],
 
@@ -50,6 +51,11 @@ export const galleryKeys = {
   infinite: (filters) => [
     ...galleryKeys.infiniteLists(),
     filters,
+  ],
+
+  creationStatus: () => [
+    ...galleryKeys.all,
+    "creation-status",
   ],
 };
 

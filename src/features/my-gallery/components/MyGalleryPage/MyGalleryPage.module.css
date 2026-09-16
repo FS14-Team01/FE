@@ -35,6 +35,21 @@
   width: 440px;
 }
 
+.createInfoWrap .btnCreate {
+  width: 440px;
+}
+
+.createInfoWrap .btnCreateDisabled {
+  color: var(--color-gray-300);
+  background: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.createInfoWrap .btnCreateDisabled:hover {
+  background: var(--color-gray-400);
+}
+
 /*------ 보유한 포토카드 ------*/
 
 .ownershipWrap {
@@ -133,7 +148,7 @@
     font-size: 48px;
   }
 
-  .titleWrap .btnCreate {
+  .createInfoWrap .btnCreate {
     width: 342px;
   }
 

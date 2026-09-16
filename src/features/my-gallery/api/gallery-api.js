@@ -20,3 +20,9 @@ export async function getMyOwnerships(filters = {}) {
   })
   return response.data?.data ?? response.data;
 }
+export async function getPhotoCardCreationStatus() {
+  const response = await apiClient.get(
+    "/users/me/photo-card-creation"
+  );
+  return response.data?.data ?? response.data;
+}
