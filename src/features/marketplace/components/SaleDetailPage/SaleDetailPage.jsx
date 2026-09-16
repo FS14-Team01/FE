@@ -13,7 +13,7 @@ import {
 } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
-import ExchangePreference from "../ExchangePreference/ExchangePreference";
+import RequesterExchangeSection from "../RequesterExchangeSection/RequesterExchangeSection";
 import ExchangeOfferSection from "../ExchangeOfferSection/ExchangeOfferSection";
 import PurchaseSection from "../PurchaseSection/PurchaseSection";
 import SaleCardOverview from "../SaleCardOverview/SaleCardOverview";
@@ -52,7 +52,8 @@ export default function SaleDetailPage({ saleId }) {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
 
-  const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
+  const { data: sale, isPending, isFetching, isError, error } =
+    useSaleDetail(saleId);
 
   const {
     mutate: updateExchangeOfferStatus,
@@ -63,7 +64,7 @@ export default function SaleDetailPage({ saleId }) {
 
   const queryClient = useQueryClient();
 
-  if (isPending) {
+  if (isPending || isFetching) {
     return <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>;
   }
 
@@ -71,6 +72,14 @@ export default function SaleDetailPage({ saleId }) {
     return (
       <main className={styles.state} role="alert">
         {error?.message ?? "판매 정보를 불러오지 못했습니다."}
+        {sale && !sale.isOwner && (
+          <RequesterExchangeSection
+            key={saleId}
+            saleId={saleId}
+            sale={sale}
+            saleError={error}
+          />
+        )}
       </main>
     );
   }
@@ -194,7 +203,13 @@ export default function SaleDetailPage({ saleId }) {
         )}
       </SaleCardOverview>
 
-      {!isOwner && <ExchangePreference variant="full" />}
+      {!isOwner && (
+        <RequesterExchangeSection
+          key={saleId}
+          saleId={saleId}
+          sale={sale}
+        />
+      )}
 
       {isOwner && (
         <ExchangeOfferSection

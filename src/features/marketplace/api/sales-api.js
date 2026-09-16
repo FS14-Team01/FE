@@ -1,5 +1,16 @@
 import apiClient from "@/lib/axios";
 
+export async function createExchangeOffer(
+  saleId,
+  { offeredCardId, offeredDescription },
+) {
+  const response = await apiClient.post(`/sales/${saleId}/exchange-offers`, {
+    offeredCardId,
+    offeredDescription,
+  });
+  return response.data?.data ?? response.data;
+}
+
 export async function getSaleDetail(saleId) {
   const response = await apiClient.get(`/sales/${saleId}`);
 
@@ -36,6 +47,20 @@ export async function stopSale(saleId) {
 
   return response.data?.data ?? response.data;
 }
+export async function getMyOwnerships(filters = {}) {
+  const response = await apiClient.get("/users/me/ownerships", {
+    params: filters,
+  });
+
+  return response.data?.data ?? response.data;
+}
+
+export async function createSale(saleData) {
+  const response = await apiClient.post("/sales", saleData);
+
+  return response.data?.data ?? response.data;
+}
+
 export async function getMySales(filters = {}) {
   const response = await apiClient.get("/users/me/sales", {
     params: filters,

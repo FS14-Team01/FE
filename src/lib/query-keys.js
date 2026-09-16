@@ -56,7 +56,7 @@ export const exchangeKeys = {
     filters,
   ],
   sent: () => [...exchangeKeys.all, "sent"],
-  /** filters: { limit } */
+  /** filters: { saleId, limit, requesterId } — requesterId는 계정별 캐시 구분용이며 API로 보내지 않는다. */
   sentList: (filters) => [...exchangeKeys.sent(), filters],
 };
 
