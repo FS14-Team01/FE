@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 import { getCardGradeLabel } from "@/constants/marketplace-options";
@@ -15,11 +14,9 @@ function formatPoints(points) {
   return `${new Intl.NumberFormat("ko-KR").format(points)} P`;
 }
 
-export default function PurchaseSection({ sale }) {
+export default function PurchaseSection({ sale, onPurchaseSuccess }) {
   const [quantity, setQuantity] = useState(MIN_QUANTITY);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [purchasedQuantity, setPurchasedQuantity] = useState(null);
-  const router = useRouter();
   const { showToast } = useToast();
   const purchaseMutation = usePurchaseSale(sale.id);
 
@@ -39,13 +36,19 @@ export default function PurchaseSection({ sale }) {
   };
 
   const handleConfirmPurchase = () => {
-    // 성공 모달에 표시할 수량이라 요청 시점 값을 따로 잡아둔다
-    const requestedQuantity = selectedQuantity;
+    // 성공 모달에 표시할 값이라 요청 시점 값을 따로 잡아둔다.
+    // 구매 직후 재조회로 sale이 바뀌거나 상세가 언마운트될 수 있어
+    // 모달 내용은 상위(SaleDetailPage)에서 이 스냅샷으로 렌더한다.
+    const purchaseResult = {
+      cardName: sale.photoCard.name,
+      grade: sale.photoCard.grade,
+      quantity: selectedQuantity,
+    };
 
-    purchaseMutation.mutate(requestedQuantity, {
+    purchaseMutation.mutate(purchaseResult.quantity, {
       onSuccess: () => {
         setIsConfirmOpen(false);
-        setPurchasedQuantity(requestedQuantity);
+        onPurchaseSuccess?.(purchaseResult);
       },
       onError: (error) => {
         setIsConfirmOpen(false);
@@ -110,29 +113,12 @@ export default function PurchaseSection({ sale }) {
       {isConfirmOpen && (
         <Modal
           title="포토카드 구매"
-          message={
-            `[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${selectedQuantity}장을 구매하시겠습니까?`
-          }
+          message={`[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${selectedQuantity}장을 구매하시겠습니까?`}
           confirmText="구매하기"
           onConfirm={handleConfirmPurchase}
           onClose={() => setIsConfirmOpen(false)}
           isPending={purchaseMutation.isPending}
         />
-      )}
-
-      {purchasedQuantity !== null && (
-        <div className={styles.successModal}>
-          <Modal
-            title="구매 성공"
-            message={
-              `[${getCardGradeLabel(sale.photoCard.grade)} | ${sale.photoCard.name}] ${purchasedQuantity}장 구매에 성공했습니다!`
-            }
-            confirmText="마이갤러리에서 확인하기"
-            // TODO: 마이갤러리 라우트 경로 확정 후 수정
-            onConfirm={() => router.push("/my-gallery")}
-            onClose={() => setPurchasedQuantity(null)}
-          />
-        </div>
       )}
     </section>
   );
