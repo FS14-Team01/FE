@@ -28,10 +28,11 @@ export default function PhotoCard({
 
   const isSelectable = !href && Boolean(onSelect);
   const CardWrapper = href ? Link : isSelectable ? "button" : "div";
+  const variantClassName = variant === "mySale" ? styles.mySale : "";
 
   return (
     <CardWrapper
-      className={`${styles.photoCard}${isSelectable ? ` ${styles.selectable}` : ""}`}
+      className={`${styles.photoCard} ${variantClassName}${isSelectable ? ` ${styles.selectable}` : ""}`.trim()}
       {...(href ? { href } : {})}
       {...(isSelectable
         ? {

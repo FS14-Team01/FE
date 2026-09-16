@@ -11,6 +11,11 @@
   border-radius: 2px;
 }
 
+.card:hover,
+.card:focus-within {
+  border-color: var(--color-brand-yellow);
+}
+
 .image {
   position: absolute;
   top: 40px;
