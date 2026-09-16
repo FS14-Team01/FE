@@ -61,6 +61,13 @@ export async function createSale(saleData) {
   return response.data?.data ?? response.data;
 }
 
+export async function getMyOwnershipFilterSummary(keyword = "") {
+  const response = await apiClient.get("/users/me/ownerships/summary", {
+    params: keyword ? { keyword } : {},
+  });
+  return response.data?.data ?? response.data;
+}
+
 export async function getMySales(filters = {}) {
   const response = await apiClient.get("/users/me/sales", {
     params: filters,

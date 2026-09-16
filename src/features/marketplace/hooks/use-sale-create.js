@@ -3,10 +3,15 @@
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import { galleryKeys, marketKeys, saleKeys } from "@/lib/query-keys";
-import { createSale, getMyOwnerships } from "../api/sales-api";
+import {
+  createSale,
+  getMyOwnerships,
+  getMyOwnershipFilterSummary,
+} from "../api/sales-api";
 
 export function useMyOwnerships(filters, enabled = true) {
   return useInfiniteQuery({
@@ -29,9 +34,18 @@ export function useCreateSale() {
   return useMutation({
     mutationFn: createSale,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: galleryKeys.all });
       queryClient.invalidateQueries({ queryKey: marketKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: saleKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: saleKeys.all });
     },
+  });
+}
+
+export function useOwnershipFilterSummary(keyword = "", enabled = true) {
+  const normalizedKeyword = keyword.trim();
+  return useQuery({
+    queryKey: galleryKeys.summary(normalizedKeyword),
+    queryFn: () => getMyOwnershipFilterSummary(normalizedKeyword),
+    enabled,
   });
 }
