@@ -36,9 +36,11 @@
 
 .cardListViewport {
   flex: 1;
-  width: 100%;
+  /* 440px 카드 두 장과 80px 간격이 들어가도록 목록 영역만 넓힌다. */
+  width: calc(100% + 80px);
   min-height: 0;
   margin-top: 40px;
+  margin-inline: -40px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-color: var(--color-gray-400) var(--color-gray-500);
@@ -48,10 +50,10 @@
 .cardGrid {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(2, max-content);
-  justify-content: space-evenly;
+  grid-template-columns: repeat(auto-fit, 440px);
+  justify-content: center;
   align-items: start;
-  row-gap: 20px;
+  gap: 80px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -118,6 +120,13 @@
   text-align: center;
 }
 
+.error {
+  margin: 16px 0 0;
+  color: var(--color-error);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
 .sentinel {
   height: 1px;
   margin-top: -1px;
@@ -125,12 +134,18 @@
 
 @media (max-width: 1199px) {
   .cardListViewport {
+    width: 100%;
     margin-top: 0;
+    margin-inline: 0;
     overflow-y: visible;
   }
 
   .cardGrid {
+    max-width: 704px;
+    grid-template-columns: repeat(auto-fit, 342px);
+    gap: 20px;
     margin-top: 40px;
+    margin-inline: auto;
   }
 
   .sentinel {
@@ -183,8 +198,17 @@
     min-width: 0;
   }
 
+  .cardListViewport {
+    /* 375px 화면에서도 170px 카드 두 장과 15px 간격을 유지한다. */
+    width: calc(100% + 10px);
+    margin-inline: -5px;
+  }
+
   .cardGrid {
+    max-width: none;
     margin-top: 20px;
+    grid-template-columns: repeat(auto-fit, 170px);
+    gap: 15px;
   }
 
   .offerLayout {
