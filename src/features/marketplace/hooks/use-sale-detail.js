@@ -9,5 +9,7 @@ export default function useSaleDetail(saleId) {
     queryKey: marketKeys.detail(saleId),
     queryFn: () => getSaleDetail(saleId),
     enabled: Boolean(saleId),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 }

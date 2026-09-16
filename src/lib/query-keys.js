@@ -33,6 +33,7 @@ export const saleKeys = {
   lists: () => [...saleKeys.all, "list"],
   /** filters: { keyword, grade, category, status, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
+  summary: () => [...saleKeys.all, "summary"],
 };
 
 /* 포토카드 원본 — GET /photo-cards/:photoCardId */
@@ -55,7 +56,7 @@ export const exchangeKeys = {
     filters,
   ],
   sent: () => [...exchangeKeys.all, "sent"],
-  /** filters: { limit } */
+  /** filters: { saleId, limit, requesterId } — requesterId는 계정별 캐시 구분용이며 API로 보내지 않는다. */
   sentList: (filters) => [...exchangeKeys.sent(), filters],
 };
 

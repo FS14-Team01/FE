@@ -7,6 +7,18 @@ import styles from "./Header.module.css";
 
 const formatPoints = (points) => new Intl.NumberFormat("ko-KR").format(points);
 
+function UnreadNotificationIcon() {
+  return (
+    <Image
+      src="/assets/ic_unread_notification.png"
+      alt=""
+      width={24}
+      height={24}
+      className={styles.notificationIcon}
+    />
+  );
+}
+
 function NotificationIcon() {
   return (
     <Image
@@ -40,6 +52,8 @@ export default function Header({
   onNotificationClick,
   onNotificationClose,
   notificationPanel,
+  isNotificationDisabled = false,
+  hasUnreadNotifications = false,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = Boolean(user);
@@ -107,8 +121,13 @@ export default function Header({
                   className={styles.notificationButton}
                   aria-label="알림 보기"
                   onClick={onNotificationClick}
+                  disabled={isNotificationDisabled}
                 >
-                  <NotificationIcon />
+                  {hasUnreadNotifications ? (
+                    <UnreadNotificationIcon />
+                  ) : (
+                    <NotificationIcon />
+                  )}
                 </button>
                 {notificationPanel}
               </div>
@@ -162,8 +181,13 @@ export default function Header({
                 className={styles.mobileNotificationButton}
                 aria-label="알림 보기"
                 onClick={onNotificationClick}
+                disabled={isNotificationDisabled}
               >
-                <NotificationIcon />
+                {hasUnreadNotifications ? (
+                  <UnreadNotificationIcon />
+                ) : (
+                  <NotificationIcon />
+                )}
               </button>
               {notificationPanel}
             </div>

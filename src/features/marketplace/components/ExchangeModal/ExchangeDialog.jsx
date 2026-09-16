@@ -11,6 +11,7 @@ export default function ExchangeDialog({
   containScroll,
   onClose,
   onBack,
+  isBusy = false,
   children,
 }) {
   const dialogRef = useRef(null);
@@ -43,10 +44,11 @@ export default function ExchangeDialog({
       data-mobile-layout={mobileLayout}
       data-contained-scroll={containScroll || undefined}
       aria-labelledby={titleId}
+      aria-busy={isBusy}
       onCancel={(event) => {
         event.preventDefault();
         event.stopPropagation();
-        onClose();
+        if (!isBusy) onClose();
       }}
     >
       <div className={styles.dialogBody}>
@@ -55,6 +57,7 @@ export default function ExchangeDialog({
           type="button"
           className={styles.dialogClose}
           onClick={onClose}
+          disabled={isBusy}
           aria-label="모달 닫기"
         >
           <Image src="/assets/ic_close.svg" alt="" width={32} height={32} />
@@ -64,6 +67,7 @@ export default function ExchangeDialog({
             type="button"
             className={styles.dialogBack}
             onClick={onBack ?? onClose}
+            disabled={isBusy}
             aria-label="카드 선택으로 돌아가기"
           >
             <svg
