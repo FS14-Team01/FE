@@ -12,6 +12,7 @@ export default function ExchangeOfferForm({
   onBack,
   onSubmit,
   isSubmitting = false,
+  errorMessage = "",
 }) {
   const descriptionId = useId();
 
@@ -19,14 +20,20 @@ export default function ExchangeOfferForm({
     event.preventDefault();
     if (isSubmitting || ownership.quantity < 1) return;
 
-  
-    onSubmit?.({ offeredCardId: ownership.photoCard.id }, { description });
+    onSubmit?.({
+      offeredCardId: ownership.photoCard.id,
+      offeredDescription: description,
+    });
   };
 
   return (
     <div className={styles.offerLayout}>
       <OwnedExchangeCard ownership={ownership} />
-      <form className={styles.offerForm} onSubmit={handleSubmit}>
+      <form
+        className={styles.offerForm}
+        onSubmit={handleSubmit}
+        aria-busy={isSubmitting}
+      >
         <label htmlFor={descriptionId} className={styles.label}>
           교환 제시 내용
         </label>
@@ -35,10 +42,26 @@ export default function ExchangeOfferForm({
           className={styles.description}
           placeholder="교환 제시 내용을 입력해 주세요"
           value={description}
+          disabled={isSubmitting}
+          aria-describedby={errorMessage ? `${descriptionId}-error` : undefined}
           onChange={(event) => onDescriptionChange(event.target.value)}
         />
+        {errorMessage && (
+          <p
+            id={`${descriptionId}-error`}
+            className={styles.error}
+            role="alert"
+          >
+            {errorMessage}
+          </p>
+        )}
         <div className={styles.actions}>
-          <Button variant="secondary" size="lg" onClick={onBack}>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={onBack}
+            disabled={isSubmitting}
+          >
             뒤로가기
           </Button>
           <Button

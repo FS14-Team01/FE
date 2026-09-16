@@ -1,24 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Header from '@/components/common/Header/Header';
-import Modal from '@/components/common/Modal/Modal';
-import SearchInput from '@/components/common/SearchInput/SearchInput';
-import Dropdown from '@/components/common/Dropdown/Dropdown';
-import MobileFilterSheet from '@/components/MobileFilterSheet/MobileFilterSheet';
-import PhotoCard from '@/components/common/PhotoCard/PhotoCard';
-import Button from '@/components/common/Button/Button';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import AuthHeader from "@/components/common/AuthHeader/AuthHeader";
+import Modal from "@/components/common/Modal/Modal";
+import SearchInput from "@/components/common/SearchInput/SearchInput";
+import Dropdown from "@/components/common/Dropdown/Dropdown";
+import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
+import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
+import Button from "@/components/common/Button/Button";
+import SaleCreateModal from "@/features/marketplace/components/SaleCreateModal/SaleCreateModal";
 import {
   GRADE_OPTIONS,
   CATEGORY_OPTIONS,
   SALE_STATUS_OPTIONS,
   MARKET_SORT_OPTIONS,
-} from '@/components/common/Dropdown/dropdownOptions';
+} from "@/components/common/Dropdown/dropdownOptions";
 // TODO: GET /sales 연동 후 제거
-import { MOCK_SALE_LIST_RESPONSE } from '@/features/marketplace/marketplace-mock';
-import { getAccessToken } from '@/lib/auth-token';
-import styles from './page.module.css';
+import { MOCK_SALE_LIST_RESPONSE } from "@/features/marketplace/marketplace-mock";
+import { getAccessToken } from "@/lib/auth-token";
+import styles from "./page.module.css";
 
 const PAGE_SIZE = 12;
 
@@ -32,12 +33,13 @@ const SORT_COMPARATORS = {
 };
 
 export default function MarketplacePage() {
-  const [keyword, setKeyword] = useState('');
-  const [searchedKeyword, setSearchedKeyword] = useState('');
+  const [isSaleCreateModalOpen, setIsSaleCreateModalOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [searchedKeyword, setSearchedKeyword] = useState("");
   const [grade, setGrade] = useState();
   const [category, setCategory] = useState();
   const [saleStatus, setSaleStatus] = useState();
-  const [sort, setSort] = useState('recent');
+  const [sort, setSort] = useState("recent");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [isLoginRequiredOpen, setIsLoginRequiredOpen] = useState(false);
   const sentinelRef = useRef(null);
@@ -82,11 +84,6 @@ export default function MarketplacePage() {
     return counts;
   }, [searchedKeyword]);
 
-  // 조건이 바뀌면 목록이 달라지므로 첫 페이지부터 다시 보여준다
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [filteredSales]);
-
   const visibleSales = filteredSales.slice(0, visibleCount);
   const hasNextPage = visibleCount < filteredSales.length;
 
@@ -100,7 +97,9 @@ export default function MarketplacePage() {
       // 한 번 불러온 뒤에는 다음 렌더에서 재관찰하도록 즉시 관찰을 끊는다.
       // 그렇지 않으면 sentinel이 화면에 남아 있는 동안 연속으로 발화한다.
       observer.unobserve(sentinel);
-      setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredSales.length));
+      setVisibleCount((prev) =>
+        Math.min(prev + PAGE_SIZE, filteredSales.length),
+      );
     });
 
     observer.observe(sentinel);
@@ -109,22 +108,44 @@ export default function MarketplacePage() {
 
   const handleSearch = (value) => {
     setSearchedKeyword(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleGradeChange = (value) => {
+    setGrade(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleSortChange = (value) => {
+    setSort(value);
+    setVisibleCount(PAGE_SIZE);
   };
 
   const handleMobileFilterApply = (next) => {
     setGrade(next.grade);
     setCategory(next.category);
     setSaleStatus(next.saleStatus);
+    setVisibleCount(PAGE_SIZE);
   };
 
   const handleSellClick = () => {
-    // TODO: 판매 등록 페이지 경로 확정 후 연결
+    if (!getAccessToken()) {
+      setIsLoginRequiredOpen(true);
+      return;
+    }
+
+    setIsSaleCreateModalOpen(true);
   };
 
   // 토큰 조회는 클릭 시점에만 해야 SSR 결과와 어긋나지 않는다
   const handleCardClick = (event) => {
     // 그리드 여백이 아니라 카드를 눌렀을 때만 반응한다
-    if (!event.target.closest('a')) return;
+    if (!event.target.closest("a")) return;
     if (getAccessToken()) return;
 
     event.preventDefault();
@@ -134,7 +155,7 @@ export default function MarketplacePage() {
 
   return (
     <>
-      <Header />
+      <AuthHeader />
 
       <main className={styles.main}>
         <div className={styles.titleRow}>
@@ -160,7 +181,7 @@ export default function MarketplacePage() {
           <Dropdown
             options={GRADE_OPTIONS}
             value={grade}
-            onChange={setGrade}
+            onChange={handleGradeChange}
             placeholder="등급"
             label="등급 필터"
             className={styles.desktopFilter}
@@ -169,7 +190,7 @@ export default function MarketplacePage() {
           <Dropdown
             options={CATEGORY_OPTIONS}
             value={category}
-            onChange={setCategory}
+            onChange={handleCategoryChange}
             placeholder="장르"
             label="장르 필터"
             className={styles.desktopFilter}
@@ -192,7 +213,7 @@ export default function MarketplacePage() {
             <Dropdown
               options={MARKET_SORT_OPTIONS}
               value={sort}
-              onChange={setSort}
+              onChange={handleSortChange}
               label="정렬 기준"
               variant="sort"
             />
@@ -224,12 +245,13 @@ export default function MarketplacePage() {
         </section>
       </main>
 
-      <Button
-        className={styles.sellButtonMobile}
-        onClick={handleSellClick}
-      >
+      <Button className={styles.sellButtonMobile} onClick={handleSellClick}>
         나의 포토카드 판매하기
       </Button>
+
+      {isSaleCreateModalOpen && (
+        <SaleCreateModal onClose={() => setIsSaleCreateModalOpen(false)} />
+      )}
 
       {isLoginRequiredOpen && (
         <Modal
@@ -242,7 +264,7 @@ export default function MarketplacePage() {
             </>
           }
           confirmText="확인"
-          onConfirm={() => router.push('/login')}
+          onConfirm={() => router.push("/login")}
           onClose={() => setIsLoginRequiredOpen(false)}
         />
       )}
