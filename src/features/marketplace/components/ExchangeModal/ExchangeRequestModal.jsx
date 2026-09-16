@@ -50,7 +50,11 @@ export default function ExchangeRequestModal({
 
       if (error.status === 409 || isSaleUnavailable) {
         queryClient.invalidateQueries({ queryKey: galleryKeys.all });
-        queryClient.invalidateQueries({ queryKey: marketKeys.detail(saleId) });
+        // 판매 종료가 아닌 요청 실패는 모달과 입력값을 유지하며 안내한다.
+        // 상세 재조회는 부모의 로딩 화면 전환으로 모달을 닫을 수 있어 판매 종료 때만 한다.
+        if (isSaleUnavailable) {
+          queryClient.invalidateQueries({ queryKey: marketKeys.detail(saleId) });
+        }
         queryClient.invalidateQueries({ queryKey: exchangeKeys.sent() });
       }
     },
@@ -76,6 +80,12 @@ export default function ExchangeRequestModal({
       onFiltersChange={setFilters}
       isLoading={ownerships.isPending}
       listErrorMessage={ownerships.error?.message ?? ""}
+      isRetryingList={ownerships.isFetching}
+      onRetryList={() => {
+        if (ownerships.isFetching) return;
+        if (ownerships.isFetchNextPageError) ownerships.fetchNextPage();
+        else ownerships.refetch();
+      }}
       hasNextPage={!ownerships.isError && ownerships.hasNextPage}
       isFetchingNextPage={ownerships.isFetchingNextPage}
       onLoadMore={() => {
@@ -88,6 +98,10 @@ export default function ExchangeRequestModal({
         }
       }}
       isSubmitting={submission.isPending}
+      canRetrySubmit={
+        submission.isError &&
+        (submission.error?.status === 0 || submission.error?.status >= 500)
+      }
       errorMessage={submission.error?.message ?? ""}
       onResetError={submission.reset}
       onSubmit={handleSubmit}

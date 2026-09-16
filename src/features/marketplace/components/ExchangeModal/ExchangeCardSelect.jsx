@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Button from "@/components/common/Button/Button";
 import SearchInput from "@/components/common/SearchInput/SearchInput";
 import Dropdown from "@/components/common/Dropdown/Dropdown";
 import ExchangeMobileFilter from "./ExchangeMobileFilter";
@@ -27,6 +28,8 @@ export default function ExchangeCardSelect({
   onSelect,
   isLoading = false,
   errorMessage = "",
+  isRetrying = false,
+  onRetry,
   hasNextPage = false,
   isFetchingNextPage = false,
   onLoadMore,
@@ -125,9 +128,21 @@ export default function ExchangeCardSelect({
       </div>
       <div ref={listViewportRef} className={styles.cardListViewport}>
         {errorMessage && (
-          <p className={styles.error} role="alert">
-            {errorMessage}
-          </p>
+          <div className={styles.notice}>
+            <p className={styles.error} role="alert">
+              {errorMessage}
+            </p>
+            {onRetry && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={onRetry}
+                disabled={isRetrying}
+              >
+                다시 불러오기
+              </Button>
+            )}
+          </div>
         )}
         {isLoading ? (
           <p className={styles.notice} role="status">
