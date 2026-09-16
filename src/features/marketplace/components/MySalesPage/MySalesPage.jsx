@@ -130,6 +130,8 @@ export default function MySalesPage() {
           grade={grade}
           category={category}
           saleStatus={status}
+          counts={summary?.gradeQuantities}
+          totalCount={summary?.totalQuantity}
           onApply={handleMobileFilterApply}
         />
         <SearchInput
