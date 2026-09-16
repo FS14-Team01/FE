@@ -24,10 +24,10 @@ export default function ExchangeOfferSection({
     isFetchNextPageError,
   } = useExchangeOffers(saleId, pageSize);
 
-  const isUnauthorized =
-    error?.status === 401 && error?.code === "UNAUTHORIZED";
-
-  const isInitialError = isError && !isFetchNextPageError && !isUnauthorized;
+  // 비인증 사용자는 판매 상세 페이지 진입 단계에서 차단
+  // 상세 진입 후 교환 목록 조회 중 발생한 오류는 별도 인증 UI로 분기하지 않고
+  // 일반 초기 조회 오류로 처리해 다시 시도할 수 있도록 함
+  const isInitialError = isError && !isFetchNextPageError;
 
   const exchangeOffers =
     exchangeOfferData?.pages.flatMap((page) => page.items) ?? [];
@@ -103,36 +103,29 @@ export default function ExchangeOfferSection({
           </div>
         )}
 
-        {!isPending &&
-          !isInitialError &&
-          !isUnauthorized &&
-          exchangeOffers.length === 0 && (
-            <p className={styles.statusMessage}>
-              아직 받은 교환 제안이 없습니다.
-            </p>
-          )}
+        {!isPending && !isInitialError && exchangeOffers.length === 0 && (
+          <p className={styles.statusMessage}>
+            아직 받은 교환 제안이 없습니다.
+          </p>
+        )}
 
         {/* 상위에서 이미 분기가 끝난 "seller" 결과를 명시 */}
-        {!isPending &&
-          !isInitialError &&
-          !isUnauthorized &&
-          exchangeOffers.length > 0 && (
-            <div className={styles.cardList}>
-              {exchangeOffers.map((exchangeOffer) => (
-                <ExchangeCard
-                  key={exchangeOffer.id}
-                  viewerRole="seller"
-                  exchangeOffer={exchangeOffer}
-                  onAccept={() => onAccept(exchangeOffer)}
-                  onReject={() => onReject(exchangeOffer)}
-                />
-              ))}
-            </div>
-          )}
+        {!isPending && !isInitialError && exchangeOffers.length > 0 && (
+          <div className={styles.cardList}>
+            {exchangeOffers.map((exchangeOffer) => (
+              <ExchangeCard
+                key={exchangeOffer.id}
+                viewerRole="seller"
+                exchangeOffer={exchangeOffer}
+                onAccept={() => onAccept(exchangeOffer)}
+                onReject={() => onReject(exchangeOffer)}
+              />
+            ))}
+          </div>
+        )}
 
         {!isPending &&
           !isInitialError &&
-          !isUnauthorized &&
           !isFetchNextPageError &&
           hasNextPage && <div ref={loadMoreRef} />}
 
