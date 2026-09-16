@@ -1,9 +1,9 @@
 "use client";
 
-import styles from "./NotificationList.module.css";
-import NotificationItem from "./NotificationItem.jsx";
-import { useGetNotifications } from "../hooks/use-notification";
 import { useEffect, useRef } from "react";
+import { useGetNotifications } from "../hooks/use-notification";
+import NotificationItem from "./NotificationItem.jsx";
+import styles from "./NotificationList.module.css";
 
 export default function NotificationList() {
   // 알림 hook 호출
@@ -26,7 +26,7 @@ export default function NotificationList() {
     if (
       sentinelRef.current == null ||
       !hasNextPage ||
-      isFetching||
+      isFetching ||
       isFetchNextPageError
     ) {
       return;
