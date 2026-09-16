@@ -52,7 +52,8 @@ export default function SaleDetailPage({ saleId }) {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
 
-  const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
+  const { data: sale, isPending, isFetching, isError, error } =
+    useSaleDetail(saleId);
 
   const {
     mutate: updateExchangeOfferStatus,
@@ -63,7 +64,7 @@ export default function SaleDetailPage({ saleId }) {
 
   const queryClient = useQueryClient();
 
-  if (isPending) {
+  if (isPending || isFetching) {
     return <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>;
   }
 
