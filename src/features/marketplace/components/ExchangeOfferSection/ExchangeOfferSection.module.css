@@ -15,6 +15,62 @@
   line-height: 1.4;
 }
 
+.content {
+  margin-top: 70px;
+}
+
+.cardList {
+  display: grid;
+  grid-template-columns: repeat(3, 440px);
+  justify-content: center;
+  gap: 80px;
+  width: 100%;
+}
+
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.statusMessage {
+  color: var(--color-gray-100);
+  text-align: center;
+}
+
+.retryButton {
+  width: 120px;
+  height: 53px;
+  border: none;
+  background: var(--color-brand-yellow);
+  color: var(--color-black);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.retryButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1599px) {
+  .cardList {
+    grid-template-columns: repeat(2, 440px);
+  }
+}
+
+@media (max-width: 1199px) {
+  .content {
+    margin-top: 48px;
+  }
+
+  .cardList {
+    grid-template-columns: repeat(2, 342px);
+    gap: 20px;
+  }
+}
+
 @media (max-width: 743px) {
   .section {
     margin-top: 60px;
@@ -27,5 +83,18 @@
   .title {
     padding-bottom: 10px;
     font-size: 22px;
+  }
+
+  .content {
+    margin-top: 46px;
+  }
+
+  /* 모바일 카드 너비가 170px이라
+     600~743px 구간에서는 3열 배치도 가능하지만,
+     공통 반응형 기준 유지를 위해 현재는 2열로 유지한다.
+     통합 QA 후 필요 시 리팩터링 여부를 논의한다. */
+  .cardList {
+    grid-template-columns: repeat(2, 170px);
+    gap: 15px;
   }
 }
