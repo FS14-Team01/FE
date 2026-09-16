@@ -31,7 +31,7 @@ export function useCreateSale() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
       queryClient.invalidateQueries({ queryKey: marketKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: saleKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: saleKeys.all });
     },
   });
 }

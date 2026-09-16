@@ -90,7 +90,7 @@ export default function MobileFilterSheet({
   // 시트 안에서 옵션을 고르는 동안에도 버튼 개수가 따라 바뀌도록,
   // 선택이 있으면 그 옵션의 개수를, 없으면 전체 개수를 쓴다
   const selectedCount = selection.value
-    ? (counts?.[selection.value] ?? 0)
+    ? counts?.[selection.value]
     : totalCount;
 
   const handleApply = () => {
@@ -172,7 +172,7 @@ export default function MobileFilterSheet({
                       selection.tab === activeTab &&
                       selection.value === option.value
                     }
-                    className={`${styles.option} ${activeTab === "grade" ? styles[option.value.toLowerCase()] : ""}`}
+                    className={`${styles.option} ${selection.tab === activeTab && selection.value === option.value ? styles.optionSelected : ""} ${activeTab === "grade" ? styles[option.value.toLowerCase()] : ""}`}
                     onClick={() => handleSelect(option.value)}
                   >
                     <span>{option.label}</span>

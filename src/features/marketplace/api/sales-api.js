@@ -69,8 +69,10 @@ export async function getMySales(filters = {}) {
   return response.data?.data ?? response.data;
 }
 
-export async function getMySalesSummary() {
-  const response = await apiClient.get("/users/me/sales/summary");
+export async function getMySalesSummary(keyword = "") {
+  const response = await apiClient.get("/users/me/sales/summary", {
+    params: keyword ? { keyword } : {},
+  });
 
   return response.data?.data ?? response.data;
 }
