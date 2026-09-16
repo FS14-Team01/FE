@@ -57,7 +57,6 @@ export default function MyGalleryPage() {
   // 카드 목록
   const photoCardList =
     data?.pages.flatMap((page) => page.items) ?? [];
-    console.log("마이갤러리 카드 목록:", photoCardList);
 
   // 전체 보유 수량
   const totalCount =
