@@ -33,6 +33,7 @@ export const saleKeys = {
   lists: () => [...saleKeys.all, "list"],
   /** filters: { keyword, grade, category, status, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
+  summary: () => [...saleKeys.all, "summary"],
 };
 
 /* 포토카드 원본 — GET /photo-cards/:photoCardId */

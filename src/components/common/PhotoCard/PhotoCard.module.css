@@ -9,6 +9,10 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.mySale {
+  height: 626px;
+}
+
 .selectable {
   display: flex;
   flex-direction: column;
@@ -241,6 +245,26 @@
   .photoCard .infoWrap {
     padding-bottom: 10px;
     line-height: 14px;
+  }
+
+  .mySale .gradeCategory {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .mySale .category {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mySale .ownerName {
+    max-width: 44%;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .photoCard .textWrap {
