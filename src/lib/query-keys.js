@@ -24,6 +24,7 @@ export const galleryKeys = {
   lists: () => [...galleryKeys.all, "list"],
   /** filters: { keyword, grade, category, limit } */
   list: (filters) => [...galleryKeys.lists(), filters],
+  summary: (keyword = "") => [...galleryKeys.all, "summary", { keyword }],
 };
 
 /* 나의 판매 포토카드 — GET /users/me/sales */
