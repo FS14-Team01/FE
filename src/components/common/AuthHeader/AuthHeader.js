@@ -11,7 +11,7 @@ import {
 import RandomPointModal from "@/features/point/components/RandomPoint/RandomPointModal";
 import { useGetPoints } from "@/features/point/hooks/use-point";
 import { useRandomPointRefresh } from "@/features/point/hooks/use-random-point-refresh";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AuthHeader() {
   useRandomPointRefresh();
@@ -49,12 +49,11 @@ export default function AuthHeader() {
 
   function handleNotificationClick() {
     if (isNotificationOpen) {
-      setIsNotificationOpen(false);
-      markAllAsRead();
+      handleNotificationClose();
       return;
-    } else {
-      setIsNotificationOpen(true);
     }
+
+    setIsNotificationOpen(true);
   }
 
   function handleNotificationClose() {
@@ -69,6 +68,27 @@ export default function AuthHeader() {
   function closeRandomPoint() {
     setIsRandomPointOpen(false);
   }
+
+  // 모바일 알림창이 열린 동안 배경 스크롤 방지
+  useEffect(() => {
+    if (!isNotificationOpen) return undefined;
+
+    const mediaQuery = window.matchMedia("(max-width: 743px)");
+    const previousOverflow = document.body.style.overflow;
+
+    const handleScreenChange = (event) => {
+      const { matches } = event;
+      document.body.style.overflow = matches ? "hidden" : previousOverflow;
+    };
+
+    handleScreenChange(mediaQuery);
+    mediaQuery.addEventListener("change", handleScreenChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleScreenChange);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isNotificationOpen]);
 
   return (
     <>
