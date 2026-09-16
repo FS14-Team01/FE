@@ -9,6 +9,7 @@ import Dropdown from "@/components/common/Dropdown/Dropdown";
 import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
 import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 import Button from "@/components/common/Button/Button";
+import SaleCreateModal from "@/features/marketplace/components/SaleCreateModal/SaleCreateModal";
 import {
   GRADE_OPTIONS,
   CATEGORY_OPTIONS,
@@ -32,6 +33,7 @@ const SORT_COMPARATORS = {
 };
 
 export default function MarketplacePage() {
+  const [isSaleCreateModalOpen, setIsSaleCreateModalOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [searchedKeyword, setSearchedKeyword] = useState("");
   const [grade, setGrade] = useState();
@@ -82,11 +84,6 @@ export default function MarketplacePage() {
     return counts;
   }, [searchedKeyword]);
 
-  // 조건이 바뀌면 목록이 달라지므로 첫 페이지부터 다시 보여준다
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [filteredSales]);
-
   const visibleSales = filteredSales.slice(0, visibleCount);
   const hasNextPage = visibleCount < filteredSales.length;
 
@@ -111,16 +108,38 @@ export default function MarketplacePage() {
 
   const handleSearch = (value) => {
     setSearchedKeyword(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleGradeChange = (value) => {
+    setGrade(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleSortChange = (value) => {
+    setSort(value);
+    setVisibleCount(PAGE_SIZE);
   };
 
   const handleMobileFilterApply = (next) => {
     setGrade(next.grade);
     setCategory(next.category);
     setSaleStatus(next.saleStatus);
+    setVisibleCount(PAGE_SIZE);
   };
 
   const handleSellClick = () => {
-    // TODO: 판매 등록 페이지 경로 확정 후 연결
+    if (!getAccessToken()) {
+      setIsLoginRequiredOpen(true);
+      return;
+    }
+
+    setIsSaleCreateModalOpen(true);
   };
 
   // 토큰 조회는 클릭 시점에만 해야 SSR 결과와 어긋나지 않는다
@@ -162,7 +181,7 @@ export default function MarketplacePage() {
           <Dropdown
             options={GRADE_OPTIONS}
             value={grade}
-            onChange={setGrade}
+            onChange={handleGradeChange}
             placeholder="등급"
             label="등급 필터"
             className={styles.desktopFilter}
@@ -171,7 +190,7 @@ export default function MarketplacePage() {
           <Dropdown
             options={CATEGORY_OPTIONS}
             value={category}
-            onChange={setCategory}
+            onChange={handleCategoryChange}
             placeholder="장르"
             label="장르 필터"
             className={styles.desktopFilter}
@@ -194,7 +213,7 @@ export default function MarketplacePage() {
             <Dropdown
               options={MARKET_SORT_OPTIONS}
               value={sort}
-              onChange={setSort}
+              onChange={handleSortChange}
               label="정렬 기준"
               variant="sort"
             />
@@ -229,6 +248,10 @@ export default function MarketplacePage() {
       <Button className={styles.sellButtonMobile} onClick={handleSellClick}>
         나의 포토카드 판매하기
       </Button>
+
+      {isSaleCreateModalOpen && (
+        <SaleCreateModal onClose={() => setIsSaleCreateModalOpen(false)} />
+      )}
 
       {isLoginRequiredOpen && (
         <Modal

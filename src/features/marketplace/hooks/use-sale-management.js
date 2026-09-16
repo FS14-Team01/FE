@@ -17,7 +17,7 @@ function mergeSaleDetail(queryClient, saleId, updatedSale) {
 
 function invalidateRelatedQueries(queryClient) {
   queryClient.invalidateQueries({ queryKey: marketKeys.lists() });
-  queryClient.invalidateQueries({ queryKey: saleKeys.lists() });
+  queryClient.invalidateQueries({ queryKey: saleKeys.all });
   queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
   queryClient.invalidateQueries({ queryKey: exchangeKeys.received() });
 }
