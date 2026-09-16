@@ -217,8 +217,8 @@ export default function MyGalleryPage() {
             quantity={item.quantity}
             grade={item.photoCard.grade}
             creatorNickname={
-              item.photoCard.creator?.nickname ?? ""
-            }
+  item.photoCard.creatorNickname ?? ""
+}
             showPrice={false}
           />
         ))}
