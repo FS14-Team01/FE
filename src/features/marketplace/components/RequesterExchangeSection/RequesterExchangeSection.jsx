@@ -18,6 +18,7 @@ import styles from "./RequesterExchangeSection.module.css";
 
 export default function RequesterExchangeSection({ saleId, sale, saleError }) {
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [isLoginRequiredOpen, setIsLoginRequiredOpen] = useState(false);
   const [isSaleUnavailable, setIsSaleUnavailable] = useState(false);
   const titleId = useId();
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function RequesterExchangeSection({ saleId, sale, saleError }) {
 
   const handleOpenRequest = () => {
     if (!getAccessToken()) {
-      showToast({ status: "info", message: "로그인이 필요합니다." });
+      setIsLoginRequiredOpen(true);
       return;
     }
     setIsRequestModalOpen(true);
@@ -100,6 +101,22 @@ export default function RequesterExchangeSection({ saleId, sale, saleError }) {
       </section>
 
       <RequesterExchangeOfferSection saleId={saleId} />
+
+      {isLoginRequiredOpen && (
+        <Modal
+          title="로그인이 필요합니다."
+          message={
+            <>
+              로그인 하시겠습니까?
+              <br />
+              다양한 서비스를 편리하게 이용하실 수 있습니다.
+            </>
+          }
+          confirmText="확인"
+          onConfirm={() => router.push("/login")}
+          onClose={() => setIsLoginRequiredOpen(false)}
+        />
+      )}
 
       {isRequestModalOpen && (
         <ExchangeRequestModal
