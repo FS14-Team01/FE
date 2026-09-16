@@ -36,7 +36,6 @@ export async function stopSale(saleId) {
 
   return response.data?.data ?? response.data;
 }
-
 export async function getMyOwnerships(filters = {}) {
   const response = await apiClient.get("/users/me/ownerships", {
     params: filters,
@@ -47,6 +46,20 @@ export async function getMyOwnerships(filters = {}) {
 
 export async function createSale(saleData) {
   const response = await apiClient.post("/sales", saleData);
+
+  return response.data?.data ?? response.data;
+}
+
+export async function getMySales(filters = {}) {
+  const response = await apiClient.get("/users/me/sales", {
+    params: filters,
+  });
+
+  return response.data?.data ?? response.data;
+}
+
+export async function getMySalesSummary() {
+  const response = await apiClient.get("/users/me/sales/summary");
 
   return response.data?.data ?? response.data;
 }
