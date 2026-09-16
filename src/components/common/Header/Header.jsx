@@ -41,9 +41,11 @@ export default function Header({
   notificationPanel,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isAuthenticated = Boolean(user);
   const closeMenu = () => setIsMenuOpen(false);
   const notificationAreaRef = useRef(null);
+  const profileAreaRef = useRef(null);
 
   useEffect(() => {
     if (!isMenuOpen) return undefined;
@@ -64,6 +66,30 @@ export default function Header({
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [notificationPanel, onNotificationClose]);
+
+  useEffect(() => {
+    if (!isProfileOpen) return;
+
+    const handleOutsideClick = (event) => {
+      if (!profileAreaRef.current?.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isProfileOpen]);
 
   const handleLogout = () => {
     closeMenu();
@@ -111,9 +137,32 @@ export default function Header({
                 </button>
                 {notificationPanel}
               </div>
-              <Link href="/" className={styles.nickname}>
-                {user.nickname}
-              </Link>
+              <div className={styles.profileArea} ref={profileAreaRef}>
+                <button
+                  type="button"
+                  className={styles.nickname}
+                  onClick={() => setIsProfileOpen((previous) => !previous)}
+                >
+                  {user.nickname}
+                </button>
+
+                {isProfileOpen && (
+                  <div
+                    id="desktop-profile-menu"
+                    className={styles.profilePanel}
+                  >
+                    <ProfileMenu
+                      user={user}
+                      points={points}
+                      onLogout={() => {
+                        setIsProfileOpen(false);
+                        handleLogout();
+                      }}
+                      onClose={() => setIsProfileOpen(false)}
+                    />
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
