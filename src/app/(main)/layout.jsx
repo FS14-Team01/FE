@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/common/Header/Header";
+import AuthHeader from "@/components/common/AuthHeader/AuthHeader";
 import NotificationList from "@/features/notification/components/NotificationList";
 import RandomPointModal from "@/features/point/components/RandomPoint/RandomPointModal";
 import { useGetPoints } from "@/features/point/hooks/use-point";
@@ -25,7 +25,7 @@ export default function MainLayout({ children }) {
 
   return (
     <>
-      <Header
+      <AuthHeader
         points={points}
         canUseRandomBox={canUseRandomBox}
         onRandomBoxClick={openRandomPoint}
