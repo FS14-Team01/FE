@@ -1,0 +1,78 @@
+.menu {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  color: var(--color-white);
+}
+
+.summary {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-gray-300);
+}
+
+.title {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.pointRow {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--color-gray-400);
+  font-size: 14px;
+}
+
+.pointRow strong {
+  color: var(--color-brand-yellow);
+}
+
+.description {
+  margin: 12px 0 20px;
+  color: var(--color-gray-400);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.loginButton {
+  display: flex;
+  width: 100%;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  color: var(--color-black);
+  background: var(--color-brand-yellow);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.navigation {
+  display: flex;
+  padding-top: 24px;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.logoutButton {
+  margin-top: auto;
+  padding: 24px 0 0;
+  align-self: flex-start;
+  border: 0;
+  color: var(--color-gray-400);
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.navigation a:focus-visible,
+.loginButton:focus-visible,
+.logoutButton:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 4px;
+}

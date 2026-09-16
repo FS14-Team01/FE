@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
-
-const formatPoints = (points) => new Intl.NumberFormat("ko-KR").format(points);
+import ProfileMenu from "../ProfileMenu/ProfileMenu";
 
 function UnreadNotificationIcon() {
   return (
@@ -56,9 +55,11 @@ export default function Header({
   hasUnreadNotifications = false,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isAuthenticated = Boolean(user);
   const closeMenu = () => setIsMenuOpen(false);
   const notificationAreaRef = useRef(null);
+  const profileAreaRef = useRef(null);
 
   useEffect(() => {
     if (!isMenuOpen) return undefined;
@@ -79,6 +80,30 @@ export default function Header({
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [notificationPanel, onNotificationClose]);
+
+  useEffect(() => {
+    if (!isProfileOpen) return;
+
+    const handleOutsideClick = (event) => {
+      if (!profileAreaRef.current?.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isProfileOpen]);
 
   const handleLogout = () => {
     closeMenu();
@@ -131,9 +156,32 @@ export default function Header({
                 </button>
                 {notificationPanel}
               </div>
-              <Link href="/" className={styles.nickname}>
-                {user.nickname}
-              </Link>
+              <div className={styles.profileArea} ref={profileAreaRef}>
+                <button
+                  type="button"
+                  className={styles.nickname}
+                  onClick={() => setIsProfileOpen((previous) => !previous)}
+                >
+                  {user.nickname}
+                </button>
+
+                {isProfileOpen && (
+                  <div
+                    id="desktop-profile-menu"
+                    className={styles.profilePanel}
+                  >
+                    <ProfileMenu
+                      user={user}
+                      points={points}
+                      onLogout={() => {
+                        setIsProfileOpen(false);
+                        handleLogout();
+                      }}
+                      onClose={() => setIsProfileOpen(false)}
+                    />
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
@@ -208,49 +256,12 @@ export default function Header({
             className={styles.drawer}
             aria-label="사용자 메뉴"
           >
-            {isAuthenticated ? (
-              <div className={styles.userSummary}>
-                <strong>안녕하세요, {user.nickname}님!</strong>
-                <div className={styles.pointRow}>
-                  <span>보유 포인트</span>
-                  <strong>{formatPoints(points ?? 0)} P</strong>
-                </div>
-              </div>
-            ) : (
-              <div className={`${styles.userSummary} ${styles.guestSummary}`}>
-                <strong>로그인이 필요합니다</strong>
-                <p>로그인하고 서비스를 이용해보세요</p>
-                <Link
-                  href="/login"
-                  className={styles.drawerLoginButton}
-                  onClick={closeMenu}
-                >
-                  로그인
-                </Link>
-              </div>
-            )}
-
-            <nav className={styles.drawerNavigation} aria-label="사용자 페이지">
-              <Link href="/" onClick={closeMenu}>
-                마켓플레이스
-              </Link>
-              <Link href="/" onClick={closeMenu}>
-                마이갤러리
-              </Link>
-              <Link href="/" onClick={closeMenu}>
-                판매 중인 포토카드
-              </Link>
-            </nav>
-
-            {isAuthenticated && (
-              <button
-                type="button"
-                className={styles.drawerLogoutButton}
-                onClick={handleLogout}
-              >
-                로그아웃
-              </button>
-            )}
+            <ProfileMenu
+              user={user}
+              points={points}
+              onLogout={handleLogout}
+              onClose={closeMenu}
+            />
           </aside>
         </>
       )}
