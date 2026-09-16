@@ -26,10 +26,22 @@ export default function AuthGuard({ children }) {
   // 백엔드 인증 정책에 따라 사용자 정보 없음·유효하지 않은 토큰은 401로 통일
   const isAuthenticationError = !hasAccessToken || error?.status === 401;
 
+  // 모달을 닫으면 이전 내부 페이지로 이동하고,
+  // 돌아갈 내부 페이지가 없으면 랜딩 페이지로 이동
+  const handleClose = () => {
+    const referrer = document.referrer;
+
+    if (referrer && new URL(referrer).origin === window.location.origin) {
+      router.back();
+      return;
+    }
+
+    router.push("/");
+  };
+
   if (!isClient) return null;
 
   // Access Token이 없거나 사용자 조회가 최종 401이면 로그인 안내
-  // 모달을 닫으면 이전 페이지로 이동
   if (isAuthenticationError) {
     return (
       <Modal
@@ -43,7 +55,7 @@ export default function AuthGuard({ children }) {
         }
         confirmText="확인"
         onConfirm={() => router.push("/login")}
-        onClose={() => router.back()}
+        onClose={handleClose}
       />
     );
   }
