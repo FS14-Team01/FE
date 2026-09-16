@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import Dropdown from "@/components/common/Dropdown/Dropdown";
 import SearchInput from "@/components/common/SearchInput/SearchInput";
 import { useToast } from "@/components/common/Toast/ToastProvider";
+import MobileFilterSheet from "@/components/MobileFilterSheet/MobileFilterSheet";
 import {
   CARD_CATEGORY_OPTIONS,
   CARD_GRADE_OPTIONS,
   getCardCategoryLabel,
 } from "@/constants/marketplace-options";
-import { useCreateSale, useMyOwnerships } from "../../hooks/use-sale-create";
+import { useCreateSale, useMyOwnerships, useOwnershipFilterSummary } from "../../hooks/use-sale-create";
 import styles from "./SaleCreateModal.module.css";
 
 function normalizeOwnership(ownership) {
@@ -19,7 +20,13 @@ function normalizeOwnership(ownership) {
   return {
     ownershipId: ownership.id,
     quantity: ownership.quantity ?? 0,
-    photoCard,
+    photoCard: {
+      ...photoCard,
+      creatorNickname:
+        photoCard.creatorNickname ??
+        photoCard.creator?.creatorNickname ??
+        photoCard.creator?.nickname,
+    },
   };
 }
 
@@ -30,7 +37,28 @@ const GRADE_CLASS_NAMES = {
   LEGENDARY: "legendary",
 };
 
+const MOBILE_QUERY = "(max-width: 743px)";
+
+function subscribeToMobileChange(onChange) {
+  const mediaQuery = window.matchMedia(MOBILE_QUERY);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+}
+
+function getIsMobile() {
+  return window.matchMedia(MOBILE_QUERY).matches;
+}
+
+function getServerIsMobile() {
+  return false;
+}
+
 export default function SaleCreateModal({ onClose }) {
+  const isMobile = useSyncExternalStore(
+    subscribeToMobileChange,
+    getIsMobile,
+    getServerIsMobile,
+  );
   const router = useRouter();
   const { showToast } = useToast();
   const [step, setStep] = useState("select");
@@ -44,7 +72,6 @@ export default function SaleCreateModal({ onClose }) {
   const [desiredGrade, setDesiredGrade] = useState("");
   const [desiredCategory, setDesiredCategory] = useState("");
   const [desiredDescription, setDesiredDescription] = useState("");
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const modalRef = useRef(null);
   const loadMoreRef = useRef(null);
   const isSubmittingRef = useRef(false);
@@ -63,7 +90,21 @@ export default function SaleCreateModal({ onClose }) {
     [keyword, grade, category],
   );
   const ownershipsQuery = useMyOwnerships(filters);
-  const { fetchNextPage, hasNextPage, isFetchingNextPage } = ownershipsQuery;
+  const filterSummaryQuery = useOwnershipFilterSummary(keyword, step === "select");
+  const filterSummary = filterSummaryQuery.isError
+    ? undefined
+    : filterSummaryQuery.data;
+  const filterCounts = {
+    ...filterSummary?.gradeCounts,
+    ...filterSummary?.categoryCounts,
+  };
+  const {
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  } = ownershipsQuery;
+  const isInitialListError = ownershipsQuery.isError && !isFetchNextPageError;
   const createSaleMutation = useCreateSale();
   const ownerships = (ownershipsQuery.data?.pages ?? [])
     .flatMap((page) => page.items ?? [])
@@ -82,7 +123,7 @@ export default function SaleCreateModal({ onClose }) {
     if (step !== "select") return;
 
     const target = loadMoreRef.current;
-    if (!target || !hasNextPage) return;
+    if (!target || !hasNextPage || isFetchNextPageError) return;
 
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !isFetchingNextPage) {
@@ -92,7 +133,7 @@ export default function SaleCreateModal({ onClose }) {
 
     observer.observe(target);
     return () => observer.disconnect();
-  }, [step, fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [step, fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError]);
 
   useEffect(() => {
     modalRef.current?.scrollTo({ top: 0 });
@@ -139,8 +180,12 @@ export default function SaleCreateModal({ onClose }) {
     setDesiredGrade("");
     setDesiredCategory("");
     setDesiredDescription("");
-    setIsMobileFilterOpen(false);
     setStep("form");
+  };
+
+  const handleMobileFilterApply = (nextFilters) => {
+    setGrade(nextFilters.grade ?? "");
+    setCategory(nextFilters.category ?? "");
   };
 
   const submitSale = (event) => {
@@ -217,15 +262,18 @@ export default function SaleCreateModal({ onClose }) {
         {step === "select" ? (
           <>
             <div className={styles.filters}>
-              <button
-                type="button"
-                className={`${styles.mobileFilterButton} ${grade || category ? styles.mobileFilterActive : ""}`}
-                onClick={() => setIsMobileFilterOpen((isOpen) => !isOpen)}
-                aria-label="필터"
-                aria-expanded={isMobileFilterOpen}
-              >
-                <span aria-hidden="true" />
-              </button>
+              {isMobile && (
+                <MobileFilterSheet
+                  className={styles.mobileFilter}
+                  gradeOptions={CARD_GRADE_OPTIONS}
+                  categoryOptions={CARD_CATEGORY_OPTIONS}
+                  grade={grade}
+                  category={category}
+                  counts={filterCounts}
+                  totalCount={filterSummary?.totalCount}
+                  onApply={handleMobileFilterApply}
+                />
+              )}
               <SearchInput
                 className={styles.searchInput}
                 value={keywordInput}
@@ -242,18 +290,9 @@ export default function SaleCreateModal({ onClose }) {
                 <Dropdown className={styles.filterDropdown} options={CARD_CATEGORY_OPTIONS} value={category} onChange={(value) => setCategory((current) => current === value ? "" : value)} placeholder="장르" label="장르 필터" />
               </div>
             </div>
-            {isMobileFilterOpen && (
-              <div className={styles.mobileFilterPanel}>
-                <Dropdown variant="sort" options={CARD_GRADE_OPTIONS} value={grade} onChange={(value) => setGrade((current) => current === value ? "" : value)} placeholder="등급" label="등급 필터" />
-                <Dropdown variant="sort" options={CARD_CATEGORY_OPTIONS} value={category} onChange={(value) => setCategory((current) => current === value ? "" : value)} placeholder="장르" label="장르 필터" />
-                <button type="button" onClick={() => { setGrade(""); setCategory(""); }}>
-                  초기화
-                </button>
-              </div>
-            )}
             {ownershipsQuery.isLoading && <p className={styles.state}>보유 포토카드를 불러오는 중입니다.</p>}
-            {ownershipsQuery.isError && <p className={styles.state}>{ownershipsQuery.error?.message ?? "보유 포토카드를 불러오지 못했습니다."}</p>}
-            {!ownershipsQuery.isLoading && !ownershipsQuery.isError && ownerships.length === 0 && (
+            {isInitialListError && <p className={styles.state}>{ownershipsQuery.error?.message ?? "보유 포토카드를 불러오지 못했습니다."}</p>}
+            {!ownershipsQuery.isLoading && !isInitialListError && ownerships.length === 0 && (
               <p className={styles.state}>판매할 수 있는 포토카드가 없습니다.</p>
             )}
             <div className={styles.cardGrid}>
@@ -269,8 +308,8 @@ export default function SaleCreateModal({ onClose }) {
                       <i aria-hidden="true" />
                       <span className={styles.cardCategory}>{getCardCategoryLabel(ownership.photoCard.category)}</span>
                     </div>
-                    {(ownership.photoCard.creatorNickname || ownership.photoCard.creator?.nickname) && (
-                      <span className={styles.cardNickname}>{ownership.photoCard.creatorNickname ?? ownership.photoCard.creator.nickname}</span>
+                    {ownership.photoCard.creatorNickname && (
+                      <span className={styles.cardNickname}>{ownership.photoCard.creatorNickname}</span>
                     )}
                   </div>
                   <div className={styles.cardSaleInfo}>
@@ -280,8 +319,18 @@ export default function SaleCreateModal({ onClose }) {
                 </button>
               ))}
             </div>
-            <div ref={loadMoreRef} className={styles.loadMore} aria-hidden="true" />
+            {hasNextPage && !isFetchNextPageError && (
+              <div ref={loadMoreRef} className={styles.loadMore} aria-hidden="true" />
+            )}
             {ownershipsQuery.isFetchingNextPage && <p className={styles.fetching}>불러오는 중...</p>}
+            {isFetchNextPageError && !isFetchingNextPage && (
+              <div className={styles.fetching} role="alert">
+                <p>다음 포토카드를 불러오지 못했습니다.</p>
+                <button type="button" className={styles.retryButton} onClick={() => fetchNextPage()}>
+                  다시 시도
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <form className={styles.saleForm} onSubmit={submitSale} aria-busy={createSaleMutation.isPending}>
