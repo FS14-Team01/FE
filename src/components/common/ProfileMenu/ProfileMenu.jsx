@@ -35,8 +35,7 @@ export default function ProfileMenu({ user, points, onLogout, onClose }) {
           마이갤러리
         </Link>
 
-        {/* 임시연결  */}
-        <Link href="/my-gallery" onClick={onClose}>
+        <Link href="/my-sales" onClick={onClose}>
           판매 중인 포토카드
         </Link>
       </nav>
