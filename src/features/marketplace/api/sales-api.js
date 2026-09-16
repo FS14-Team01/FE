@@ -1,5 +1,16 @@
 import apiClient from "@/lib/axios";
 
+export async function createExchangeOffer(
+  saleId,
+  { offeredCardId, offeredDescription },
+) {
+  const response = await apiClient.post(`/sales/${saleId}/exchange-offers`, {
+    offeredCardId,
+    offeredDescription,
+  });
+  return response.data?.data ?? response.data;
+}
+
 export async function getSaleDetail(saleId) {
   const response = await apiClient.get(`/sales/${saleId}`);
 

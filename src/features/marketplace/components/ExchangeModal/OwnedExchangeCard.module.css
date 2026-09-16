@@ -1,4 +1,16 @@
 .cardFrame {
   /* 교환 화면의 배치만 담당한다. 카드 내부 스타일은 공통 PhotoCard에서 관리한다. */
-  width: max-content;
+  width: 440px;
+}
+
+@media (max-width: 1199px) {
+  .cardFrame {
+    width: 342px;
+  }
+}
+
+@media (max-width: 743px) {
+  .cardFrame {
+    width: 170px;
+  }
 }
