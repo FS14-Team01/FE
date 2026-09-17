@@ -15,7 +15,7 @@ import {
 
 export function useMyOwnerships(filters, enabled = true) {
   return useInfiniteQuery({
-    queryKey: galleryKeys.list(filters),
+    queryKey: galleryKeys.infinite(filters),
     queryFn: ({ pageParam }) =>
       getMyOwnerships({
         ...filters,
