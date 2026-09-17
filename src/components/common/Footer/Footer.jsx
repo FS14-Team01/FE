@@ -1,6 +1,15 @@
+"use client";
+
 import styles from "./Footer.module.css";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
+
   return (
     <footer className={styles.wrapper}>
       <div className={styles.inner}>
