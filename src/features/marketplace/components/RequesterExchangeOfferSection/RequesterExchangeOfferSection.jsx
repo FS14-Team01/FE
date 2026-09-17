@@ -14,8 +14,12 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
   });
   const { showToast } = useToast();
   const sentinelRef = useRef(null);
-  const { hasNextPage, isFetching, isError, fetchNextPage } = offers;
+  const { hasNextPage, isFetching, isError, error, fetchNextPage } = offers;
   const isCancelling = cancellation.isPending;
+  const errorMessage =
+    error?.status === 401
+      ? "교환 제시 목록을 불러오지 못했습니다."
+      : error?.message ?? "교환 제시 목록을 불러오지 못했습니다.";
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -55,7 +59,7 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
       {offers.isError && (
         <div className={styles.feedback}>
           <p className={styles.error} role="alert">
-            {offers.error.message}
+            {errorMessage}
           </p>
           <Button
             variant="secondary"
