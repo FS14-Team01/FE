@@ -21,16 +21,27 @@ export default function ExchangeModal({
   isFetchingNextPage = false,
   onLoadMore,
   isSubmitting = false,
+  canRetrySubmit = false,
+  errorMessage = "",
+  listErrorMessage = "",
+  isRetryingList = false,
+  onRetryList,
+  onResetError,
 }) {
   const [selectedOwnership, setSelectedOwnership] = useState(null);
   const [description, setDescription] = useState("");
 
   const handleSelect = (ownership) => {
+    onResetError?.();
     setSelectedOwnership(ownership);
     setDescription("");
   };
 
-  const handleBack = () => setSelectedOwnership(null);
+  const handleBack = () => {
+    if (isSubmitting) return;
+    onResetError?.();
+    setSelectedOwnership(null);
+  };
 
   return (
     <ExchangeDialog
@@ -44,6 +55,7 @@ export default function ExchangeModal({
       containScroll={!selectedOwnership}
       onClose={onClose}
       onBack={handleBack}
+      isBusy={isSubmitting}
     >
       {selectedOwnership ? (
         <ExchangeOfferForm
@@ -53,6 +65,8 @@ export default function ExchangeModal({
           onBack={handleBack}
           onSubmit={onSubmit}
           isSubmitting={isSubmitting}
+          canRetrySubmit={canRetrySubmit}
+          errorMessage={errorMessage}
         />
       ) : (
         <ExchangeCardSelect
@@ -61,6 +75,9 @@ export default function ExchangeModal({
           onFiltersChange={onFiltersChange}
           onSelect={handleSelect}
           isLoading={isLoading}
+          errorMessage={listErrorMessage}
+          isRetrying={isRetryingList}
+          onRetry={onRetryList}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
           onLoadMore={onLoadMore}

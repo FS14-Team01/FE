@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
+import { getCardGradeLabel } from "@/constants/marketplace-options";
 import {
   exchangeKeys,
   marketKeys,
@@ -13,7 +14,7 @@ import {
 } from "@/lib/query-keys";
 import useSaleDetail from "../../hooks/use-sale-detail";
 import useUpdateExchangeOfferStatus from "../../hooks/use-update-exchange-offer-status.js";
-import ExchangePreference from "../ExchangePreference/ExchangePreference";
+import RequesterExchangeSection from "../RequesterExchangeSection/RequesterExchangeSection";
 import ExchangeOfferSection from "../ExchangeOfferSection/ExchangeOfferSection";
 import PurchaseSection from "../PurchaseSection/PurchaseSection";
 import SaleCardOverview from "../SaleCardOverview/SaleCardOverview";
@@ -51,8 +52,17 @@ export default function SaleDetailPage({ saleId }) {
 
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
+  // 구매 성공 모달은 상세 재조회/품절 전환과 무관하게 유지되어야 하므로
+  // PurchaseSection이 아니라 여기서 구매 시점 스냅샷으로 관리한다
+  const [purchaseResult, setPurchaseResult] = useState(null);
 
-  const { data: sale, isPending, isError, error } = useSaleDetail(saleId);
+  const {
+    data: sale,
+    isPending,
+    isFetching,
+    isError,
+    error,
+  } = useSaleDetail(saleId);
 
   const {
     mutate: updateExchangeOfferStatus,
@@ -63,27 +73,12 @@ export default function SaleDetailPage({ saleId }) {
 
   const queryClient = useQueryClient();
 
-  if (isPending) {
-    return <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>;
-  }
-
-  if (isError) {
-    return (
-      <main className={styles.state} role="alert">
-        {error?.message ?? "판매 정보를 불러오지 못했습니다."}
-      </main>
-    );
-  }
-
-  if (sale.status === "SOLD_OUT" || sale.status === "CANCELLED") {
-    return (
-      <main className={styles.state} role="alert">
-        판매 정보를 찾을 수 없습니다.
-      </main>
-    );
-  }
-
-  const isOwner = sale.isOwner === true;
+  const isLoading = isPending || isFetching;
+  const isUnavailable =
+    !isLoading &&
+    !isError &&
+    (sale?.status === "SOLD_OUT" || sale?.status === "CANCELLED");
+  const isOwner = sale?.isOwner === true;
 
   const handleAccept = (exchangeOffer) => {
     setSelectedOffer(exchangeOffer);
@@ -182,42 +177,99 @@ export default function SaleDetailPage({ saleId }) {
     );
   };
 
-  return (
-    <main className={styles.main}>
-      <SaleCardOverview sale={sale}>
-        {isOwner ? (
-          <SellerSaleSection sale={sale} />
-        ) : (
-          <div className={styles.actions}>
-            <PurchaseSection sale={sale} />
-          </div>
+  // 구매 성공 모달은 아래 분기 바깥에서 렌더하므로 상세가 숨겨져도 유지된다
+  const handleClosePurchaseResult = () => {
+    setPurchaseResult(null);
+  };
+
+  let pageContent;
+
+  if (isLoading) {
+    pageContent = (
+      <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>
+    );
+  } else if (isError) {
+    pageContent = (
+      <main className={styles.state} role="alert">
+        {error?.message ?? "판매 정보를 불러오지 못했습니다."}
+        {sale && !sale.isOwner && (
+          <RequesterExchangeSection
+            key={saleId}
+            saleId={saleId}
+            sale={sale}
+            saleError={error}
+          />
         )}
-      </SaleCardOverview>
+      </main>
+    );
+  } else if (isUnavailable) {
+    pageContent = (
+      <main className={styles.state} role="alert">
+        판매 정보를 찾을 수 없습니다.
+      </main>
+    );
+  } else {
+    pageContent = (
+      <main className={styles.main}>
+        <SaleCardOverview sale={sale}>
+          {isOwner ? (
+            <SellerSaleSection sale={sale} />
+          ) : (
+            <div className={styles.actions}>
+              <PurchaseSection
+                sale={sale}
+                onPurchaseSuccess={setPurchaseResult}
+              />
+            </div>
+          )}
+        </SaleCardOverview>
 
-      {!isOwner && <ExchangePreference variant="full" />}
+        {!isOwner && (
+          <RequesterExchangeSection key={saleId} saleId={saleId} sale={sale} />
+        )}
 
-      {isOwner && (
-        <ExchangeOfferSection
-          saleId={saleId}
-          pageSize={PAGE_SIZE}
-          onAccept={handleAccept}
-          onReject={handleReject}
-        />
+        {isOwner && (
+          <ExchangeOfferSection
+            saleId={saleId}
+            pageSize={PAGE_SIZE}
+            onAccept={handleAccept}
+            onReject={handleReject}
+          />
+        )}
+
+        {selectedOffer && exchangeAction && modalText && (
+          <Modal
+            title={modalText.title}
+            message={modalMessage}
+            confirmText={modalText.confirmText}
+            onConfirm={handleConfirmExchange}
+            onClose={() => {
+              setSelectedOffer(null);
+              setExchangeAction(null);
+            }}
+            isPending={isUpdatingExchangeOffer}
+          />
+        )}
+      </main>
+    );
+  }
+
+  return (
+    <>
+      {pageContent}
+
+      {/* 상세가 로딩/오류/품절로 전환되어도 구매 결과 안내는 남는다 */}
+      {purchaseResult && (
+        <div className={styles.successModal}>
+          <Modal
+            title="구매 성공"
+            message={`[${getCardGradeLabel(purchaseResult.grade)} | ${purchaseResult.cardName}] ${purchaseResult.quantity}장 구매에 성공했습니다!`}
+            confirmText="마이갤러리에서 확인하기"
+            onConfirm={() => router.push("/my-gallery")}
+            onClose={handleClosePurchaseResult}
+          />
+        </div>
       )}
-
-      {selectedOffer && exchangeAction && modalText && (
-        <Modal
-          title={modalText.title}
-          message={modalMessage}
-          confirmText={modalText.confirmText}
-          onConfirm={handleConfirmExchange}
-          onClose={() => {
-            setSelectedOffer(null);
-            setExchangeAction(null);
-          }}
-          isPending={isUpdatingExchangeOffer}
-        />
-      )}
-    </main>
+    </>
   );
 }

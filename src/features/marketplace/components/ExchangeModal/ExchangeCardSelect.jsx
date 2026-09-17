@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Button from "@/components/common/Button/Button";
 import SearchInput from "@/components/common/SearchInput/SearchInput";
 import Dropdown from "@/components/common/Dropdown/Dropdown";
 import ExchangeMobileFilter from "./ExchangeMobileFilter";
@@ -26,6 +27,9 @@ export default function ExchangeCardSelect({
   onFiltersChange,
   onSelect,
   isLoading = false,
+  errorMessage = "",
+  isRetrying = false,
+  onRetry,
   hasNextPage = false,
   isFetchingNextPage = false,
   onLoadMore,
@@ -123,11 +127,28 @@ export default function ExchangeCardSelect({
         </div>
       </div>
       <div ref={listViewportRef} className={styles.cardListViewport}>
+        {errorMessage && (
+          <div className={styles.notice}>
+            <p className={styles.error} role="alert">
+              {errorMessage}
+            </p>
+            {onRetry && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={onRetry}
+                disabled={isRetrying}
+              >
+                다시 불러오기
+              </Button>
+            )}
+          </div>
+        )}
         {isLoading ? (
           <p className={styles.notice} role="status">
             보유 카드를 불러오는 중입니다.
           </p>
-        ) : ownerships.length === 0 ? (
+        ) : ownerships.length === 0 && !errorMessage ? (
           <p className={styles.notice} role="status">
             조건에 맞는 보유 카드가 없습니다.
           </p>
