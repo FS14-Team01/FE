@@ -73,15 +73,15 @@ export default function Home() {
         <Image
           src="/landing/landing02D.png"
           alt="거래 알림 화면"
-          width={1508}
-          height={1022}
+          width={4170}
+          height={2025}
         />
         <Image
           className={styles.pointBlueBackground}
           src="/landing/landing02circle.png"
           alt="배경"
-          width={2838}
-          height={724}
+          width={3212}
+          height={786}
         />
       </section>
 
