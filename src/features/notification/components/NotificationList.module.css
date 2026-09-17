@@ -32,7 +32,8 @@
   color: var(--color-gray-100);
 }
 
-.statusContainer p, .loadMoreStatus p {
+.statusContainer p,
+.loadMoreStatus p {
   margin: 0;
 }
 

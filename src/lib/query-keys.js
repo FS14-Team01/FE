@@ -10,29 +10,69 @@
 /* 마켓플레이스 판매글 — GET /sales, GET /sales/:saleId */
 export const marketKeys = {
   all: ["market"],
+
   lists: () => [...marketKeys.all, "list"],
+
   /** filters: { keyword, grade, category, status, sort, limit } */
   list: (filters) => [...marketKeys.lists(), filters],
+
   details: () => [...marketKeys.all, "detail"],
-  detail: (saleId) => [...marketKeys.details(), saleId],
+
+  detail: (saleId) => [
+    ...marketKeys.details(),
+    saleId,
+  ],
 };
 
 /* 마이갤러리 — GET /users/me/ownerships */
-// 추가한부분
 export const galleryKeys = {
   all: ["gallery"],
+
+  // 일반 조회
   lists: () => [...galleryKeys.all, "list"],
+
   /** filters: { keyword, grade, category, limit } */
-  list: (filters) => [...galleryKeys.lists(), filters],
+  list: (filters) => [
+    ...galleryKeys.lists(),
+    filters,
+  ],
+
+  // 무한스크롤 조회
+  infiniteLists: () => [
+    ...galleryKeys.all,
+    "infinite",
+  ],
+
+  /**
+   * filters: { keyword, grade, category, limit }
+   * cursor는 useInfiniteQuery의 pageParam으로 관리하므로 제외합니다.
+   */
+  infinite: (filters) => [
+    ...galleryKeys.infiniteLists(),
+    filters,
+  ],
+
+  creationStatus: () => [
+    ...galleryKeys.all,
+    "creation-status",
+  ],
+
+  summary: (keyword = "") => [
+    ...galleryKeys.all,
+    "summary",
+    { keyword },
+  ],
 };
 
 /* 나의 판매 포토카드 — GET /users/me/sales */
-// 추가한부분
 export const saleKeys = {
   all: ["sale"],
+
   lists: () => [...saleKeys.all, "list"],
+
   /** filters: { keyword, grade, category, status, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
+
   summary: (keyword = "") => [
     ...saleKeys.all,
     "summary",
@@ -44,44 +84,79 @@ export const saleKeys = {
 // 생성 직후 이동하는 상세는 판매글이 아닌 카드 원본이라 marketKeys와 별개입니다
 export const photoCardKeys = {
   all: ["photoCard"],
-  details: () => [...photoCardKeys.all, "detail"],
-  detail: (photoCardId) => [...photoCardKeys.details(), photoCardId],
+
+  details: () => [
+    ...photoCardKeys.all,
+    "detail",
+  ],
+
+  detail: (photoCardId) => [
+    ...photoCardKeys.details(),
+    photoCardId,
+  ],
 };
 
 /* 교환 제안 — GET /sales/:saleId/exchange-offers, GET /users/me/exchange-offers */
-// 추가한부분
 export const exchangeKeys = {
   all: ["exchange"],
-  received: () => [...exchangeKeys.all, "received"],
+
+  received: () => [
+    ...exchangeKeys.all,
+    "received",
+  ],
+
   /** filters: { limit } */
   receivedBySale: (saleId, filters) => [
     ...exchangeKeys.received(),
     saleId,
     filters,
   ],
+
   sent: () => [...exchangeKeys.all, "sent"],
-  /** filters: { saleId, limit, requesterId } — requesterId는 계정별 캐시 구분용이며 API로 보내지 않는다. */
-  sentList: (filters) => [...exchangeKeys.sent(), filters],
+
+  /**
+   * filters: { saleId, limit, requesterId }
+   * requesterId는 계정별 캐시 구분용이며 API로 보내지 않는다.
+   */
+  sentList: (filters) => [
+    ...exchangeKeys.sent(),
+    filters,
+  ],
 };
 
 /* 알림 — GET /notifications */
-// 추가한부분
 // 안 읽은 알림은 전용 엔드포인트가 없어 { isRead: false } 목록으로 조회합니다
 export const notificationKeys = {
   all: ["notification"],
-  lists: () => [...notificationKeys.all, "list"],
+
+  lists: () => [
+    ...notificationKeys.all,
+    "list",
+  ],
+
   /** filters: { isRead, limit } */
-  list: (filters) => [...notificationKeys.lists(), filters],
+  list: (filters) => [
+    ...notificationKeys.lists(),
+    filters,
+  ],
 };
 
 /* 유저 — GET /users/me */
 export const userKeys = {
   all: ["user"],
-  me: () => [...userKeys.all, "me"],
+
+  me: () => [
+    ...userKeys.all,
+    "me",
+  ],
 };
 
 /* 포인트 — GET /points/me */
 export const pointKeys = {
   all: ["point"],
-  me: () => [...pointKeys.all, "me"],
+
+  me: () => [
+    ...pointKeys.all,
+    "me",
+  ],
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import styles from "./MobileFilterSheet.module.css";
 
@@ -48,6 +49,10 @@ export default function MobileFilterSheet({
     category: categoryOptions,
     saleStatus: saleStatusOptions,
   };
+  const availableTabs = TABS.filter(
+    (tab) => optionsByTab[tab.key].length > 0,
+  );
+  const visibleTabs = availableTabs.length > 0 ? availableTabs : TABS;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -69,7 +74,7 @@ export default function MobileFilterSheet({
   const handleOpen = () => {
     const current = getCurrentSelection();
     setSelection(current);
-    setActiveTab(current.tab ?? "grade");
+    setActiveTab(current.tab ?? visibleTabs[0]?.key ?? "grade");
     setIsOpen(true);
   };
 
@@ -113,21 +118,22 @@ export default function MobileFilterSheet({
         <Image src="/assets/ic_filter.png" alt="" width={20} height={20} />
       </button>
 
-      {isOpen && (
-        <div
-          className={styles.overlay}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-        >
-          <button
-            type="button"
-            className={styles.backdrop}
-            aria-label="필터 닫기"
-            onClick={handleClose}
-          />
+      {isOpen &&
+        createPortal(
+          <div
+            className={styles.overlay}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+          >
+            <button
+              type="button"
+              className={styles.backdrop}
+              aria-label="필터 닫기"
+              onClick={handleClose}
+            />
 
-          <div className={styles.sheet}>
+            <div className={styles.sheet}>
             <div className={styles.header}>
               <h2 id={titleId} className={styles.title}>
                 필터
@@ -148,7 +154,7 @@ export default function MobileFilterSheet({
             </div>
 
             <div className={styles.tabs} role="tablist">
-              {TABS.map((tab) => (
+              {visibleTabs.map((tab) => (
                 <button
                   key={tab.key}
                   type="button"
@@ -219,9 +225,10 @@ export default function MobileFilterSheet({
                   : "포토보기"}
               </button>
             </div>
-          </div>
-        </div>
-      )}
+            </div>
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
