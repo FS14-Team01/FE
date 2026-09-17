@@ -26,8 +26,5 @@ export default function useInfiniteMyGallery(filters = {}) {
         : undefined,
 
     placeholderData: keepPreviousData,
-
-    // 마이갤러리 진입 시 최신 보유 목록 조회
-    refetchOnMount: "always",
   });
 }
