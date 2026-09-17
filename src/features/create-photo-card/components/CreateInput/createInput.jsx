@@ -43,11 +43,6 @@ export default function CreateInput({
             event.preventDefault();
           }
         }}
-        onWheel={(event) => {
-          if (type === "number") {
-            event.currentTarget.blur(); // 휠로 값이 바뀌지 않도록 포커스 해제
-          }
-        }}
       />
       {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
