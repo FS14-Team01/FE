@@ -6,6 +6,7 @@ import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 import { useStopSale, useUpdateSale } from "../../hooks/use-sale-management";
 import SaleEditModal from "../SaleEditModal/SaleEditModal";
+import ExchangePreference from "../ExchangePreference/ExchangePreference";
 import styles from "./SellerSaleSection.module.css";
 
 export default function SellerSaleSection({ sale }) {
@@ -53,18 +54,10 @@ export default function SellerSaleSection({ sale }) {
     <>
       <section
         className={styles.section}
-        aria-labelledby="seller-sale-section-title"
+        aria-label="판매 관리"
         data-sale-id={sale.id}
       >
-        <div className={styles.heading}>
-          <h2 id="seller-sale-section-title" className={styles.title}>
-            교환 희망 정보
-          </h2>
-        </div>
-
-        <div className={styles.preference}>
-          {/* 교환 희망 등급, 장르 및 설명 */}
-        </div>
+        <ExchangePreference sale={sale} variant="seller" />
 
         <div className={styles.actions}>
           <button
