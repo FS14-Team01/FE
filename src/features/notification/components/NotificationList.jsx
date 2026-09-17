@@ -20,6 +20,7 @@ export default function NotificationList() {
   } = useGetNotifications({ limit: 20 });
 
   // 무한 스크롤
+  const scrollContainRef = useRef(null);
   const sentinelRef = useRef(null);
 
   useEffect(() => {
@@ -32,11 +33,16 @@ export default function NotificationList() {
       return;
     }
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting && hasNextPage && !isFetching) {
-        fetchNextPage();
-      }
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: scrollContainRef.current,
+      },
+    );
     observer.observe(sentinelRef.current);
 
     return () => observer.disconnect();
@@ -106,5 +112,9 @@ export default function NotificationList() {
     }
   }
 
-  return <div className={styles.wrapper}>{content}</div>;
+  return (
+    <div className={styles.wrapper} ref={scrollContainRef}>
+      {content}
+    </div>
+  );
 }
