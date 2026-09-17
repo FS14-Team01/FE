@@ -66,12 +66,12 @@
 
 .tabs {
   display: flex;
-  gap: 90px;
-  padding-left: 20px;
+  width: 100%;
 }
 
-/* 텍스트 폭에 맞추고 밑줄도 글자 길이만큼만 그린다 */
+/* 노출되는 탭이 필터 영역을 동일한 너비로 나눠 갖는다 */
 .tab {
+  flex: 1;
   padding: 12px 0;
   border: 0;
   border-bottom: 2px solid transparent;
@@ -79,6 +79,7 @@
   color: var(--color-gray-400);
   font-size: 14px;
   font-weight: 700;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -122,6 +123,10 @@
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.optionSelected {
+  background: var(--color-black);
 }
 
 .count {

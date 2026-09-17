@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Dropdown from "@/components/common/Dropdown/Dropdown";
 import {
   CATEGORY_OPTIONS,
@@ -16,8 +16,28 @@ import useSalesSummary from "../../hooks/use-sales-summary";
 import styles from "./MySalesPage.module.css";
 
 const PAGE_SIZE = 12;
+const MOBILE_QUERY = "(max-width: 743px)";
+
+function subscribeToMobileChange(onChange) {
+  const mediaQuery = window.matchMedia(MOBILE_QUERY);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+}
+
+function getIsMobile() {
+  return window.matchMedia(MOBILE_QUERY).matches;
+}
+
+function getServerIsMobile() {
+  return false;
+}
 
 export default function MySalesPage() {
+  const isMobile = useSyncExternalStore(
+    subscribeToMobileChange,
+    getIsMobile,
+    getServerIsMobile,
+  );
   const [keyword, setKeyword] = useState("");
   const [searchedKeyword, setSearchedKeyword] = useState("");
   const [grade, setGrade] = useState();
@@ -38,6 +58,7 @@ export default function MySalesPage() {
 
   const salesQuery = useSalesList(filters);
   const summaryQuery = useSalesSummary();
+  const filterSummaryQuery = useSalesSummary(searchedKeyword);
   const userQuery = useCurrentUser();
   const {
     fetchNextPage,
@@ -47,6 +68,16 @@ export default function MySalesPage() {
   } = salesQuery;
   const sales = salesQuery.data?.pages.flatMap((page) => page.items) ?? [];
   const summary = summaryQuery.data;
+  const totalCount = summary?.totalCount;
+  const gradeCounts = summary?.gradeCounts ?? {};
+  const filterSummary = filterSummaryQuery.isError
+    ? undefined
+    : filterSummaryQuery.data;
+  const filterCounts = {
+    ...filterSummary?.gradeCounts,
+    ...filterSummary?.categoryCounts,
+    ...filterSummary?.statusCounts,
+  };
   const isInitialListError =
     salesQuery.isError && !isFetchNextPageError;
 
@@ -101,18 +132,18 @@ export default function MySalesPage() {
           <>
             <strong>
               {userQuery.data?.nickname
-                ? `${userQuery.data.nickname}님이 판매 등록한 포토카드`
-                : "판매 등록한 포토카드"}{" "}
-              ({summary.totalQuantity}장)
+                ? `${userQuery.data.nickname}님의 판매글`
+                : "나의 판매글"}{" "}
+              {totalCount != null && `(${totalCount}개)`}
             </strong>
             <div className={styles.gradeCounts}>
-              {Object.entries(summary.gradeQuantities).map(
+              {Object.entries(gradeCounts).map(
                 ([cardGrade, count]) => (
                   <span
                     key={cardGrade}
                     className={styles[cardGrade.toLowerCase()]}
                   >
-                    {cardGrade.replace("_", " ")} {count}장
+                    {cardGrade.replace("_", " ")} {count}개
                   </span>
                 ),
               )}
@@ -122,18 +153,20 @@ export default function MySalesPage() {
       </section>
 
       <div className={styles.filters}>
-        <MobileFilterSheet
-          className={styles.mobileFilter}
-          gradeOptions={GRADE_OPTIONS}
-          categoryOptions={CATEGORY_OPTIONS}
-          saleStatusOptions={SALE_STATUS_OPTIONS}
-          grade={grade}
-          category={category}
-          saleStatus={status}
-          counts={summary?.gradeQuantities}
-          totalCount={summary?.totalQuantity}
-          onApply={handleMobileFilterApply}
-        />
+        {isMobile && (
+          <MobileFilterSheet
+            className={styles.mobileFilter}
+            gradeOptions={GRADE_OPTIONS}
+            categoryOptions={CATEGORY_OPTIONS}
+            saleStatusOptions={SALE_STATUS_OPTIONS}
+            grade={grade}
+            category={category}
+            saleStatus={status}
+            counts={filterCounts}
+            totalCount={filterSummary?.totalCount}
+            onApply={handleMobileFilterApply}
+          />
+        )}
         <SearchInput
           className={styles.search}
           value={keyword}

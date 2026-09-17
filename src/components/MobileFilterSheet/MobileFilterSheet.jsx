@@ -178,7 +178,7 @@ export default function MobileFilterSheet({
                       selection.tab === activeTab &&
                       selection.value === option.value
                     }
-                    className={`${styles.option} ${activeTab === "grade" ? styles[option.value.toLowerCase()] : ""}`}
+                    className={`${styles.option} ${selection.tab === activeTab && selection.value === option.value ? styles.optionSelected : ""} ${activeTab === "grade" ? styles[option.value.toLowerCase()] : ""}`}
                     onClick={() => handleSelect(option.value)}
                   >
                     <span>{option.label}</span>
