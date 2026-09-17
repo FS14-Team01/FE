@@ -271,8 +271,6 @@ export default function CreatePage() {
           <CreateInput
             label="총 발행량"
             type="number"
-            min={1}
-            max={10}
             placeholder="총 발행량을 입력해 주세요"
             value={totalSupply}
             onChange={(event) =>
