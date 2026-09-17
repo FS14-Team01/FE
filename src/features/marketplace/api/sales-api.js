@@ -48,6 +48,14 @@ export async function stopSale(saleId) {
   return response.data?.data ?? response.data;
 }
 
+export async function purchaseSale(saleId, quantity) {
+  const response = await apiClient.post(`/sales/${saleId}/purchases`, {
+    quantity,
+  });
+
+  return response.data?.data ?? response.data;
+}
+
 export async function getSales({
   keyword,
   grade,
