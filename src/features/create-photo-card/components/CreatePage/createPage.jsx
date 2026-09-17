@@ -1,23 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import Dropdown from "@/components/common/Dropdown/Dropdown";
 import {
   CATEGORY_OPTIONS,
   GRADE_OPTIONS,
 } from "@/components/common/Dropdown/dropdownOptions";
 import Button from "@/components/common/Button/Button";
+import { useToast } from "@/components/common/Toast/ToastProvider";
+
 import CreateInput from "@/features/create-photo-card/components/CreateInput/createInput";
 import ImageUpload from "@/features/create-photo-card/components/ImageUpload/ImageUpload";
+import useCreatePhotoCard from "@/features/create-photo-card/hooks/use-create-photo-card";
+
 import styles from "@/features/create-photo-card/components/CreatePage/createPage.module.css";
 
 export default function CreatePage() {
+  const router = useRouter();
+  const { showToast } = useToast();
+
+  const {
+    mutateAsync: createPhotoCard,
+    isPending,
+  } = useCreatePhotoCard();
+
   const [name, setName] = useState("");
   const [grade, setGrade] = useState("");
   const [category, setCategory] = useState("");
-  const [totalSupply, setTotalSupply] = useState("");
-  const [description, setDescription] = useState("");
-  const [imageFile, setImageFile] = useState(null);
+  const [totalSupply, setTotalSupply] =
+    useState("");
+  const [description, setDescription] =
+    useState("");
+  const [imageFile, setImageFile] =
+    useState(null);
 
   // 사용자가 한 번이라도 건드린 필드
   const [touched, setTouched] = useState({
@@ -35,11 +52,6 @@ export default function CreatePage() {
       ...prev,
       [field]: true,
     }));
-  };
-
-  // API 연결 전 form 기본 submit 방지
-  const handleSubmit = (event) => {
-    event.preventDefault();
   };
 
   // 포토카드 이름 오류
@@ -62,10 +74,12 @@ export default function CreatePage() {
 
   // 총 발행량 오류
   const totalSupplyError =
-    touched.totalSupply && totalSupply === ""
+    touched.totalSupply &&
+    totalSupply === ""
       ? "총 발행량을 입력해 주세요."
       : totalSupply !== "" &&
-          (Number(totalSupply) < 1 || Number(totalSupply) > 10)
+          (Number(totalSupply) < 1 ||
+            Number(totalSupply) > 10)
         ? "총 발행량은 1장 이상 10장 이하로 선택 가능합니다."
         : "";
 
@@ -74,7 +88,6 @@ export default function CreatePage() {
     touched.image && !imageFile
       ? "이미지를 업로드해 주세요."
       : "";
-
 
   // 모든 필드가 정상이어야 생성 버튼 활성화
   const isFormInvalid =
@@ -86,10 +99,52 @@ export default function CreatePage() {
     Number(totalSupply) > 10 ||
     !imageFile;
 
+  // 포토카드 생성
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (isFormInvalid || isPending) {
+      return;
+    }
+
+    try {
+      await createPhotoCard({
+        imageFile,
+        name,
+        grade,
+        category,
+        description,
+        totalSupply,
+      });
+
+      showToast({
+        status: "success",
+        message: "포토카드가 생성되었어요.",
+      });
+
+      router.push("/my-gallery");
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ??
+        "포토카드 생성에 실패했어요.";
+
+      showToast({
+        status: "error",
+        message,
+      });
+    }
+  };
+
   return (
-    <div className={styles.PhotoCardCreateWrap}>
+    <div
+      className={
+        styles.PhotoCardCreateWrap
+      }
+    >
       <div className={styles.titleWrap}>
-        <div className={styles.title}>포토카드 생성</div>
+        <div className={styles.title}>
+          포토카드 생성
+        </div>
       </div>
 
       <form
@@ -103,20 +158,30 @@ export default function CreatePage() {
             type="text"
             placeholder="포토카드 이름을 입력해 주세요"
             value={name}
-            onChange={(event) => setName(event.target.value)}
-            onBlur={() => handleTouched("name")}
+            onChange={(event) =>
+              setName(event.target.value)
+            }
+            onBlur={() =>
+              handleTouched("name")
+            }
             error={nameError}
           />
         </div>
 
         {/* 등급 */}
         <div className={styles.formWrap}>
-          <div className={styles.formTitle}>등급</div>
+          <div className={styles.formTitle}>
+            등급
+          </div>
 
           <div
             className={styles.sortArea}
             onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) {
+              if (
+                !event.currentTarget.contains(
+                  event.relatedTarget
+                )
+              ) {
                 handleTouched("grade");
               }
             }}
@@ -132,13 +197,19 @@ export default function CreatePage() {
                 handleTouched("grade");
               }}
               className={`${styles.createSort} ${
-                gradeError ? styles.errorDropdown : ""
+                gradeError
+                  ? styles.errorDropdown
+                  : ""
               }`}
             />
           </div>
 
           {gradeError && (
-            <p className={styles.errorMessage}>
+            <p
+              className={
+                styles.errorMessage
+              }
+            >
               {gradeError}
             </p>
           )}
@@ -146,13 +217,21 @@ export default function CreatePage() {
 
         {/* 장르 */}
         <div className={styles.formWrap}>
-          <div className={styles.formTitle}>장르</div>
+          <div className={styles.formTitle}>
+            장르
+          </div>
 
           <div
             className={styles.sortArea}
             onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) {
-                handleTouched("category");
+              if (
+                !event.currentTarget.contains(
+                  event.relatedTarget
+                )
+              ) {
+                handleTouched(
+                  "category"
+                );
               }
             }}
           >
@@ -164,16 +243,24 @@ export default function CreatePage() {
               value={category}
               onChange={(value) => {
                 setCategory(value);
-                handleTouched("category");
+                handleTouched(
+                  "category"
+                );
               }}
               className={`${styles.createSort} ${
-                categoryError ? styles.errorDropdown : ""
+                categoryError
+                  ? styles.errorDropdown
+                  : ""
               }`}
             />
           </div>
 
           {categoryError && (
-            <p className={styles.errorMessage}>
+            <p
+              className={
+                styles.errorMessage
+              }
+            >
               {categoryError}
             </p>
           )}
@@ -188,8 +275,16 @@ export default function CreatePage() {
             max={10}
             placeholder="총 발행량을 입력해 주세요"
             value={totalSupply}
-            onChange={(event) => setTotalSupply(event.target.value)}
-            onBlur={() => handleTouched("totalSupply")}
+            onChange={(event) =>
+              setTotalSupply(
+                event.target.value
+              )
+            }
+            onBlur={() =>
+              handleTouched(
+                "totalSupply"
+              )
+            }
             error={totalSupplyError}
           />
         </div>
@@ -199,31 +294,50 @@ export default function CreatePage() {
           <ImageUpload
             imageFile={imageFile}
             onChange={setImageFile}
-            onTouched={() => handleTouched("image")}
+            onTouched={() =>
+              handleTouched("image")
+            }
             error={imageError}
           />
         </div>
 
         {/* 포토카드 설명 */}
         <div className={styles.formWrap}>
-          <div className={styles.formTitle}>포토카드 설명</div>
+          <div className={styles.formTitle}>
+            포토카드 설명
+          </div>
 
           <textarea
-            className={styles.createDetail}
+            className={
+              styles.createDetail
+            }
             placeholder="카드 설명을 입력해 주세요"
             value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            onChange={(event) =>
+              setDescription(
+                event.target.value
+              )
+            }
           />
         </div>
 
         {/* 생성하기 */}
-        <div className={styles.buttonWrap}>
+        <div
+          className={styles.buttonWrap}
+        >
           <Button
             type="submit"
-            className={styles.btnCreate}
-            disabled={isFormInvalid}
+            className={
+              styles.btnCreate
+            }
+            disabled={
+              isFormInvalid ||
+              isPending
+            }
           >
-            생성하기
+            {isPending
+              ? "생성 중..."
+              : "생성하기"}
           </Button>
         </div>
       </form>
