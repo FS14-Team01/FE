@@ -4,7 +4,7 @@
   right: 0;
   z-index: 10;
   width: 300px;
-  max-height: 535px;
+  max-height: min(535px, calc(100dvh - var(--header-height)));
   border-radius: 2px;
   background: var(--color-gray-500);
   overflow-y: auto;
