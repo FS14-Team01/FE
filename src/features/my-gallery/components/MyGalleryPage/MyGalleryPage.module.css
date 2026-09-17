@@ -20,11 +20,38 @@
   font-family: "YeogiOttaeJalnan";
 }
 
-.titleWrap .btnCreate {
+.createInfoWrap {
+  display: flex;
+  align-items: flex-end;
+}
+
+.createInfoWrap .createCountInfo {
+  margin-right: 12px;
+  font-size: 14px;
+  color: var(--color-gray-300);
+}
+
+.createInfoWrap .btnCreate {
   width: 440px;
 }
 
+.createInfoWrap .btnCreate {
+  width: 440px;
+}
+
+.createInfoWrap .btnCreateDisabled {
+  color: var(--color-gray-300);
+  background: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.createInfoWrap .btnCreateDisabled:hover {
+  background: var(--color-gray-400);
+}
+
 /*------ 보유한 포토카드 ------*/
+
 .ownershipWrap {
   margin-top: 50px;
 }
@@ -72,6 +99,7 @@
 }
 
 /*------ 검색 및 드롭다운 ------*/
+
 .mobileFilterWrap {
   display: none;
 }
@@ -92,6 +120,7 @@
 }
 
 /*------ 포토카드 리스트 ------*/
+
 .photocardWrap {
   display: grid;
   margin-top: 60px;
@@ -100,7 +129,17 @@
 }
 
 /*------ 반응형 ------*/
-@media(max-width:1199px) {
+
+/* 데스크톱 */
+@media (max-width: 1599px) {
+  .photocardWrap {
+    grid-template-columns: repeat(2, 440px);
+    justify-content: center;
+  }
+}
+
+/* 태블릿 */
+@media (max-width: 1199px) {
   .myGalleryWrap {
     padding: 40px 24px;
   }
@@ -109,7 +148,7 @@
     font-size: 48px;
   }
 
-  .titleWrap .btnCreate {
+  .createInfoWrap .btnCreate {
     width: 342px;
   }
 
@@ -127,13 +166,14 @@
   }
 
   .photocardWrap {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 342px);
+    justify-content: center;
     gap: 20px;
   }
-
 }
 
-@media(max-width:743px) {
+/* 모바일 */
+@media (max-width: 743px) {
   .myGalleryWrap {
     padding: 0 15px 40px 15px;
   }
@@ -152,7 +192,6 @@
     width: calc(100% - 30px);
     box-sizing: border-box;
     bottom: 40px;
-
     z-index: 5;
   }
 
@@ -200,7 +239,9 @@
   }
 
   .photocardWrap {
+    grid-template-columns: repeat(2, 170px);
+    justify-content: center;
     margin-top: 20px;
-    gap: 5px;
+    gap: 15px;
   }
 }
