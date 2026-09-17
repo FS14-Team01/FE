@@ -21,8 +21,11 @@ export default function ExchangeModal({
   isFetchingNextPage = false,
   onLoadMore,
   isSubmitting = false,
+  canRetrySubmit = false,
   errorMessage = "",
   listErrorMessage = "",
+  isRetryingList = false,
+  onRetryList,
   onResetError,
 }) {
   const [selectedOwnership, setSelectedOwnership] = useState(null);
@@ -62,6 +65,7 @@ export default function ExchangeModal({
           onBack={handleBack}
           onSubmit={onSubmit}
           isSubmitting={isSubmitting}
+          canRetrySubmit={canRetrySubmit}
           errorMessage={errorMessage}
         />
       ) : (
@@ -72,6 +76,8 @@ export default function ExchangeModal({
           onSelect={handleSelect}
           isLoading={isLoading}
           errorMessage={listErrorMessage}
+          isRetrying={isRetryingList}
+          onRetry={onRetryList}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
           onLoadMore={onLoadMore}

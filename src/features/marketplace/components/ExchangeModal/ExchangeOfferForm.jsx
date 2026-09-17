@@ -12,6 +12,7 @@ export default function ExchangeOfferForm({
   onBack,
   onSubmit,
   isSubmitting = false,
+  canRetrySubmit = false,
   errorMessage = "",
 }) {
   const descriptionId = useId();
@@ -69,7 +70,7 @@ export default function ExchangeOfferForm({
             size="lg"
             disabled={isSubmitting || ownership.quantity < 1 || !onSubmit}
           >
-            교환하기
+            {canRetrySubmit ? "다시 시도" : "교환하기"}
           </Button>
         </div>
       </form>
