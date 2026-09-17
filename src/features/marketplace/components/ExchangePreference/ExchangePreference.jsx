@@ -26,17 +26,18 @@ export default function ExchangePreference({ sale, variant = "full" }) {
       </div>
 
       <div className={styles.content}>
-        {(grade || category) && (
-          <div className={styles.meta}>
-            {grade && <strong className={styles[grade.toLowerCase()]}>{getCardGradeLabel(grade)}</strong>}
-            {grade && category && <span className={styles.separator} aria-hidden="true">|</span>}
-            {category && <span className={styles.category}>{getCardCategoryLabel(category)}</span>}
-          </div>
-        )}
-        {description && <p className={styles.description}>{description}</p>}
-        {!grade && !category && !description && (
-          <p className={styles.description}>등록된 교환 희망 정보가 없습니다.</p>
-        )}
+        <div className={styles.meta}>
+          <strong className={grade ? styles[grade.toLowerCase()] : styles.category}>
+            {grade ? getCardGradeLabel(grade) : "등급 미지정"}
+          </strong>
+          <span className={styles.separator} aria-hidden="true">|</span>
+          <span className={styles.category}>
+            {category ? getCardCategoryLabel(category) : "장르 미지정"}
+          </span>
+        </div>
+        <p className={styles.description}>
+          {description || "교환 희망 설명이 없습니다."}
+        </p>
       </div>
     </section>
   );
