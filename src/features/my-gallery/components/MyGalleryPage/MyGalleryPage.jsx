@@ -55,7 +55,7 @@ export default function MyGalleryPage() {
 
     if (isCreationStatusError || !creationStatus) {
       showToast({
-        status: "error",
+        status: "info",
         message: "생성 상태를 불러오지 못했어요. 다시 시도해 주세요.",
       });
 
@@ -319,6 +319,8 @@ export default function MyGalleryPage() {
             categoryOptions={CATEGORY_OPTIONS}
             grade={selectedGrade}
             category={selectedCategory}
+            counts={gradeQuantities}
+            totalCount={totalCount}
             onApply={handleMobileFilterApply}
           />
         </div>
