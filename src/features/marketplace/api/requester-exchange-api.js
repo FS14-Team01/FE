@@ -1,10 +1,5 @@
 import apiClient from "@/lib/axios";
 
-export async function getExchangeRequester({ signal } = {}) {
-  const response = await apiClient.get("/users/me", { signal });
-  return response.data;
-}
-
 /** 테스트 확장 saleId로 현재 판매글의 본인 제안만 조회한다. */
 export async function getMyExchangeOffers({ saleId, cursor, signal }) {
   const response = await apiClient.get("/users/me/exchange-offers", {

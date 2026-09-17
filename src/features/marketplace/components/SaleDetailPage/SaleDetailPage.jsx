@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 import { getCardGradeLabel } from "@/constants/marketplace-options";
+import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
 import {
   exchangeKeys,
   marketKeys,
@@ -49,6 +50,8 @@ const TOAST_ACTION_BY_EXCHANGE_ACTION = {
 
 export default function SaleDetailPage({ saleId }) {
   const router = useRouter();
+  // 보호 레이아웃이 확인한 사용자 캐시를 공유하고 하위 목록에는 ID만 전달한다.
+  const { data: currentUser } = useCurrentUser();
 
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
@@ -214,6 +217,7 @@ export default function SaleDetailPage({ saleId }) {
             saleId={saleId}
             sale={sale}
             saleError={error}
+            requesterId={currentUser.id}
           />
         )}
       </main>
@@ -235,7 +239,12 @@ export default function SaleDetailPage({ saleId }) {
         </SaleCardOverview>
 
         {!isOwner && (
-          <RequesterExchangeSection key={saleId} saleId={saleId} sale={sale} />
+          <RequesterExchangeSection
+            key={`${currentUser.id}:${saleId}`}
+            saleId={saleId}
+            sale={sale}
+            requesterId={currentUser.id}
+          />
         )}
 
         {isOwner && (
