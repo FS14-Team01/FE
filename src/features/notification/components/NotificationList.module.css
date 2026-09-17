@@ -15,7 +15,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 20px;
   width: 100%;
   min-height: 200px;
   color: var(--color-gray-100);
@@ -26,7 +26,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 20px;
   width: 100%;
   padding: 24px 0;
   color: var(--color-gray-100);
@@ -38,11 +38,11 @@
 }
 
 .retryBtn {
-  width: 120px;
-  height: 53px;
+  width: 90px;
+  height: 40px;
   border: none;
   background-color: var(--color-brand-yellow);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
 }
@@ -71,5 +71,12 @@
 
   .statusContainer {
     min-height: 100%;
+    gap: 40px;
+  }
+
+  .retryBtn {
+    width: 120px;
+    height: 53px;
+    font-size: 16px;
   }
 }
