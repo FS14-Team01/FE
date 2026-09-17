@@ -23,20 +23,27 @@
 
 .icon { width: 22px; height: 22px; flex-shrink: 0; }
 .content { padding: 28px 0 48px; }
-.meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 20px; }
+.seller .content { padding-bottom: 80px; }
+.meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 24px; }
 .category { color: var(--color-gray-300); font-weight: 700; }
 .separator { color: var(--color-gray-400); }
 .common { color: var(--color-brand-yellow); }
 .rare { color: var(--color-grade-blue); }
 .super_rare { color: var(--color-grade-purple); }
 .legendary { color: var(--color-grade-pink); }
-.description { margin: 0; color: var(--color-gray-100); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 16px; }
+.description { margin: 0; color: var(--color-gray-100); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 18px; }
 .meta + .description { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--color-gray-400); }
 
 .title {
   margin: 0;
   padding-bottom: 14px;
   font-size: 24px;
+}
+
+@media (max-width: 1199px) {
+  .seller .content { padding-bottom: 40px; }
+  .meta { font-size: 20px; }
+  .description { font-size: 16px; }
 }
 
 @media (max-width: 743px) {
@@ -58,5 +65,4 @@
   }
 
   .meta { font-size: 18px; }
-  .description { font-size: 14px; }
 }
