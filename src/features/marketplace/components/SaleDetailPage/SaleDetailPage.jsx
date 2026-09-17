@@ -150,7 +150,7 @@ export default function SaleDetailPage({ saleId }) {
             });
 
             queryClient.invalidateQueries({
-              queryKey: galleryKeys.lists(),
+              queryKey: galleryKeys.all,
             });
 
             queryClient.invalidateQueries({
@@ -188,6 +188,22 @@ export default function SaleDetailPage({ saleId }) {
     pageContent = (
       <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>
     );
+  } else if (
+    isUnavailable ||
+    (isError && error?.status === 404 && error?.code === "SALE_NOT_FOUND")
+  ) {
+    pageContent = (
+      <main className={`${styles.state} ${styles.unavailable}`} role="alert">
+        <p>판매 정보를 찾을 수 없습니다.</p>
+        <button
+          type="button"
+          className={styles.returnButton}
+          onClick={() => router.replace("/marketplace")}
+        >
+          마켓플레이스로 돌아가기
+        </button>
+      </main>
+    );
   } else if (isError) {
     pageContent = (
       <main className={styles.state} role="alert">
@@ -200,12 +216,6 @@ export default function SaleDetailPage({ saleId }) {
             saleError={error}
           />
         )}
-      </main>
-    );
-  } else if (isUnavailable) {
-    pageContent = (
-      <main className={styles.state} role="alert">
-        판매 정보를 찾을 수 없습니다.
       </main>
     );
   } else {
