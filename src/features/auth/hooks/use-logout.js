@@ -15,7 +15,7 @@ export function useLogout() {
       clearAccessToken();
 
       queryClient.removeQueries();
-      router.replace("/marketplace");
+      router.replace("/");
     },
   });
 }
