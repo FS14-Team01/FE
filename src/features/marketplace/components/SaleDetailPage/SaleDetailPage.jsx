@@ -150,7 +150,7 @@ export default function SaleDetailPage({ saleId }) {
             });
 
             queryClient.invalidateQueries({
-              queryKey: galleryKeys.lists(),
+              queryKey: galleryKeys.all,
             });
 
             queryClient.invalidateQueries({
