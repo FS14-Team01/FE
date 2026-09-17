@@ -128,6 +128,25 @@
   gap: 80px;
 }
 
+.stateWrap,
+.loadMoreWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  color: var(--color-gray-100);
+  text-align: center;
+}
+
+.stateWrap {
+  min-height: 300px;
+}
+
+.loadMoreWrap {
+  margin-top: 40px;
+}
+
 /*------ 반응형 ------*/
 
 /* 데스크톱 */
