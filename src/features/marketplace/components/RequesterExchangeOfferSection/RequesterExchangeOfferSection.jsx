@@ -3,25 +3,11 @@
 import { useEffect, useRef } from "react";
 import Button from "@/components/common/Button/Button";
 import { useToast } from "@/components/common/Toast/ToastProvider";
-import useExchangeRequester from "../../hooks/use-exchange-requester";
 import useRequesterExchangeOffers from "../../hooks/use-requester-exchange-offers";
 import ExchangeCard from "../ExchangeCard/ExchangeCard";
 import styles from "./RequesterExchangeOfferSection.module.css";
 
-export default function RequesterExchangeOfferSection({ saleId }) {
-  // 요청자 ID로 목록 캐시를 구분한다. 미로그인 때는 목록을 요청하지 않는다.
-  const user = useExchangeRequester();
-  if (!user.authenticated || !user.data?.id || user.isError) return null;
-  return (
-    <RequesterOffers
-      key={`${user.data.id}:${saleId}`}
-      saleId={saleId}
-      requesterId={user.data.id}
-    />
-  );
-}
-
-function RequesterOffers({ saleId, requesterId }) {
+export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
   const { offers, cancellation, cancel } = useRequesterExchangeOffers({
     saleId,
     requesterId,
