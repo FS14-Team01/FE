@@ -73,7 +73,11 @@ export const saleKeys = {
   /** filters: { keyword, grade, category, status, limit } */
   list: (filters) => [...saleKeys.lists(), filters],
 
-  summary: () => [...saleKeys.all, "summary"],
+  summary: (keyword = "") => [
+    ...saleKeys.all,
+    "summary",
+    ...(keyword ? [{ keyword }] : []),
+  ],
 };
 
 /* 포토카드 원본 — GET /photo-cards/:photoCardId */
