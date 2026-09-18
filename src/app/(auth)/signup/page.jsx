@@ -18,12 +18,68 @@ export default function SignUpPage() {
     useState(false);
   const router = useRouter();
   const signupMutation = useSignup();
+  const normalizedEmail = email.trim().toLowerCase();
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const NICKNAME_PATTERN = /^[가-힣a-zA-Z0-9_]+$/;
+  const normalizedNickname = nickname.trim();
 
   function handleSubmit(event) {
     event.preventDefault();
 
+    if (!email.trim()) {
+      setValidationError("이메일을 입력해 주세요.");
+      return;
+    }
+
+    if (normalizedEmail.length > 254) {
+      setValidationError("이메일은 254자 이내로 입력해 주세요.");
+      return;
+    }
+
+    if (EMAIL_PATTERN.test(normalizedEmail) === false) {
+      setValidationError("올바른 이메일 주소를 입력해 주세요.");
+      return;
+    }
+
+    if (normalizedNickname === "") {
+      setValidationError("닉네임을 입력해 주세요.");
+      return;
+    }
+
+    if (normalizedNickname.length < 2 || normalizedNickname.length > 20) {
+      setValidationError("닉네임은 2~20자로 입력해 주세요.");
+      return;
+    }
+
+    if (NICKNAME_PATTERN.test(normalizedNickname) === false) {
+      setValidationError(
+        "닉네임에는 한글, 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.",
+      );
+      return;
+    }
+
+    if (password === "") {
+      setValidationError("비밀번호를 입력해 주세요.");
+      return;
+    }
+
+    if (passwordConfirm === "") {
+      setValidationError("비밀번호를 한 번 더 입력해 주세요.");
+      return;
+    }
+
+    if (password.length < 8 || password.length > 64) {
+      setValidationError("비밀번호는 8~64자로 입력해 주세요.");
+      return;
+    }
+
+    if (new TextEncoder().encode(password).length > 72) {
+      setValidationError("비밀번호를 더 짧게 입력해 주세요.");
+      return;
+    }
+
     if (password !== passwordConfirm) {
-      setValidationError("비밀번호가 일치하지 않습니다.");
+      setValidationError("비밀번호 확인이 일치하지 않습니다.");
       return;
     }
 
@@ -45,7 +101,7 @@ export default function SignUpPage() {
 
   return (
     <main className={styles.page}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <Image
           src="/assets/logo.png"
           alt="로고"
