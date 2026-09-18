@@ -101,10 +101,14 @@ export default function MarketplacePage() {
 
   const handleGradeChange = (value) => {
     setGrade((current) => current === value ? undefined : value);
+    setCategory(undefined);
+    setSaleStatus(undefined);
   };
 
   const handleCategoryChange = (value) => {
     setCategory((current) => current === value ? undefined : value);
+    setGrade(undefined);
+    setSaleStatus(undefined);
   };
 
   const handleSortChange = (value) => {
