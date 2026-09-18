@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   useInfiniteQuery,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import { exchangeKeys, galleryKeys, marketKeys } from "@/lib/query-keys";
+import Toast from "@/components/common/Toast/Toast";
+import { useToast } from "@/components/common/Toast/ToastProvider";
 import { getOwnerships } from "../../api/ownerships-api";
 import { createExchangeOffer } from "../../api/sales-api";
 import ExchangeModal from "./ExchangeModal";
@@ -24,6 +26,9 @@ export default function ExchangeRequestModal({
     category: "",
   });
   const submittingRef = useRef(false);
+  const [failureToastId, setFailureToastId] = useState(0);
+  const closeFailureToast = useCallback(() => setFailureToastId(0), []);
+  const { showToast } = useToast();
   const queryClient = useQueryClient();
   const ownerships = useInfiniteQuery({
     queryKey: galleryKeys.list({ ...filters, limit: 12 }),
@@ -46,7 +51,12 @@ export default function ExchangeRequestModal({
           (error.code === "SALE_SOLD_OUT" || error.code === "SALE_CANCELLED")) ||
         (error.status === 404 && error.code === "SALE_NOT_FOUND");
 
-      if (isSaleUnavailable) onSaleUnavailable?.();
+      if (isSaleUnavailable) {
+        showToast({ status: "failure", action: "exchange" });
+        onSaleUnavailable?.();
+      } else {
+        setFailureToastId((previous) => previous + 1);
+      }
 
       if (error.status === 409 || isSaleUnavailable) {
         queryClient.invalidateQueries({ queryKey: galleryKeys.all });
@@ -63,6 +73,7 @@ export default function ExchangeRequestModal({
   async function handleSubmit(payload) {
     if (submittingRef.current) return;
     submittingRef.current = true;
+    closeFailureToast();
     try {
       const offer = await submission.mutateAsync(payload);
       onSuccess(offer);
@@ -79,7 +90,13 @@ export default function ExchangeRequestModal({
       filters={filters}
       onFiltersChange={setFilters}
       isLoading={ownerships.isPending}
-      listErrorMessage={ownerships.error?.message ?? ""}
+      listErrorMessage={
+        ownerships.isError
+          ? ownerships.error?.status === 401
+            ? "보유 카드를 불러오지 못했습니다."
+            : (ownerships.error?.message ?? "보유 카드를 불러오지 못했습니다.")
+          : ""
+      }
       isRetryingList={ownerships.isFetching}
       onRetryList={() => {
         if (ownerships.isFetching) return;
@@ -103,7 +120,20 @@ export default function ExchangeRequestModal({
         (submission.error?.status === 0 || submission.error?.status >= 500)
       }
       errorMessage={submission.error?.message ?? ""}
-      onResetError={submission.reset}
+      onResetError={() => {
+        submission.reset();
+        closeFailureToast();
+      }}
+      feedback={
+        failureToastId > 0 && (
+          <Toast
+            key={failureToastId}
+            status="failure"
+            action="exchange"
+            onClose={closeFailureToast}
+          />
+        )
+      }
       onSubmit={handleSubmit}
       onClose={() => {
         if (!submittingRef.current) onClose();

@@ -27,6 +27,7 @@ export default function ExchangeModal({
   isRetryingList = false,
   onRetryList,
   onResetError,
+  feedback,
 }) {
   const [selectedOwnership, setSelectedOwnership] = useState(null);
   const [description, setDescription] = useState("");
@@ -57,6 +58,8 @@ export default function ExchangeModal({
       onBack={handleBack}
       isBusy={isSubmitting}
     >
+      {/* 실패 안내는 교환 모달과 함께 표시하고 입력 상태는 유지한다. */}
+      {feedback}
       {selectedOwnership ? (
         <ExchangeOfferForm
           ownership={selectedOwnership}
