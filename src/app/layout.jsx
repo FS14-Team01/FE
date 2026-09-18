@@ -1,4 +1,5 @@
 import Footer from "@/components/common/Footer/Footer";
+import ScrollToTopButton from "@/components/common/ScrollToTopButton/ScrollToTopButton";
 import { ToastProvider } from "@/components/common/Toast/ToastProvider";
 import Provider from "@/providers/provider";
 import "./globals.css";
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
           <ToastProvider>
             {children}
             <Footer />
+            <ScrollToTopButton />
           </ToastProvider>
         </Provider>
       </body>

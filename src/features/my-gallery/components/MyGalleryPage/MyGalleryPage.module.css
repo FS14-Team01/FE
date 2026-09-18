@@ -221,10 +221,12 @@
 
   .titleWrap .btnCreate {
     position: fixed;
-    width: calc(100% - 30px);
+    right: 16px;
+    left: 16px;
+    width: calc(100% - 32px);
     box-sizing: border-box;
-    bottom: 40px;
-    z-index: 5;
+    bottom: 16px;
+    z-index: 90;
   }
 
   .ownershipWrap {
