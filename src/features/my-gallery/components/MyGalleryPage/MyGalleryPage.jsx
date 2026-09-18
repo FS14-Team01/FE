@@ -375,7 +375,7 @@ export default function MyGalleryPage() {
             <Dropdown
               options={GRADE_OPTIONS}
               value={selectedGrade}
-              onChange={setSelectedGrade}
+              onChange={(value) => setSelectedGrade((current) => current === value ? "" : value)}
               placeholder="등급"
               label="등급 필터"
               variant="filter"
@@ -386,7 +386,7 @@ export default function MyGalleryPage() {
             <Dropdown
               options={CATEGORY_OPTIONS}
               value={selectedCategory}
-              onChange={setSelectedCategory}
+              onChange={(value) => setSelectedCategory((current) => current === value ? "" : value)}
               placeholder="장르"
               label="장르 필터"
               variant="filter"
