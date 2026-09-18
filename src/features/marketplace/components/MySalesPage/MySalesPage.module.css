@@ -97,7 +97,7 @@
 }
 
 @media (max-width: 743px) {
-  .page { padding: 20px 10px 80px; }
+  .page { padding: 0 10px 80px; }
   .heading { display: none; }
   .summary { padding: 20px 0; font-size: 14px; }
   .gradeCounts {
