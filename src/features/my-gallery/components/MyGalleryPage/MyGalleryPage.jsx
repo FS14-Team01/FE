@@ -178,6 +178,12 @@ export default function MyGalleryPage() {
     setKeyword(value.trim());
   };
 
+  // 검색어를 모두 지우면 엔터 없이도 전체 목록으로 돌아간다
+  const handleKeywordChange = (value) => {
+    setKeywordInput(value);
+    if (value.trim() === "") setKeyword("");
+  };
+
   const handleMobileFilterApply = ({ grade, category }) => {
     setSelectedGrade(grade ?? "");
     setSelectedCategory(category ?? "");
@@ -365,7 +371,7 @@ export default function MyGalleryPage() {
           <SearchInput
             className={styles.searchInput}
             value={keywordInput}
-            onChange={setKeywordInput}
+            onChange={handleKeywordChange}
             onSearch={handleSearch}
           />
         </div>
