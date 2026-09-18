@@ -69,7 +69,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /*-------- 포토카드 텍스트 영역 --------*/
