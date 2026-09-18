@@ -1,0 +1,339 @@
+.photoCard {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 600px;
+  min-width: 0;
+  padding: 40px;
+  background-color: var(--color-gray-500);
+  box-sizing: border-box;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.mySale {
+  height: 626px;
+}
+
+.selectable {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  appearance: none;
+  border-radius: 2px;
+  color: var(--color-white);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.selectable>.imgWrap,
+.selectable>.textWrap {
+  flex: 0 0 auto;
+}
+
+.photoCard:hover:not(:disabled),
+.photoCard:focus-visible {
+  border-color: var(--color-brand-yellow);
+}
+
+.photoCard:focus-visible {
+  outline: none;
+}
+
+.selectable:disabled {
+  cursor: not-allowed;
+}
+
+.selectable:disabled::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-overlay-black);
+  content: "";
+  pointer-events: none;
+}
+
+/*-------- 포토카드 이미지 영역 --------*/
+.imgWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  /* 이미지 비율 가로 4 : 세로 3 */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.imgWrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/*-------- 포토카드 텍스트 영역 --------*/
+.photoCard .title {
+  flex-shrink: 0;
+  color: var(--color-gray-300);
+}
+
+.photoCard .textWrap {
+  min-width: 0;
+  color: var(--color-white);
+  margin-top: 25px;
+}
+
+.photoCard .name,
+.photoCard .category,
+.photoCard .ownerName,
+.photoCard .saleInfo .data {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photoCard .textWrap .name {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.photoCard .infoWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-gray-400);
+  box-sizing: border-box;
+}
+
+.photoCard .gradeCategory {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+
+.photoCard .gradeCategory> :first-child {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.photoCard .gradeCategory .line {
+  flex-shrink: 0;
+  width: 1px;
+  height: 16px;
+  margin: 4px 10px 0 10px;
+  box-sizing: border-box;
+  background-color: var(--color-gray-400);
+}
+
+.photoCard .category {
+  color: var(--color-gray-300);
+}
+
+.photoCard .ownerName {
+  flex-shrink: 0;
+  max-width: 35%;
+  text-decoration: underline;
+}
+
+.photoCard .saleInfo {
+  margin-top: 20px;
+}
+
+.photoCard .saleInfo>div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.photoCard .saleInfo .data {
+  font-size: 18px;
+  text-align: right;
+}
+
+.photoCard .saleInfo .supply {
+  margin-top: 10px;
+}
+
+.photoCard .saleInfo .supply .data span {
+  color: var(--color-gray-400);
+}
+
+.photoCard .cardBottom {
+  position: absolute;
+  right: 40px;
+  bottom: 40px;
+  left: 40px;
+  text-align: center;
+}
+
+.photoCard .cardBottom img {
+  display: block;
+  width: 100px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/*-------- 카드 등급 --------*/
+.gradeCategory .gradeCommon {
+  color: var(--color-brand-yellow);
+}
+
+.gradeCategory .gradeRare {
+  color: var(--color-grade-blue);
+}
+
+.gradeCategory .gradeSuperRare {
+  color: var(--color-grade-purple);
+}
+
+.gradeCategory .gradeLegendary {
+  color: var(--color-grade-pink);
+}
+
+/*-------- 카드 상태 --------*/
+/* soldout */
+.soldOut {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* soldout card dim 처리 */
+.soldOut .dim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-overlay-black);
+}
+
+/* SOLD OUT 아이콘 */
+.soldOut>img {
+  position: relative;
+  z-index: 1;
+  width: 50%;
+  max-width: 170px;
+  height: auto;
+}
+
+/* 판매 중 */
+.saleTag {
+  position: absolute;
+  background-color: var(--color-overlay-black);
+  z-index: 999;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 2px;
+
+  box-sizing: border-box;
+}
+
+.onChange {
+  color: var(--color-brand-yellow);
+}
+
+@media (max-width: 1199px) {
+  .photoCard {
+    width: 342px;
+    height: 517px;
+    padding: 20px;
+  }
+
+  .photoCard .cardBottom {
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .saleTag {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 743px) {
+  .photoCard {
+    width: 170px;
+    height: 234px;
+    padding: 10px;
+  }
+
+  .photoCard .textWrap .name {
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .photoCard .infoWrap {
+    gap: 5px;
+    padding-bottom: 10px;
+    line-height: 14px;
+  }
+
+  .mySale .gradeCategory {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .mySale .category {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mySale .ownerName {
+    max-width: 44%;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .photoCard .textWrap {
+    font-size: 10px;
+    line-height: 12px;
+    margin-top: 10px;
+  }
+
+  .photoCard .gradeCategory .line {
+    height: 10px;
+    margin: 0 5px;
+  }
+
+  .photoCard .saleInfo {
+    margin-top: 10px;
+  }
+
+  .photoCard .saleInfo>div {
+    gap: 5px;
+  }
+
+  .photoCard .saleInfo .data {
+    font-size: 10px;
+  }
+
+  .photoCard .saleInfo .supply {
+    margin-top: 5px;
+  }
+
+  .photoCard .saleInfo .supply:first-child {
+    margin-top: 0;
+  }
+
+  .photoCard .cardBottom {
+    display: none;
+  }
+
+  .saleTag {
+    top: 5px;
+    left: 5px;
+    font-size: 10px;
+  }
+}

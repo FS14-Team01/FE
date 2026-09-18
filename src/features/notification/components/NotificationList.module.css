@@ -1,0 +1,82 @@
+.wrapper {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  z-index: 10;
+  width: 300px;
+  max-height: min(535px, calc(100dvh - var(--header-height)));
+  border-radius: 2px;
+  background: var(--color-gray-500);
+  overflow-y: auto;
+}
+
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  min-height: 200px;
+  color: var(--color-gray-100);
+}
+
+.loadMoreStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  padding: 24px 0;
+  color: var(--color-gray-100);
+}
+
+.statusContainer p,
+.loadMoreStatus p {
+  margin: 0;
+}
+
+.retryBtn {
+  width: 90px;
+  height: 40px;
+  border: none;
+  background-color: var(--color-brand-yellow);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sentinel {
+  height: 1px;
+}
+
+@media (max-width: 743px) {
+  .wrapper {
+    position: fixed;
+    top: var(--header-height);
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .statusContainer {
+    min-height: 100%;
+    gap: 40px;
+  }
+
+  .retryBtn {
+    width: 120px;
+    height: 53px;
+    font-size: 16px;
+  }
+}

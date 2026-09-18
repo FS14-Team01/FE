@@ -1,0 +1,282 @@
+.myGalleryWrap {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 50px 40px;
+  box-sizing: border-box;
+}
+
+.titleWrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-gray-100);
+  box-sizing: border-box;
+}
+
+.titleWrap .title {
+  font-size: 62px;
+  font-family: "YeogiOttaeJalnan";
+}
+
+.createInfoWrap {
+  display: flex;
+  align-items: flex-end;
+}
+
+.createInfoWrap .createCountInfo {
+  margin-right: 12px;
+  font-size: 14px;
+  color: var(--color-gray-300);
+}
+
+.createInfoWrap .btnCreate {
+  width: 440px;
+}
+
+.createInfoWrap .btnCreate {
+  width: 440px;
+}
+
+.createInfoWrap .btnCreateDisabled {
+  color: var(--color-gray-300);
+  background: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.createInfoWrap .btnCreateDisabled:hover {
+  background: var(--color-gray-400);
+}
+
+/*------ 보유한 포토카드 ------*/
+
+.ownershipWrap {
+  margin-top: 50px;
+}
+
+.ownershipWrap .title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.ownershipWrap .title span {
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: normal;
+  color: var(--color-gray-300);
+}
+
+.gradeWrap {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 46px;
+  border-bottom: 1px solid var(--color-gray-400);
+  scrollbar-width: none;
+}
+
+.gradeWrap .grade {
+  border: 1px solid;
+  padding: 7px 20px;
+  box-sizing: border-box;
+}
+
+.gradeWrap .grade.common {
+  color: var(--color-brand-yellow);
+}
+
+.gradeWrap .grade.rare {
+  color: var(--color-grade-blue);
+}
+
+.gradeWrap .grade.super_rare {
+  color: var(--color-grade-purple);
+}
+
+.gradeWrap .grade.legendary {
+  color: var(--color-grade-pink);
+}
+
+/*------ 검색 및 드롭다운 ------*/
+
+.mobileFilterWrap {
+  display: none;
+}
+
+.searchWrap {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.dropDownWrap {
+  display: flex;
+  margin-left: 80px;
+}
+
+.dropDownWrap .gradeDropdown {
+  margin-right: 45px;
+}
+
+/*------ 포토카드 리스트 ------*/
+
+.photocardWrap {
+  display: grid;
+  margin-top: 60px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+}
+
+.stateWrap,
+.loadMoreWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  color: var(--color-gray-100);
+  text-align: center;
+}
+
+.stateWrap {
+  min-height: 300px;
+}
+
+.loadMoreWrap {
+  margin-top: 40px;
+}
+
+/*------ 반응형 ------*/
+
+/* 데스크톱 */
+@media (max-width: 1599px) {
+  .photocardWrap {
+    grid-template-columns: repeat(2, 440px);
+    justify-content: center;
+  }
+}
+
+/* 태블릿 */
+@media (max-width: 1199px) {
+  .myGalleryWrap {
+    padding: 40px 24px;
+  }
+
+  .titleWrap .title {
+    font-size: 48px;
+  }
+
+  .createInfoWrap {
+    display: block;
+  }
+
+  .createInfoWrap .createCountInfo {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .createInfoWrap .btnCreate {
+    width: 342px;
+  }
+
+  .gradeWrap {
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .dropDownWrap {
+    margin-left: 30px;
+  }
+
+  .dropDownWrap .gradeDropdown {
+    margin-right: 25px;
+  }
+
+  .photocardWrap {
+    grid-template-columns: repeat(2, 342px);
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 743px) {
+  .myGalleryWrap {
+    padding: 0 15px 40px 15px;
+  }
+
+  .titleWrap {
+    padding: 0;
+    border: none;
+  }
+
+  .titleWrap .title {
+    display: none;
+  }
+
+  .createInfoWrap .createCountInfo {
+    display: none;
+  }
+
+  .titleWrap .btnCreate {
+    position: fixed;
+    right: 16px;
+    left: 16px;
+    width: calc(100% - 32px);
+    box-sizing: border-box;
+    bottom: 16px;
+    z-index: 90;
+  }
+
+  .ownershipWrap {
+    margin-top: 20px;
+  }
+
+  .ownershipWrap .title {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .ownershipWrap .title span {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
+  .gradeWrap {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    font-size: 12px;
+    padding-bottom: 20px;
+  }
+
+  .gradeWrap .grade {
+    flex-shrink: 0;
+    padding: 5px 10px;
+  }
+
+  .mobileFilterWrap {
+    display: block;
+  }
+
+  .searchInputWrap {
+    width: calc(100% - 55px);
+    margin-left: 10px;
+  }
+
+  .searchInput {
+    width: 100%;
+  }
+
+  .dropDownWrap {
+    display: none;
+  }
+
+  .photocardWrap {
+    grid-template-columns: repeat(2, 170px);
+    justify-content: center;
+    margin-top: 20px;
+    gap: 15px;
+  }
+}
