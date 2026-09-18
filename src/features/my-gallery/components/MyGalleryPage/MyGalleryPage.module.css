@@ -167,6 +167,15 @@
     font-size: 48px;
   }
 
+  .createInfoWrap {
+    display: block;
+  }
+
+  .createInfoWrap .createCountInfo {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
   .createInfoWrap .btnCreate {
     width: 342px;
   }
@@ -203,6 +212,10 @@
   }
 
   .titleWrap .title {
+    display: none;
+  }
+
+  .createInfoWrap .createCountInfo {
     display: none;
   }
 
