@@ -7,7 +7,7 @@
   padding: 40px;
   background-color: var(--color-gray-500);
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .mySale {
@@ -27,8 +27,8 @@
   cursor: pointer;
 }
 
-.selectable > .imgWrap,
-.selectable > .textWrap {
+.selectable>.imgWrap,
+.selectable>.textWrap {
   flex: 0 0 auto;
 }
 
@@ -69,7 +69,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /*-------- 포토카드 텍스트 영역 --------*/
@@ -117,7 +117,7 @@
   align-items: center;
 }
 
-.photoCard .gradeCategory > :first-child {
+.photoCard .gradeCategory> :first-child {
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -145,7 +145,7 @@
   margin-top: 20px;
 }
 
-.photoCard .saleInfo > div {
+.photoCard .saleInfo>div {
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -214,7 +214,7 @@
 }
 
 /* SOLD OUT 아이콘 */
-.soldOut > img {
+.soldOut>img {
   position: relative;
   z-index: 1;
   width: 50%;
@@ -311,7 +311,7 @@
     margin-top: 10px;
   }
 
-  .photoCard .saleInfo > div {
+  .photoCard .saleInfo>div {
     gap: 5px;
   }
 
