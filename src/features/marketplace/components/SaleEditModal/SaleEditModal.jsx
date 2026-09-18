@@ -218,7 +218,9 @@ export default function SaleEditModal({
                   variant="sort"
                   options={CARD_GRADE_OPTIONS}
                   value={desiredGrade}
-                  onChange={setDesiredGrade}
+                  onChange={(value) =>
+                    setDesiredGrade((current) => current === value ? "" : value)
+                  }
                   placeholder="등급 선택"
                   label="교환 희망 등급"
                 />
@@ -230,7 +232,9 @@ export default function SaleEditModal({
                   variant="sort"
                   options={CARD_CATEGORY_OPTIONS}
                   value={desiredCategory}
-                  onChange={setDesiredCategory}
+                  onChange={(value) =>
+                    setDesiredCategory((current) => current === value ? "" : value)
+                  }
                   placeholder="장르 선택"
                   label="교환 희망 장르"
                 />

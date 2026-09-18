@@ -10,15 +10,18 @@ import {
   getCardCategoryLabel,
   getCardGradeLabel,
 } from "@/constants/marketplace-options";
-import { getAccessToken } from "@/lib/auth-token";
 import { marketKeys } from "@/lib/query-keys";
 import ExchangeRequestModal from "../ExchangeModal/ExchangeRequestModal";
 import RequesterExchangeOfferSection from "../RequesterExchangeOfferSection/RequesterExchangeOfferSection";
 import styles from "./RequesterExchangeSection.module.css";
 
-export default function RequesterExchangeSection({ saleId, sale, saleError }) {
+export default function RequesterExchangeSection({
+  saleId,
+  sale,
+  saleError,
+  requesterId,
+}) {
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
-  const [isLoginRequiredOpen, setIsLoginRequiredOpen] = useState(false);
   const [isSaleUnavailable, setIsSaleUnavailable] = useState(false);
   const titleId = useId();
   const router = useRouter();
@@ -36,14 +39,6 @@ export default function RequesterExchangeSection({ saleId, sale, saleError }) {
   const handleLeaveUnavailableSale = () => {
     queryClient.invalidateQueries({ queryKey: marketKeys.lists() });
     router.replace("/marketplace");
-  };
-
-  const handleOpenRequest = () => {
-    if (!getAccessToken()) {
-      setIsLoginRequiredOpen(true);
-      return;
-    }
-    setIsRequestModalOpen(true);
   };
 
   if (isExchangeSaleUnavailable) {
@@ -93,30 +88,18 @@ export default function RequesterExchangeSection({ saleId, sale, saleError }) {
         <Button
           className={styles.exchangeButton}
           size="lg"
-          onClick={handleOpenRequest}
+          onClick={() => setIsRequestModalOpen(true)}
           disabled={sale.status !== "ON_SALE" || sale.remainingQuantity < 1}
         >
           포토카드 교환하기
         </Button>
       </section>
 
-      <RequesterExchangeOfferSection saleId={saleId} />
-
-      {isLoginRequiredOpen && (
-        <Modal
-          title="로그인이 필요합니다."
-          message={
-            <>
-              로그인 하시겠습니까?
-              <br />
-              다양한 서비스를 편리하게 이용하실 수 있습니다.
-            </>
-          }
-          confirmText="확인"
-          onConfirm={() => router.push("/login")}
-          onClose={() => setIsLoginRequiredOpen(false)}
-        />
-      )}
+      <RequesterExchangeOfferSection
+        key={`${requesterId}:${saleId}`}
+        saleId={saleId}
+        requesterId={requesterId}
+      />
 
       {isRequestModalOpen && (
         <ExchangeRequestModal

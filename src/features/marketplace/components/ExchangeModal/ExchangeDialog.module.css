@@ -1,7 +1,17 @@
 /* 카드 선택/입력 등 교환 모달 전용 레이아웃 */
-.contentDialog {
+.overlay {
   position: fixed;
+  z-index: 1000;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-overlay-black);
+}
+
+.contentDialog {
+  position: relative;
   width: 1160px;
   max-width: calc(100% - 80px);
   min-height: min(800px, calc(100dvh - 80px));
@@ -16,10 +26,11 @@
   color: var(--color-white);
   scrollbar-color: var(--color-gray-400) var(--color-gray-500);
   scrollbar-width: thin;
+  transition: transform 180ms ease-out;
 }
 
-.contentDialog::backdrop {
-  background: var(--color-overlay-black);
+.contentDialog.dragging {
+  transition: none;
 }
 
 .dialogBody {
@@ -60,7 +71,8 @@
 }
 
 .dialogClose:focus-visible,
-.dialogBack:focus-visible {
+.dialogBack:focus-visible,
+.handle:focus-visible {
   outline: 2px solid var(--color-grade-blue);
 }
 
@@ -94,8 +106,11 @@
 }
 
 @media (max-width: 1199px) {
+  .overlay {
+    align-items: flex-end;
+  }
+
   .contentDialog {
-    inset: auto 0 0;
     width: 100%;
     max-width: 100%;
     min-height: min(800px, calc(100dvh - 40px));
@@ -121,13 +136,36 @@
 
   .handle {
     position: absolute;
-    top: 15px;
-    left: calc(50% - 24px);
+    top: 0;
+    left: calc(50% - 40px);
     display: block;
+    width: 80px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+  }
+
+  .handle::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 16px;
     width: 48px;
     height: 6px;
     border-radius: 50px;
     background: var(--color-gray-400);
+  }
+
+  .handle:active {
+    cursor: grabbing;
+  }
+
+  .handle:disabled {
+    cursor: not-allowed;
   }
 
   .dialogClose {
@@ -141,6 +179,12 @@
 
   .dialogTitle {
     font-size: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contentDialog {
+    transition: none;
   }
 }
 
@@ -171,7 +215,6 @@
   }
 
   .contentDialog[data-mobile-layout="page"] {
-    inset: 0;
     height: 100dvh;
     max-height: 100dvh;
     background: var(--color-black);

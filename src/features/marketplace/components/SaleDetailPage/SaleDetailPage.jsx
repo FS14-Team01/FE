@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 import { getCardGradeLabel } from "@/constants/marketplace-options";
+import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
 import {
   exchangeKeys,
   marketKeys,
@@ -49,6 +50,8 @@ const TOAST_ACTION_BY_EXCHANGE_ACTION = {
 
 export default function SaleDetailPage({ saleId }) {
   const router = useRouter();
+  // 보호 레이아웃이 확인한 사용자 캐시를 공유하고 하위 목록에는 ID만 전달한다.
+  const { data: currentUser } = useCurrentUser();
 
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
@@ -150,7 +153,7 @@ export default function SaleDetailPage({ saleId }) {
             });
 
             queryClient.invalidateQueries({
-              queryKey: galleryKeys.lists(),
+              queryKey: galleryKeys.all,
             });
 
             queryClient.invalidateQueries({
@@ -188,6 +191,22 @@ export default function SaleDetailPage({ saleId }) {
     pageContent = (
       <main className={styles.state}>판매 정보를 불러오는 중입니다.</main>
     );
+  } else if (
+    isUnavailable ||
+    (isError && error?.status === 404 && error?.code === "SALE_NOT_FOUND")
+  ) {
+    pageContent = (
+      <main className={`${styles.state} ${styles.unavailable}`} role="alert">
+        <p>판매 정보를 찾을 수 없습니다.</p>
+        <button
+          type="button"
+          className={styles.returnButton}
+          onClick={() => router.replace("/marketplace")}
+        >
+          마켓플레이스로 돌아가기
+        </button>
+      </main>
+    );
   } else if (isError) {
     pageContent = (
       <main className={styles.state} role="alert">
@@ -198,14 +217,9 @@ export default function SaleDetailPage({ saleId }) {
             saleId={saleId}
             sale={sale}
             saleError={error}
+            requesterId={currentUser.id}
           />
         )}
-      </main>
-    );
-  } else if (isUnavailable) {
-    pageContent = (
-      <main className={styles.state} role="alert">
-        판매 정보를 찾을 수 없습니다.
       </main>
     );
   } else {
@@ -225,7 +239,12 @@ export default function SaleDetailPage({ saleId }) {
         </SaleCardOverview>
 
         {!isOwner && (
-          <RequesterExchangeSection key={saleId} saleId={saleId} sale={sale} />
+          <RequesterExchangeSection
+            key={`${currentUser.id}:${saleId}`}
+            saleId={saleId}
+            sale={sale}
+            requesterId={currentUser.id}
+          />
         )}
 
         {isOwner && (

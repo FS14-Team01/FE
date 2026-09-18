@@ -58,7 +58,7 @@ export default function useRequesterExchangeOffers({ saleId, requesterId }) {
       await cancellation.mutateAsync(exchangeOfferId);
       return true;
     } catch {
-      // 오류는 cancellation.error를 통해 카드 목록 위에 표시한다.
+      // 오류는 cancellation.error를 통해 취소 확인 모달에 표시한다.
       return false;
     } finally {
       cancellingRef.current = false;

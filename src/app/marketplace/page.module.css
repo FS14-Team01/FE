@@ -34,7 +34,12 @@
   margin-left: auto;
 }
 
-.mobileFilter {
+/*
+ * 두 버튼 모두 컴포넌트 쪽 클래스(.trigger / .button)가 display를 갖고 있어
+ * 클래스 하나만으로는 특이도가 같아 CSS 번들 순서에 따라 덮인다.
+ * button 태그를 함께 지정해 특이도를 올린다.
+ */
+button.mobileFilter {
   display: none;
 }
 
@@ -90,14 +95,14 @@
   height: 1px;
 }
 
-.sellButtonMobile {
+button.sellButtonMobile {
   display: none;
 }
 
-.sellButtonDesktop {
+button.sellButtonDesktop {
   width: 440px;
-  height: 60px !important;
-  font-size: 16px !important;
+  height: 60px;
+  font-size: 16px;
 }
 
 /* 반응형: 데스크톱 (1200px ~ 1599px) */
@@ -127,10 +132,10 @@
     gap: 20px;
   }
 
-  .sellButtonDesktop {
+  button.sellButtonDesktop {
     width: 342px;
-    height: 60px !important;
-    font-size: 16px !important;
+    height: 60px;
+    font-size: 16px;
   }
 }
 
@@ -175,7 +180,7 @@
   }
 
   /* 필터 버튼을 시안 크기에 맞춤 */
-  .mobileFilter {
+  button.mobileFilter {
     display: inline-flex;
     width: 35px;
     height: 35px;
@@ -199,14 +204,14 @@
     gap: 15px;
   }
 
-  .sellButtonDesktop {
+  button.sellButtonDesktop {
     display: none;
   }
 
-  .sellButtonMobile {
+  button.sellButtonMobile {
     display: flex;
-    height: 55px !important;
-    font-size: 16px !important;
+    height: 55px;
+    font-size: 16px;
     position: fixed;
     right: 16px;
     bottom: 16px;

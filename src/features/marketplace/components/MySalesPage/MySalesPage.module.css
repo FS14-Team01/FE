@@ -77,8 +77,9 @@
 .more button {
   margin-top: 12px;
   padding: 8px 16px;
-  border: 1px solid var(--color-gray-200);
-  color: var(--color-white);
+  border: 1px solid var(--color-brand-yellow);
+  background: var(--color-brand-yellow);
+  color: var(--color-black);
   cursor: pointer;
 }
 

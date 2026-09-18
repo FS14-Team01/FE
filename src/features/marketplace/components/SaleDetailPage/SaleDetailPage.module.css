@@ -10,6 +10,30 @@
   min-height: 360px;
 }
 
+.unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.unavailable p {
+  margin: 0;
+}
+
+.returnButton {
+  max-width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 1px solid var(--color-brand-yellow);
+  background: var(--color-brand-yellow);
+  color: var(--color-black);
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .actions {
   margin-top: 40px;
 }
@@ -25,6 +49,13 @@
   color: var(--color-white);
   font-size: 16px;
   font-weight: 400;
+}
+
+@media (max-width: 1199px) {
+  .main,
+  .state {
+    padding-top: 40px;
+  }
 }
 
 @media (max-width: 743px) {
