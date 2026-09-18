@@ -24,6 +24,7 @@ const EMPTY_SELECTION = { tab: undefined, value: undefined };
  * @param {string} [saleStatus] 선택된 매진 여부
  * @param {Record<string, number>} [counts] value별 표시 개수. 없으면 표시하지 않음
  * @param {number} [totalCount] 하단 버튼에 표시할 전체 개수
+ * @param {string} [countUnit] 수량 단위. 기본값은 개
  * @param {(next: { grade?: string, category?: string, saleStatus?: string }) => void} onApply
  * @param {string} [className]
  */
@@ -36,6 +37,7 @@ export default function MobileFilterSheet({
   saleStatus,
   counts,
   totalCount,
+  countUnit = "개",
   onApply,
   className,
 }) {
@@ -184,7 +186,7 @@ export default function MobileFilterSheet({
                     <span>{option.label}</span>
                     {counts?.[option.value] != null && (
                       <span className={styles.count}>
-                        {counts[option.value]}개
+                        {counts[option.value]}{countUnit}
                       </span>
                     )}
                   </button>
@@ -221,7 +223,7 @@ export default function MobileFilterSheet({
                 onClick={handleApply}
               >
                 {selectedCount != null
-                  ? `${selectedCount}개 포토보기`
+                  ? `${selectedCount}${countUnit} 포토보기`
                   : "포토보기"}
               </button>
             </div>
