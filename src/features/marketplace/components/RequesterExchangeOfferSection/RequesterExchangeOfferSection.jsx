@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Button from "@/components/common/Button/Button";
+import { useEffect, useId, useRef, useState } from "react";
+import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
+import { getCardGradeLabel } from "@/constants/marketplace-options";
 import useRequesterExchangeOffers from "../../hooks/use-requester-exchange-offers";
 import ExchangeCard from "../ExchangeCard/ExchangeCard";
+import ExchangeListStatus from "../ExchangeModal/ExchangeListStatus";
 import styles from "./RequesterExchangeOfferSection.module.css";
 
 export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
@@ -13,6 +15,8 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
     requesterId,
   });
   const { showToast } = useToast();
+  const titleId = useId();
+  const [selectedOffer, setSelectedOffer] = useState(null);
   const sentinelRef = useRef(null);
   const { hasNextPage, isFetching, isError, error, fetchNextPage } = offers;
   const isCancelling = cancellation.isPending;
@@ -39,8 +43,21 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
   }, [hasNextPage, isFetching, isError, isCancelling, fetchNextPage]);
 
   const items = offers.data?.pages.flatMap((page) => page.items) ?? [];
-  async function handleCancel({ exchangeOfferId }) {
-    if (await cancel(exchangeOfferId)) {
+  function handleOpenCancel(offer) {
+    cancellation.reset();
+    setSelectedOffer(offer);
+  }
+
+  function handleCloseCancel() {
+    if (isCancelling) return;
+    setSelectedOffer(null);
+    cancellation.reset();
+  }
+
+  async function handleConfirmCancel() {
+    if (!selectedOffer || isCancelling) return;
+    if (await cancel(selectedOffer.id)) {
+      setSelectedOffer(null);
       showToast({ status: "info", message: "교환 제안을 취소했습니다." });
     }
   }
@@ -48,63 +65,82 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
   return (
     <section
       className={styles.section}
-      aria-label="내가 보낸 교환 제안"
+      aria-labelledby={titleId}
       data-sale-id={saleId}
     >
-      {offers.isPending && (
-        <p className={styles.message} role="status">
-          교환 제안 목록을 불러오는 중입니다.
-        </p>
-      )}
-      {offers.isError && (
-        <div className={styles.feedback}>
-          <p className={styles.error} role="alert">
-            {errorMessage}
-          </p>
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={offers.isFetching}
-            onClick={() =>
+      <div className={styles.heading}>
+        <h2 id={titleId} className={styles.title}>
+          내가 제시한 교환 목록
+        </h2>
+      </div>
+
+      <div className={styles.content}>
+        {offers.isPending && (
+          <ExchangeListStatus message="교환 제안 목록을 불러오는 중입니다." />
+        )}
+        {!offers.isPending && !offers.isError && items.length === 0 && (
+          <ExchangeListStatus message="이 판매글에 보낸 교환 제안이 없습니다." />
+        )}
+
+        {items.length > 0 && (
+          <div className={styles.grid}>
+            {items.map((offer) => (
+              <ExchangeCard
+                key={offer.id}
+                viewerRole="requester"
+                exchangeOffer={offer}
+                onCancel={
+                  isCancelling ? undefined : () => handleOpenCancel(offer)
+                }
+              />
+            ))}
+          </div>
+        )}
+
+        {offers.isFetchingNextPage && (
+          <ExchangeListStatus message="교환 제안을 더 불러오는 중입니다." />
+        )}
+        {/* 추가 조회 실패 시 기존 카드를 유지하고 목록 끝에서 재시도한다. */}
+        {offers.isError && (
+          <ExchangeListStatus
+            message={errorMessage}
+            isError
+            isRetrying={offers.isFetching}
+            onRetry={() =>
               offers.isFetchNextPageError
                 ? offers.fetchNextPage()
                 : offers.refetch()
             }
-          >
-            다시 불러오기
-          </Button>
-        </div>
-      )}
-      {cancellation.isError && (
-        <p className={styles.error} role="alert">
-          {cancellation.error.message}
-        </p>
-      )}
-      {!offers.isPending && !offers.isError && items.length === 0 && (
-        <p className={styles.message}>이 판매글에 보낸 교환 제안이 없습니다.</p>
-      )}
-      <div className={styles.grid}>
-        {items.map((offer) => (
-          <ExchangeCard
-            key={offer.id}
-            viewerRole="requester"
-            exchangeOffer={{
-              ...offer,
-              offeredCard: {
-                ...offer.offeredCard,
-                description: offer.offeredDescription,
-              },
-            }}
-            onCancel={isCancelling ? undefined : handleCancel}
           />
-        ))}
+        )}
+        <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
       </div>
-      {offers.isFetchingNextPage && (
-        <p className={styles.message} role="status">
-          교환 제안을 더 불러오는 중입니다.
-        </p>
+
+      {selectedOffer && (
+        <Modal
+          title="교환 제시 취소"
+          message={
+            <>
+              [{getCardGradeLabel(selectedOffer.offeredCard.grade)} |{" "}
+              {selectedOffer.offeredCard.name}]{" "}
+              <br className={styles.cancelLineBreak} />
+              교환 제시를 취소하시겠습니까?
+              {cancellation.isError && (
+                <span className={styles.cancelError} role="alert">
+                  {cancellation.error?.status === 401
+                    ? "교환 제안을 취소하지 못했습니다."
+                    : (cancellation.error?.message ??
+                      "교환 제안을 취소하지 못했습니다.")}
+                </span>
+              )}
+            </>
+          }
+          confirmText={cancellation.isError ? "다시 시도" : "취소하기"}
+          isPending={isCancelling}
+          onConfirm={handleConfirmCancel}
+          onClose={handleCloseCancel}
+        />
       )}
-      <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
     </section>
   );
 }
