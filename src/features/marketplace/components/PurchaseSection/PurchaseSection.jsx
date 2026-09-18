@@ -14,7 +14,7 @@ function formatPoints(points) {
   return `${new Intl.NumberFormat("ko-KR").format(points)} P`;
 }
 
-export default function PurchaseSection({ sale, onPurchaseSuccess }) {
+export default function PurchaseSection({ sale }) {
   const [quantity, setQuantity] = useState(MIN_QUANTITY);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { showToast } = useToast();
@@ -36,19 +36,10 @@ export default function PurchaseSection({ sale, onPurchaseSuccess }) {
   };
 
   const handleConfirmPurchase = () => {
-    // 성공 모달에 표시할 값이라 요청 시점 값을 따로 잡아둔다.
-    // 구매 직후 재조회로 sale이 바뀌거나 상세가 언마운트될 수 있어
-    // 모달 내용은 상위(SaleDetailPage)에서 이 스냅샷으로 렌더한다.
-    const purchaseResult = {
-      cardName: sale.photoCard.name,
-      grade: sale.photoCard.grade,
-      quantity: selectedQuantity,
-    };
-
-    purchaseMutation.mutate(purchaseResult.quantity, {
+    if (purchaseMutation.isPending || isSoldOut) return;
+    purchaseMutation.mutate(selectedQuantity, {
       onSuccess: () => {
         setIsConfirmOpen(false);
-        onPurchaseSuccess?.(purchaseResult);
       },
       onError: (error) => {
         setIsConfirmOpen(false);
@@ -105,7 +96,7 @@ export default function PurchaseSection({ sale, onPurchaseSuccess }) {
         type="button"
         className={styles.purchaseButton}
         onClick={() => setIsConfirmOpen(true)}
-        disabled={isSoldOut}
+        disabled={isSoldOut || purchaseMutation.isPending}
       >
         포토카드 구매하기
       </button>
