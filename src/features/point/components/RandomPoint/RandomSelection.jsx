@@ -37,6 +37,7 @@ export default function RandomSelection({
     }, 500);
 
     const resultTimer = setTimeout(() => {
+      setIsRevealing(false);
       setStep("result");
     }, 2000);
 
@@ -44,7 +45,7 @@ export default function RandomSelection({
       clearTimeout(revealTimer);
       clearTimeout(resultTimer);
     };
-  }, [isRevealing, setStep]);
+  }, [isRevealing, setIsRevealing, setStep]);
 
   const handleConfirm = async () => {
     if (isDrawing || isRevealing) return;
