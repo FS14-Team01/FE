@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { galleryKeys } from "@/lib/query-keys";
 import { getMyOwnerships } from "../api/gallery-api";
@@ -24,7 +21,5 @@ export default function useInfiniteMyGallery(filters = {}) {
       lastPage.hasNext
         ? lastPage.nextCursor
         : undefined,
-
-    placeholderData: keepPreviousData,
   });
 }

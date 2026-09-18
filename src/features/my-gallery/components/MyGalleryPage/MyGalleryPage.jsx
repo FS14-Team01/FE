@@ -15,7 +15,6 @@ import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 
 import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
-import useMyGallery from "@/features/my-gallery/hooks/use-my-gallery";
 import useInfiniteMyGallery from "@/features/my-gallery/hooks/use-infinite-my-gallery";
 import usePhotoCardCreationStatus from "@/features/my-gallery/hooks/use-photo-card-creation-status";
 
@@ -24,6 +23,7 @@ import styles from "./MyGalleryPage.module.css";
 export default function MyGalleryPage() {
   const router = useRouter();
   const loadMoreRef = useRef(null);
+  const creationStatusErrorToastShownRef = useRef(false);
   const { showToast } = useToast();
 
   // 사용자 정보
@@ -38,6 +38,21 @@ export default function MyGalleryPage() {
     refetch: refetchCreationStatus,
   } = usePhotoCardCreationStatus();
 
+  useEffect(() => {
+    if (!isCreationStatusError) {
+      creationStatusErrorToastShownRef.current = false;
+      return;
+    }
+
+    if (creationStatusErrorToastShownRef.current) return;
+
+    creationStatusErrorToastShownRef.current = true;
+
+    showToast({
+      status: "info",
+      message: "생성 상태를 불러오지 못했어요. 다시 시도해 주세요.",
+    });
+  }, [isCreationStatusError, showToast]);
   const weeklyCreatedCount = creationStatus?.weeklyCreatedCount ?? 0;
   const remainingCount = creationStatus?.remainingCount ?? 0;
   const weeklyLimit = creationStatus?.weeklyLimit ?? 3;
@@ -123,10 +138,29 @@ export default function MyGalleryPage() {
       void refetchCreationStatus();
     }, resetDelay + 500);
 
+    const handleVisibilityChange = () => {
+      if (
+        document.visibilityState === "visible" &&
+        Date.now() >= resetTime
+      ) {
+        setRemainingTime("");
+        void refetchCreationStatus();
+      }
+    };
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
     return () => {
       clearTimeout(initialTimer);
       clearInterval(intervalTimer);
       clearTimeout(resetTimer);
+
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
     };
   }, [
     creationStatus?.resetsAt,
@@ -135,9 +169,15 @@ export default function MyGalleryPage() {
   ]);
 
   // 검색 / 필터
+  const [keywordInput, setKeywordInput] = useState("");
   const [keyword, setKeyword] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleSearch = (value) => {
+    setKeyword(value.trim());
+  };
+
   const handleMobileFilterApply = ({ grade, category }) => {
     setSelectedGrade(grade ?? "");
     setSelectedCategory(category ?? "");
@@ -150,8 +190,9 @@ export default function MyGalleryPage() {
     limit: 12,
   };
 
-  const hasFilters =
-    keyword || selectedGrade || selectedCategory;
+  const hasFilters = Boolean(
+    keyword || selectedGrade || selectedCategory
+  );
 
   // 카드 목록
   const {
@@ -166,18 +207,14 @@ export default function MyGalleryPage() {
   } = useInfiniteMyGallery(filters);
 
   // 전체 보유 통계
-  const { data: summaryData } = useMyGallery({
-    limit: 12,
-  });
-
   const photoCardList =
     data?.pages.flatMap((page) => page.items) ?? [];
 
-  const totalCount =
-    summaryData?.summary?.totalQuantity ?? 0;
+  const summary = data?.pages?.[0]?.summary;
 
-  const gradeQuantities =
-    summaryData?.summary?.gradeQuantities ?? {};
+  const totalCount = summary?.totalQuantity ?? 0;
+
+  const gradeQuantities = summary?.gradeQuantities ?? {};
 
   const gradeCounts = [
     {
@@ -271,8 +308,8 @@ export default function MyGalleryPage() {
 
           <Button
             className={`${styles.btnCreate} ${isCreateDisabled
-              ? styles.btnCreateDisabled
-              : ""
+                ? styles.btnCreateDisabled
+                : ""
               }`}
             type="button"
             variant="primary"
@@ -327,8 +364,9 @@ export default function MyGalleryPage() {
         <div className={styles.searchInputWrap}>
           <SearchInput
             className={styles.searchInput}
-            value={keyword}
-            onChange={setKeyword}
+            value={keywordInput}
+            onChange={setKeywordInput}
+            onSearch={handleSearch}
           />
         </div>
 
