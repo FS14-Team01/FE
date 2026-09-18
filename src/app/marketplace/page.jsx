@@ -85,11 +85,11 @@ export default function MarketplacePage() {
   };
 
   const handleGradeChange = (value) => {
-    setGrade(value);
+    setGrade((current) => current === value ? undefined : value);
   };
 
   const handleCategoryChange = (value) => {
-    setCategory(value);
+    setCategory((current) => current === value ? undefined : value);
   };
 
   const handleSortChange = (value) => {
