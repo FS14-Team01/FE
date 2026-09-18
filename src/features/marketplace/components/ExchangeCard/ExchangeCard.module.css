@@ -23,8 +23,6 @@
   left: 40px;
   height: 270px;
   overflow: hidden;
-
-  background-color: var(--color-gray-200);
 }
 
 .image img {
@@ -84,7 +82,7 @@
   margin: 0;
 }
 
-.purchasePrice > .separator {
+.purchasePrice>.separator {
   display: none;
 }
 
@@ -93,7 +91,7 @@
   font-weight: 400;
 }
 
-.purchasePrice > span:last-child {
+.purchasePrice>span:last-child {
   margin-left: -5px;
   color: var(--color-gray-200);
 }
@@ -314,7 +312,7 @@
     gap: 5px;
   }
 
-  .purchasePrice > span:last-child {
+  .purchasePrice>span:last-child {
     margin-left: -3px;
   }
 
