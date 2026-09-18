@@ -55,9 +55,6 @@ export default function ExchangeCard({
   const isActionable = isPending && !isProcessing;
   const isRequester = viewerRole === "requester";
   const isSeller = viewerRole === "seller";
-  const imageStyle = offeredCard.imageUrl
-    ? { "--photo-card-image": `url("${offeredCard.imageUrl}")` }
-    : undefined;
 
   // 구조적으로는 isSeller가 크게 필요하지 않지만 두 역할을 명시적으로 검증하려는 목적
   if (!isRequester && !isSeller) {
@@ -73,12 +70,14 @@ export default function ExchangeCard({
       aria-label={`${offeredCard.name}, ${gradeLabel} 등급 교환 제안 카드`}
       aria-busy={isProcessing}
     >
-      <div
-        className={styles.image}
-        role="img"
-        aria-label={`${offeredCard.name} 포토카드 이미지`}
-        style={imageStyle}
-      />
+      <div className={styles.image}>
+        {offeredCard.imageUrl && (
+          <img
+            src={offeredCard.imageUrl}
+            alt={`${offeredCard.name} 포토카드 이미지`}
+          />
+        )}
+      </div>
 
       <div className={styles.content}>
         <div className={styles.heading}>
