@@ -17,6 +17,7 @@ import {
   MARKET_SORT_OPTIONS,
 } from "@/components/common/Dropdown/dropdownOptions";
 import useSales from "@/features/marketplace/hooks/use-sales";
+import useMarketSummary from "@/features/marketplace/hooks/use-market-summary";
 import { getAccessToken } from "@/lib/auth-token";
 import styles from "./page.module.css";
 
@@ -61,6 +62,14 @@ export default function MarketplacePage() {
     () => data?.pages.flatMap((page) => page.items) ?? [],
     [data],
   );
+
+  const summaryQuery = useMarketSummary(searchedKeyword);
+  const summary = summaryQuery.isError ? undefined : summaryQuery.data;
+  const filterCounts = summary ? {
+    ...summary.gradeCounts,
+    ...summary.categoryCounts,
+    ...summary.statusCounts,
+  } : undefined;
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -173,7 +182,6 @@ export default function MarketplacePage() {
             />
           </div>
 
-          {/* TODO: 옵션별 개수(counts)는 서버 집계 응답 확정 후 연결 */}
           <MobileFilterSheet
             className={styles.mobileFilter}
             gradeOptions={GRADE_OPTIONS}
@@ -182,7 +190,8 @@ export default function MarketplacePage() {
             grade={grade}
             category={category}
             saleStatus={saleStatus}
-            totalCount={sales.length}
+            counts={filterCounts}
+            totalCount={summary?.totalCount}
             onApply={handleMobileFilterApply}
           />
 

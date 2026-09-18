@@ -16,6 +16,9 @@ export const marketKeys = {
   /** filters: { keyword, grade, category, status, sort, limit } */
   list: (filters) => [...marketKeys.lists(), filters],
 
+  // 목록 관련 집계도 기존 lists() 무효화에 포함한다.
+  summary: (keyword = "") => [...marketKeys.lists(), "summary", { keyword }],
+
   details: () => [...marketKeys.all, "detail"],
 
   detail: (saleId) => [
