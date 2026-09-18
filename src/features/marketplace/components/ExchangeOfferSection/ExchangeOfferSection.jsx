@@ -29,6 +29,12 @@ export default function ExchangeOfferSection({
   // 일반 초기 조회 오류로 처리해 다시 시도할 수 있도록 함
   const isInitialError = isError && !isFetchNextPageError;
 
+  // 하위 목록 요청의 401은 로그인 안내 대신 일반 조회 실패로 처리
+  const errorMessage =
+    error?.status === 401
+      ? "교환 제시 목록을 불러오지 못했습니다."
+      : (error?.message ?? "교환 제시 목록을 불러오지 못했습니다.");
+
   const exchangeOffers =
     exchangeOfferData?.pages.flatMap((page) => page.items) ?? [];
 
@@ -89,7 +95,7 @@ export default function ExchangeOfferSection({
         {isInitialError && (
           <div className={styles.statusContainer}>
             <p className={styles.statusMessage} role="alert">
-              {error?.message ?? "교환 제시 목록을 불러오지 못했습니다."}
+              {errorMessage}
             </p>
 
             <button

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import Toast from "./Toast";
 
 const ToastContext = createContext(null);
@@ -8,13 +8,13 @@ const ToastContext = createContext(null);
 export function ToastProvider({ children }) {
   const [toast, setToast] = useState(null);
 
-  const showToast = ({ status, action, message }) => {
+  const showToast = useCallback(({ status, action, message }) => {
     setToast({
       status,
       action,
       message,
     });
-  };
+  }, []);
 
   const handleCloseToast = () => {
     setToast(null);

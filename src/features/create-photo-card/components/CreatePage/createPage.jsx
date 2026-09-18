@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Dropdown from "@/components/common/Dropdown/Dropdown";
@@ -14,12 +14,45 @@ import { useToast } from "@/components/common/Toast/ToastProvider";
 import CreateInput from "@/features/create-photo-card/components/CreateInput/createInput";
 import ImageUpload from "@/features/create-photo-card/components/ImageUpload/ImageUpload";
 import useCreatePhotoCard from "@/features/create-photo-card/hooks/use-create-photo-card";
-
+import usePhotoCardCreationStatus from "@/features/my-gallery/hooks/use-photo-card-creation-status";
 import styles from "@/features/create-photo-card/components/CreatePage/createPage.module.css";
 
 export default function CreatePage() {
   const router = useRouter();
   const { showToast } = useToast();
+  const {
+    data: creationStatus,
+    isLoading: isCreationStatusLoading,
+    isError: isCreationStatusError,
+  } = usePhotoCardCreationStatus();
+  useEffect(() => {
+    if (isCreationStatusLoading) return;
+
+    if (isCreationStatusError || !creationStatus) {
+      showToast({
+        status: "info",
+        message: "생성 상태를 확인하지 못했어요.",
+      });
+
+      router.replace("/my-gallery");
+      return;
+    }
+
+    if (!creationStatus.canCreate) {
+      showToast({
+        status: "info",
+        message: "이번 주 모든 생성 기회를 소진했어요.",
+      });
+
+      router.replace("/my-gallery");
+    }
+  }, [
+    creationStatus,
+    isCreationStatusLoading,
+    isCreationStatusError,
+    router,
+    showToast,
+  ]);
 
   const {
     mutateAsync: createPhotoCard,
@@ -75,11 +108,11 @@ export default function CreatePage() {
   // 총 발행량 오류
   const totalSupplyError =
     touched.totalSupply &&
-    totalSupply === ""
+      totalSupply === ""
       ? "총 발행량을 입력해 주세요."
       : totalSupply !== "" &&
-          (Number(totalSupply) < 1 ||
-            Number(totalSupply) > 10)
+        (Number(totalSupply) < 1 ||
+          Number(totalSupply) > 10)
         ? "총 발행량은 1장 이상 10장 이하로 선택 가능합니다."
         : "";
 
@@ -134,7 +167,14 @@ export default function CreatePage() {
       });
     }
   };
-
+  if (
+  isCreationStatusLoading ||
+  isCreationStatusError ||
+  !creationStatus ||
+  !creationStatus.canCreate
+) {
+  return null;
+}
   return (
     <div
       className={
@@ -196,11 +236,10 @@ export default function CreatePage() {
                 setGrade(value);
                 handleTouched("grade");
               }}
-              className={`${styles.createSort} ${
-                gradeError
+              className={`${styles.createSort} ${gradeError
                   ? styles.errorDropdown
                   : ""
-              }`}
+                }`}
             />
           </div>
 
@@ -247,11 +286,10 @@ export default function CreatePage() {
                   "category"
                 );
               }}
-              className={`${styles.createSort} ${
-                categoryError
+              className={`${styles.createSort} ${categoryError
                   ? styles.errorDropdown
                   : ""
-              }`}
+                }`}
             />
           </div>
 
@@ -271,8 +309,6 @@ export default function CreatePage() {
           <CreateInput
             label="총 발행량"
             type="number"
-            min={1}
-            max={10}
             placeholder="총 발행량을 입력해 주세요"
             value={totalSupply}
             onChange={(event) =>

@@ -6,7 +6,7 @@
 .eyebrow {
   margin: 0 0 30px;
   color: var(--sale-detail-gray-300);
-  font-family: var(--font-main);
+  font-family: var(--font-brand);
   font-size: 24px;
   font-weight: 400;
   line-height: normal;
@@ -26,7 +26,7 @@
 
 .content {
   display: grid;
-  grid-template-columns: minmax(0, 960px) minmax(320px, 440px);
+  grid-template-columns: minmax(0, 1fr) 440px;
   gap: 80px;
   align-items: start;
 }
@@ -163,7 +163,7 @@
   }
 
   .content {
-    grid-template-columns: minmax(0, 1fr) clamp(380px, 40vw, 440px);
+    grid-template-columns: minmax(0, 1fr) 342px;
     gap: 20px;
   }
 
@@ -180,6 +180,12 @@
 
   .meta {
     gap: clamp(6px, 1vw, 12px);
+  }
+}
+
+@media (max-width: 1199px) {
+  .description {
+    font-size: 16px;
   }
 }
 

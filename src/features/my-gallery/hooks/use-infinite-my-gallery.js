@@ -18,14 +18,13 @@ export default function useInfiniteMyGallery(filters = {}) {
         cursor: pageParam,
       }),
 
-    // 첫 요청은 cursor 없이 시작
     initialPageParam: undefined,
 
-    // 다음 페이지가 있으면 nextCursor 전달
     getNextPageParam: (lastPage) =>
-      lastPage.hasNext ? lastPage.nextCursor : undefined,
+      lastPage.hasNext
+        ? lastPage.nextCursor
+        : undefined,
 
-    // 검색/필터 변경 중 기존 화면 유지
     placeholderData: keepPreviousData,
   });
 }
