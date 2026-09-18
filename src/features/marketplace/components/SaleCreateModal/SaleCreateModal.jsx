@@ -284,10 +284,16 @@ export default function SaleCreateModal({ onClose }) {
                 onSearch={setKeyword}
               />
               <div className={styles.desktopFilter}>
-                <Dropdown className={styles.filterDropdown} options={CARD_GRADE_OPTIONS} value={grade} onChange={(value) => setGrade((current) => current === value ? "" : value)} placeholder="등급" label="등급 필터" />
+                <Dropdown className={styles.filterDropdown} options={CARD_GRADE_OPTIONS} value={grade} onChange={(value) => {
+                  setGrade((current) => current === value ? "" : value);
+                  setCategory("");
+                }} placeholder="등급" label="등급 필터" />
               </div>
               <div className={styles.desktopFilter}>
-                <Dropdown className={styles.filterDropdown} options={CARD_CATEGORY_OPTIONS} value={category} onChange={(value) => setCategory((current) => current === value ? "" : value)} placeholder="장르" label="장르 필터" />
+                <Dropdown className={styles.filterDropdown} options={CARD_CATEGORY_OPTIONS} value={category} onChange={(value) => {
+                  setCategory((current) => current === value ? "" : value);
+                  setGrade("");
+                }} placeholder="장르" label="장르 필터" />
               </div>
             </div>
             {ownershipsQuery.isLoading && <p className={styles.state}>보유 포토카드를 불러오는 중입니다.</p>}
