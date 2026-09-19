@@ -15,7 +15,7 @@ function Toast({ status, action, message, onClose }) {
     status === "info"
       ? message
       : actionText
-        ? `포토카드 ${actionText}에 ${
+        ? `${actionText}에 ${
             status === "success" ? "성공했습니다!" : "실패했습니다."
           }`
         : "";
