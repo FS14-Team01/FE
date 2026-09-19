@@ -225,10 +225,10 @@ export default function MyGalleryPage() {
     data?.pages.flatMap((page) => page.items) ?? [];
 
   const totalCount =
-    summaryData?.totalQuantity ?? 0;
+    summaryData?.totalCount ?? 0;
 
   const gradeQuantities =
-    summaryData?.gradeQuantities ?? {};
+    summaryData?.gradeCounts ?? {};
 
   const gradeCounts = [
     {
@@ -322,8 +322,8 @@ export default function MyGalleryPage() {
 
           <Button
             className={`${styles.btnCreate} ${isCreateDisabled
-                ? styles.btnCreateDisabled
-                : ""
+              ? styles.btnCreateDisabled
+              : ""
               }`}
             type="button"
             variant="primary"
@@ -382,10 +382,10 @@ export default function MyGalleryPage() {
             grade={selectedGrade}
             category={selectedCategory}
             counts={filterSummary ? {
-              ...filterSummary.gradeQuantities,
-              ...filterSummary.categoryQuantities,
+              ...filterSummary.gradeCounts,
+              ...filterSummary.categoryCounts,
             } : undefined}
-            totalCount={filterSummary?.totalQuantity}
+            totalCount={filterSummary?.totalCount}
             countUnit="장"
             onApply={handleMobileFilterApply}
           />
