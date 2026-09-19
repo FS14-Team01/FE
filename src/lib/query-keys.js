@@ -83,22 +83,6 @@ export const saleKeys = {
   ],
 };
 
-/* 포토카드 원본 — GET /photo-cards/:photoCardId */
-// 생성 직후 이동하는 상세는 판매글이 아닌 카드 원본이라 marketKeys와 별개입니다
-export const photoCardKeys = {
-  all: ["photoCard"],
-
-  details: () => [
-    ...photoCardKeys.all,
-    "detail",
-  ],
-
-  detail: (photoCardId) => [
-    ...photoCardKeys.details(),
-    photoCardId,
-  ],
-};
-
 /* 교환 제안 — GET /sales/:saleId/exchange-offers, GET /users/me/exchange-offers */
 export const exchangeKeys = {
   all: ["exchange"],
