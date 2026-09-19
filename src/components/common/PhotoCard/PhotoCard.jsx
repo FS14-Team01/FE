@@ -7,6 +7,7 @@ export default function PhotoCard({
   grade,
   category,
   creatorNickname,
+  sellerNickname,
   price,
   initialQuantity,
   remainingQuantity,
@@ -79,7 +80,10 @@ export default function PhotoCard({
             <div className={styles.category}>{category?.replace("_", " ")}</div>
           </div>
 
-          <div className={styles.ownerName}>{creatorNickname}</div>
+          {/* 마켓플레이스는 판매자, 그 외 화면은 제작자를 보여준다 */}
+          <div className={styles.ownerName}>
+            {sellerNickname ?? creatorNickname}
+          </div>
         </div>
 
         <div className={styles.saleInfo}>
