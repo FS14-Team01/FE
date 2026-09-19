@@ -14,11 +14,13 @@ export default function CreateInput({
 }) {
   // number 타입은 정수만 입력할 수 있도록 처리
   const handleChange = (event) => {
-    const inputValue = event.target.value;
-
-    if (type === "number" && inputValue !== "" && !/^\d+$/.test(inputValue)) {
+    if (type !== "number") {
+      onChange(event);
       return;
     }
+
+    event.target.value =
+      event.target.value.replace(/\D/g, "");
 
     onChange(event);
   };

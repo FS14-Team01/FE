@@ -15,7 +15,7 @@ import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 
 import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
-import useMyGallery from "@/features/my-gallery/hooks/use-my-gallery";
+import useOwnershipSummary from "@/features/my-gallery/hooks/use-ownership-summary";
 import useInfiniteMyGallery from "@/features/my-gallery/hooks/use-infinite-my-gallery";
 import usePhotoCardCreationStatus from "@/features/my-gallery/hooks/use-photo-card-creation-status";
 
@@ -24,6 +24,7 @@ import styles from "./MyGalleryPage.module.css";
 export default function MyGalleryPage() {
   const router = useRouter();
   const loadMoreRef = useRef(null);
+  const creationStatusErrorToastShownRef = useRef(false);
   const { showToast } = useToast();
 
   // 사용자 정보
@@ -38,6 +39,21 @@ export default function MyGalleryPage() {
     refetch: refetchCreationStatus,
   } = usePhotoCardCreationStatus();
 
+  useEffect(() => {
+    if (!isCreationStatusError) {
+      creationStatusErrorToastShownRef.current = false;
+      return;
+    }
+
+    if (creationStatusErrorToastShownRef.current) return;
+
+    creationStatusErrorToastShownRef.current = true;
+
+    showToast({
+      status: "info",
+      message: "생성 상태를 불러오지 못했어요. 다시 시도해 주세요.",
+    });
+  }, [isCreationStatusError, showToast]);
   const weeklyCreatedCount = creationStatus?.weeklyCreatedCount ?? 0;
   const remainingCount = creationStatus?.remainingCount ?? 0;
   const weeklyLimit = creationStatus?.weeklyLimit ?? 3;
@@ -123,10 +139,29 @@ export default function MyGalleryPage() {
       void refetchCreationStatus();
     }, resetDelay + 500);
 
+    const handleVisibilityChange = () => {
+      if (
+        document.visibilityState === "visible" &&
+        Date.now() >= resetTime
+      ) {
+        setRemainingTime("");
+        void refetchCreationStatus();
+      }
+    };
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
     return () => {
       clearTimeout(initialTimer);
       clearInterval(intervalTimer);
       clearTimeout(resetTimer);
+
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
     };
   }, [
     creationStatus?.resetsAt,
@@ -135,9 +170,21 @@ export default function MyGalleryPage() {
   ]);
 
   // 검색 / 필터
+  const [keywordInput, setKeywordInput] = useState("");
   const [keyword, setKeyword] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleSearch = (value) => {
+    setKeyword(value.trim());
+  };
+
+  // 검색어를 모두 지우면 엔터 없이도 전체 목록으로 돌아간다
+  const handleKeywordChange = (value) => {
+    setKeywordInput(value);
+    if (value.trim() === "") setKeyword("");
+  };
+
   const handleMobileFilterApply = ({ grade, category }) => {
     setSelectedGrade(grade ?? "");
     setSelectedCategory(category ?? "");
@@ -150,8 +197,9 @@ export default function MyGalleryPage() {
     limit: 12,
   };
 
-  const hasFilters =
-    keyword || selectedGrade || selectedCategory;
+  const hasFilters = Boolean(
+    keyword || selectedGrade || selectedCategory
+  );
 
   // 카드 목록
   const {
@@ -166,18 +214,21 @@ export default function MyGalleryPage() {
   } = useInfiniteMyGallery(filters);
 
   // 전체 보유 통계
-  const { data: summaryData } = useMyGallery({
-    limit: 12,
-  });
+  const summaryQuery = useOwnershipSummary();
+  const filterSummaryQuery = useOwnershipSummary(keyword);
+  const summaryData = summaryQuery.data;
+  const filterSummary = filterSummaryQuery.isError
+    ? undefined
+    : filterSummaryQuery.data;
 
   const photoCardList =
     data?.pages.flatMap((page) => page.items) ?? [];
 
   const totalCount =
-    summaryData?.summary?.totalQuantity ?? 0;
+    summaryData?.totalQuantity ?? 0;
 
   const gradeQuantities =
-    summaryData?.summary?.gradeQuantities ?? {};
+    summaryData?.gradeQuantities ?? {};
 
   const gradeCounts = [
     {
@@ -271,8 +322,8 @@ export default function MyGalleryPage() {
 
           <Button
             className={`${styles.btnCreate} ${isCreateDisabled
-              ? styles.btnCreateDisabled
-              : ""
+                ? styles.btnCreateDisabled
+                : ""
               }`}
             type="button"
             variant="primary"
@@ -295,10 +346,21 @@ export default function MyGalleryPage() {
       <div className={styles.ownershipWrap}>
         <div className={styles.title}>
           {nickname}님이 보유한 포토카드
-          <span>({totalCount}장)</span>
+          {summaryQuery.isSuccess && <span>({totalCount}장)</span>}
         </div>
 
-        <div className={styles.gradeWrap}>
+        {summaryQuery.isPending && (
+          <p role="status">보유 수량을 불러오는 중입니다.</p>
+        )}
+        {summaryQuery.isError && (
+          <div role="alert">
+            <p>보유 수량을 불러오지 못했습니다.</p>
+            <Button type="button" size="sm" onClick={() => summaryQuery.refetch()}>
+              다시 시도
+            </Button>
+          </div>
+        )}
+        {summaryQuery.isSuccess && <div className={styles.gradeWrap}>
           {gradeCounts.map((item) => (
             <div
               key={item.grade}
@@ -308,7 +370,7 @@ export default function MyGalleryPage() {
               {item.grade.replace("_", " ")} {item.count}장
             </div>
           ))}
-        </div>
+        </div>}
       </div>
 
       {/* 검색 / 필터 */}
@@ -319,16 +381,21 @@ export default function MyGalleryPage() {
             categoryOptions={CATEGORY_OPTIONS}
             grade={selectedGrade}
             category={selectedCategory}
-            counts={gradeQuantities}
-            totalCount={totalCount}
+            counts={filterSummary ? {
+              ...filterSummary.gradeQuantities,
+              ...filterSummary.categoryQuantities,
+            } : undefined}
+            totalCount={filterSummary?.totalQuantity}
+            countUnit="장"
             onApply={handleMobileFilterApply}
           />
         </div>
         <div className={styles.searchInputWrap}>
           <SearchInput
             className={styles.searchInput}
-            value={keyword}
-            onChange={setKeyword}
+            value={keywordInput}
+            onChange={handleKeywordChange}
+            onSearch={handleSearch}
           />
         </div>
 
@@ -337,7 +404,10 @@ export default function MyGalleryPage() {
             <Dropdown
               options={GRADE_OPTIONS}
               value={selectedGrade}
-              onChange={setSelectedGrade}
+              onChange={(value) => {
+                setSelectedGrade((current) => current === value ? "" : value);
+                setSelectedCategory("");
+              }}
               placeholder="등급"
               label="등급 필터"
               variant="filter"
@@ -348,7 +418,10 @@ export default function MyGalleryPage() {
             <Dropdown
               options={CATEGORY_OPTIONS}
               value={selectedCategory}
-              onChange={setSelectedCategory}
+              onChange={(value) => {
+                setSelectedCategory((current) => current === value ? "" : value);
+                setSelectedGrade("");
+              }}
               placeholder="장르"
               label="장르 필터"
               variant="filter"

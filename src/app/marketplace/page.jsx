@@ -17,6 +17,7 @@ import {
   MARKET_SORT_OPTIONS,
 } from "@/components/common/Dropdown/dropdownOptions";
 import useSales from "@/features/marketplace/hooks/use-sales";
+import useMarketSummary from "@/features/marketplace/hooks/use-market-summary";
 import { getAccessToken } from "@/lib/auth-token";
 import styles from "./page.module.css";
 
@@ -62,6 +63,14 @@ export default function MarketplacePage() {
     [data],
   );
 
+  const summaryQuery = useMarketSummary(searchedKeyword);
+  const summary = summaryQuery.isError ? undefined : summaryQuery.data;
+  const filterCounts = summary ? {
+    ...summary.gradeCounts,
+    ...summary.categoryCounts,
+    ...summary.statusCounts,
+  } : undefined;
+
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel || !hasNextPage || isFetchingNextPage) return;
@@ -84,12 +93,22 @@ export default function MarketplacePage() {
     setSearchedKeyword(value);
   };
 
+  // 검색어를 모두 지우면 엔터 없이도 전체 목록으로 돌아간다
+  const handleKeywordChange = (value) => {
+    setKeyword(value);
+    if (value.trim() === "") setSearchedKeyword("");
+  };
+
   const handleGradeChange = (value) => {
-    setGrade(value);
+    setGrade((current) => current === value ? undefined : value);
+    setCategory(undefined);
+    setSaleStatus(undefined);
   };
 
   const handleCategoryChange = (value) => {
-    setCategory(value);
+    setCategory((current) => current === value ? undefined : value);
+    setGrade(undefined);
+    setSaleStatus(undefined);
   };
 
   const handleSortChange = (value) => {
@@ -142,30 +161,31 @@ export default function MarketplacePage() {
           <SearchInput
             className={styles.searchInput}
             value={keyword}
-            onChange={setKeyword}
+            onChange={handleKeywordChange}
             onSearch={handleSearch}
           />
           <div className={styles.searchLineBreak} aria-hidden="true" />
 
-          <Dropdown
-            options={GRADE_OPTIONS}
-            value={grade}
-            onChange={handleGradeChange}
-            placeholder="등급"
-            label="등급 필터"
-            className={styles.desktopFilter}
-          />
+          <div className={styles.desktopFilter}>
+            <Dropdown
+              options={GRADE_OPTIONS}
+              value={grade}
+              onChange={handleGradeChange}
+              placeholder="등급"
+              label="등급 필터"
+            />
+          </div>
 
-          <Dropdown
-            options={CATEGORY_OPTIONS}
-            value={category}
-            onChange={handleCategoryChange}
-            placeholder="장르"
-            label="장르 필터"
-            className={styles.desktopFilter}
-          />
+          <div className={styles.desktopFilter}>
+            <Dropdown
+              options={CATEGORY_OPTIONS}
+              value={category}
+              onChange={handleCategoryChange}
+              placeholder="장르"
+              label="장르 필터"
+            />
+          </div>
 
-          {/* TODO: 옵션별 개수(counts)는 서버 집계 응답 확정 후 연결 */}
           <MobileFilterSheet
             className={styles.mobileFilter}
             gradeOptions={GRADE_OPTIONS}
@@ -174,7 +194,8 @@ export default function MarketplacePage() {
             grade={grade}
             category={category}
             saleStatus={saleStatus}
-            totalCount={sales.length}
+            counts={filterCounts}
+            totalCount={summary?.totalCount}
             onApply={handleMobileFilterApply}
           />
 
