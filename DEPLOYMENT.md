@@ -1,52 +1,61 @@
 # 프론트엔드 배포 가이드
 
-## 구성
+## 배포 정보
 
-- 플랫폼: Netlify
-- 테스트 브랜치: `deploy-test`
-- 운영 브랜치: `main` 예정
+- 배포 플랫폼: Netlify
+- 배포 브랜치: `main`
 
-## 환경 변수
+## 배포 절차
 
-Netlify의 **Environment variables**에 등록한다.
+1. GitHub 저장소와 Netlify를 연결한다.
+2. 배포 브랜치로 `main`을 선택한다.
+3. Build settings와 Environment variables를 입력한다.
+4. `Deploy`를 실행한다.
+5. 이후 `main` 브랜치에 변경사항이 병합되면 자동으로 다시 배포된다.
 
-| 변수 | 설명 |
-| --- | --- |
-| `NEXT_PUBLIC_API_URL` | Render 백엔드 주소. 끝에 `/`를 붙이지 않는다. |
-
-실제 값은 `.env.example`이나 Git에 올리지 않는다.
+환경변수를 변경한 경우 `Deploys → Trigger deploy`에서 다시 배포한다. 캐시 문제가 의심되면 `Clear cache and deploy site`를 실행한다.
 
 ## Netlify 설정
 
+### Build settings
+
 | 항목 | 값 |
 | --- | --- |
-| Runtime | `Next.js` |
-| Base directory | `/` |
-| Build command | `npm run build` |
-| Publish directory | `.next` |
+| Branch to deploy | `main` |
+| Base Directory | 비워두기 |
+| Build Command | `npm run build` |
+| Publish Directory | `.next` |
+| Functions Directory | 기본값 유지 |
 
-## 테스트 배포
+### Environment variables
 
-1. `deploy-test` 브랜치를 GitHub에 push한다.
-2. Netlify에서 조직의 FE 저장소와 `deploy-test` 브랜치를 연결한다.
-3. `NEXT_PUBLIC_API_URL`을 등록하고 배포한다.
-4. 발급된 Netlify 주소를 백엔드의 `FRONTEND_URL`에 등록한다.
+| Key | Value |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | 배포한 Render 백엔드 주소 |
+| `NODE_VERSION` | `20` |
 
-## 확인 항목
+`NEXT_PUBLIC_API_URL` 마지막에는 `/`를 붙이지 않는다.
 
-- 페이지 및 이미지 표시
-- Render API 요청
-- 회원가입과 로그인
+## 백엔드 연결
+
+Netlify 배포가 완료되면 Render 백엔드의 `FRONTEND_URL`에 발급된 Netlify 주소를 등록한다.
+
+```env
+FRONTEND_URL=https://<netlify-site-name>.netlify.app
+```
+
+`FRONTEND_URL` 마지막에는 `/`를 붙이지 않는다.
+
+## 배포 후 확인
+
+- 페이지와 이미지 표시
+- 회원가입 및 로그인
 - 포토카드 생성
+- 새로고침 후 로그인 유지
+- 백엔드 API 요청
 
-## 트러블슈팅
+## 주의사항
 
-- 이 프로젝트는 동적 경로를 사용하므로 `output: "export"` 방식의 폴더 배포를 사용하지 않는다.
-- `publish directory cannot be the same as base directory` 오류가 나면 Publish directory가 `.next`인지 확인한다.
-- API가 `localhost`를 호출하면 `NEXT_PUBLIC_API_URL`을 확인하고 다시 배포한다.
-
-## 정식 배포 예정
-
-- `main` 브랜치 운영 배포
-- GitHub Actions CI
-- PR Preview 및 자동 배포
+- 실제 환경변수나 비밀키를 Git에 올리지 않는다.
+- `.env.local`은 로컬 개발에만 사용한다.
+- `main` 브랜치에는 PR을 통해 병합한다.
