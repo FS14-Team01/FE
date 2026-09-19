@@ -42,6 +42,15 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
     return () => observer.disconnect();
   }, [hasNextPage, isFetching, isError, isCancelling, fetchNextPage]);
 
+  useEffect(() => {
+    if (!cancellation.isError) return;
+
+    showToast({
+      status: "failure",
+      action: "exchangeCancel",
+    });
+  }, [cancellation.isError, showToast]);
+
   const items = offers.data?.pages.flatMap((page) => page.items) ?? [];
   function handleOpenCancel(offer) {
     cancellation.reset();
@@ -58,7 +67,10 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
     if (!selectedOffer || isCancelling) return;
     if (await cancel(selectedOffer.id)) {
       setSelectedOffer(null);
-      showToast({ status: "info", message: "교환 제안을 취소했습니다." });
+      showToast({
+        status: "success",
+        action: "exchangeCancel",
+      });
     }
   }
 
@@ -125,14 +137,6 @@ export default function RequesterExchangeOfferSection({ saleId, requesterId }) {
               {selectedOffer.offeredCard.name}]{" "}
               <br className={styles.cancelLineBreak} />
               교환 제시를 취소하시겠습니까?
-              {cancellation.isError && (
-                <span className={styles.cancelError} role="alert">
-                  {cancellation.error?.status === 401
-                    ? "교환 제안을 취소하지 못했습니다."
-                    : (cancellation.error?.message ??
-                      "교환 제안을 취소하지 못했습니다.")}
-                </span>
-              )}
             </>
           }
           confirmText={cancellation.isError ? "다시 시도" : "취소하기"}
