@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Dropdown from "@/components/common/Dropdown/Dropdown";
@@ -20,12 +20,14 @@ import styles from "@/features/create-photo-card/components/CreatePage/createPag
 export default function CreatePage() {
   const router = useRouter();
   const { showToast } = useToast();
+  const creationSucceededRef = useRef(false);
   const {
     data: creationStatus,
     isLoading: isCreationStatusLoading,
     isError: isCreationStatusError,
   } = usePhotoCardCreationStatus();
   useEffect(() => {
+    if (creationSucceededRef.current) return;
     if (isCreationStatusLoading) return;
 
     if (isCreationStatusError || !creationStatus) {
@@ -149,32 +151,29 @@ export default function CreatePage() {
         description,
         totalSupply,
       });
+      creationSucceededRef.current = true;
 
       showToast({
         status: "success",
-        message: "포토카드가 생성되었어요.",
+        action: "create",
       });
 
       router.push("/my-gallery");
-    } catch (error) {
-      const message =
-        error?.response?.data?.message ??
-        "포토카드 생성에 실패했어요.";
-
+    } catch {
       showToast({
-        status: "error",
-        message,
+        status: "failure",
+        action: "create",
       });
     }
   };
   if (
-  isCreationStatusLoading ||
-  isCreationStatusError ||
-  !creationStatus ||
-  !creationStatus.canCreate
-) {
-  return null;
-}
+    isCreationStatusLoading ||
+    isCreationStatusError ||
+    !creationStatus ||
+    !creationStatus.canCreate
+  ) {
+    return null;
+  }
   return (
     <div
       className={
@@ -237,9 +236,9 @@ export default function CreatePage() {
                 handleTouched("grade");
               }}
               className={`${styles.createSort} ${gradeError
-                  ? styles.errorDropdown
-                  : ""
-                }`}
+                ? styles.errorDropdown
+                : ""
+              }`}
             />
           </div>
 
@@ -287,9 +286,9 @@ export default function CreatePage() {
                 );
               }}
               className={`${styles.createSort} ${categoryError
-                  ? styles.errorDropdown
-                  : ""
-                }`}
+                ? styles.errorDropdown
+                : ""
+              }`}
             />
           </div>
 

@@ -41,7 +41,7 @@ export default function PurchaseSection({ sale, onPurchaseSuccess }) {
         setIsConfirmOpen(false);
         onPurchaseSuccess?.();
       },
-      onError: (error) => {
+      onError: () => {
         setIsConfirmOpen(false);
         showToast({
           status: "failure",

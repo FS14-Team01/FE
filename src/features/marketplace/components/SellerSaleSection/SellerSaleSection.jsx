@@ -21,12 +21,15 @@ export default function SellerSaleSection({ sale }) {
     updateSaleMutation.mutate(updateData, {
       onSuccess: () => {
         setIsEditModalOpen(false);
-        showToast({ status: "info", message: "판매 정보가 수정되었습니다." });
-      },
-      onError: (error) => {
         showToast({
-          status: "info",
-          message: error?.message ?? "판매 정보를 수정하지 못했습니다.",
+          status: "success",
+          action: "saleEdit",
+        });
+      },
+      onError: () => {
+        showToast({
+          status: "failure",
+          action: "saleEdit",
         });
       },
     });
@@ -38,13 +41,16 @@ export default function SellerSaleSection({ sale }) {
     stopSaleMutation.mutate(undefined, {
       onSuccess: () => {
         setIsStopModalOpen(false);
-        showToast({ status: "info", message: "판매가 종료되었습니다." });
+        showToast({
+          status: "success",
+          action: "saleCancel",
+        });
         router.replace("/marketplace");
       },
-      onError: (error) => {
+      onError: () => {
         showToast({
-          status: "info",
-          message: error?.message ?? "판매를 내리지 못했습니다.",
+          status: "failure",
+          action: "saleCancel",
         });
       },
     });
