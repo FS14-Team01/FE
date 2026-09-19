@@ -36,26 +36,16 @@ export default function PurchaseSection({ sale, onPurchaseSuccess }) {
   };
 
   const handleConfirmPurchase = () => {
-    // 성공 모달에 표시할 값이라 요청 시점 값을 따로 잡아둔다.
-    // 구매 직후 재조회로 sale이 바뀌거나 상세가 언마운트될 수 있어
-    // 모달 내용은 상위(SaleDetailPage)에서 이 스냅샷으로 렌더한다.
-    const purchaseResult = {
-      cardName: sale.photoCard.name,
-      grade: sale.photoCard.grade,
-      quantity: selectedQuantity,
-    };
-
-    purchaseMutation.mutate(purchaseResult.quantity, {
+    purchaseMutation.mutate(selectedQuantity, {
       onSuccess: () => {
         setIsConfirmOpen(false);
-        onPurchaseSuccess?.(purchaseResult);
+        onPurchaseSuccess?.();
       },
       onError: (error) => {
         setIsConfirmOpen(false);
         showToast({
           status: "failure",
           action: "purchase",
-          message: error.message,
         });
       },
     });
