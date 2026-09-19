@@ -235,7 +235,7 @@ export default function MarketplacePage() {
                     name={sale.photoCard.name}
                     grade={sale.photoCard.grade}
                     category={sale.photoCard.category}
-                    creatorNickname={sale.seller?.nickname}
+                    sellerNickname={sale.seller?.nickname}
                     price={sale.price}
                     initialQuantity={sale.initialQuantity}
                     remainingQuantity={sale.remainingQuantity}
