@@ -12,6 +12,7 @@ export default function OwnedExchangeCard({ ownership, onSelect, disabled }) {
         name={photoCard.name}
         grade={photoCard.grade}
         category={getCardCategoryLabel(photoCard.category)}
+        creatorNickname={photoCard.creatorNickname}
         quantity={quantity}
         variant="ownership"
         showPrice={false}
