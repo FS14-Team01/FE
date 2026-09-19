@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "@/components/common/Modal/Modal";
 import { useToast } from "@/components/common/Toast/ToastProvider";
-import { getCardGradeLabel } from "@/constants/marketplace-options";
 import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
 import {
   exchangeKeys,
@@ -55,9 +54,6 @@ export default function SaleDetailPage({ saleId }) {
 
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [exchangeAction, setExchangeAction] = useState(null);
-  // 구매 성공 모달은 상세 재조회/품절 전환과 무관하게 유지되어야 하므로
-  // PurchaseSection이 아니라 여기서 구매 시점 스냅샷으로 관리한다
-  const [purchaseResult, setPurchaseResult] = useState(null);
 
   const {
     data: sale,
@@ -73,6 +69,15 @@ export default function SaleDetailPage({ saleId }) {
   } = useUpdateExchangeOfferStatus();
 
   const { showToast } = useToast();
+
+  const handlePurchaseSuccess = () => {
+    showToast({
+      status: "success",
+      action: "purchase",
+    });
+
+    router.replace("/my-gallery");
+  };
 
   const queryClient = useQueryClient();
 
@@ -180,11 +185,6 @@ export default function SaleDetailPage({ saleId }) {
     );
   };
 
-  // 구매 성공 모달은 아래 분기 바깥에서 렌더하므로 상세가 숨겨져도 유지된다
-  const handleClosePurchaseResult = () => {
-    setPurchaseResult(null);
-  };
-
   let pageContent;
 
   if (isLoading) {
@@ -232,7 +232,7 @@ export default function SaleDetailPage({ saleId }) {
             <div className={styles.actions}>
               <PurchaseSection
                 sale={sale}
-                onPurchaseSuccess={setPurchaseResult}
+                onPurchaseSuccess={handlePurchaseSuccess}
               />
             </div>
           )}
@@ -273,22 +273,5 @@ export default function SaleDetailPage({ saleId }) {
     );
   }
 
-  return (
-    <>
-      {pageContent}
-
-      {/* 상세가 로딩/오류/품절로 전환되어도 구매 결과 안내는 남는다 */}
-      {purchaseResult && (
-        <div className={styles.successModal}>
-          <Modal
-            title="구매 성공"
-            message={`[${getCardGradeLabel(purchaseResult.grade)} | ${purchaseResult.cardName}] ${purchaseResult.quantity}장 구매에 성공했습니다!`}
-            confirmText="마이갤러리에서 확인하기"
-            onConfirm={() => router.push("/my-gallery")}
-            onClose={handleClosePurchaseResult}
-          />
-        </div>
-      )}
-    </>
-  );
+  return pageContent;
 }
