@@ -23,7 +23,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 440px);
+  grid-template-columns: repeat(3, 440px);
   gap: 80px;
   justify-content: center;
   align-items: start;
@@ -45,6 +45,12 @@
   height: 1px;
 }
 
+@media (max-width: 1599px) {
+  .grid {
+    grid-template-columns: repeat(2, 440px);
+  }
+}
+
 @media (max-width: 1199px) {
   .title {
     font-size: 32px;
@@ -56,7 +62,7 @@
     margin-top: 48px;
   }
   .grid {
-    grid-template-columns: repeat(auto-fit, 342px);
+    grid-template-columns: repeat(2, 342px);
     gap: 20px;
     width: calc(100% + 8px);
     margin-inline: -4px;
@@ -72,7 +78,7 @@
     margin-top: 46px;
   }
   .grid {
-    grid-template-columns: repeat(auto-fit, 170px);
+    grid-template-columns: repeat(2, 170px);
     gap: 15px;
     width: calc(100% + 10px);
     margin-inline: -5px;

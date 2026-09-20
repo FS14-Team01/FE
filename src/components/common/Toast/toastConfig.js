@@ -5,10 +5,13 @@ export const TOAST_ICONS = {
 };
 
 export const TOAST_ACTIONS = {
-  create: "생성",
+  create: "포토카드 생성",
   sale: "판매 등록",
-  purchase: "구매",
+  saleEdit: "판매 수정",
+  saleCancel: "판매내리기",
+  purchase: "포토카드 구매",
   exchange: "교환 제시",
+  exchangeCancel: "교환 제시 취소",
   exchangeAccept: "교환 승인",
   exchangeReject: "교환 거절",
 };

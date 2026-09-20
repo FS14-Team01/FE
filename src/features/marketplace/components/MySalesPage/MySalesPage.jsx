@@ -177,11 +177,13 @@ export default function MySalesPage() {
           className={styles.desktopFilter}
           options={GRADE_OPTIONS}
           value={grade}
-          onChange={(nextGrade) =>
+          onChange={(nextGrade) => {
             setGrade((currentGrade) =>
               currentGrade === nextGrade ? undefined : nextGrade,
-            )
-          }
+            );
+            setCategory(undefined);
+            setStatus(undefined);
+          }}
           placeholder="등급"
           label="등급 필터"
         />
@@ -189,11 +191,13 @@ export default function MySalesPage() {
           className={styles.desktopFilter}
           options={CATEGORY_OPTIONS}
           value={category}
-          onChange={(nextCategory) =>
+          onChange={(nextCategory) => {
             setCategory((currentCategory) =>
               currentCategory === nextCategory ? undefined : nextCategory,
-            )
-          }
+            );
+            setGrade(undefined);
+            setStatus(undefined);
+          }}
           placeholder="장르"
           label="장르 필터"
         />
@@ -201,11 +205,13 @@ export default function MySalesPage() {
           className={styles.desktopFilter}
           options={SALE_STATUS_OPTIONS}
           value={status}
-          onChange={(nextStatus) =>
+          onChange={(nextStatus) => {
             setStatus((currentStatus) =>
               currentStatus === nextStatus ? undefined : nextStatus,
-            )
-          }
+            );
+            setGrade(undefined);
+            setCategory(undefined);
+          }}
           placeholder="판매방법"
           label="판매 상태 필터"
         />

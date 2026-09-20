@@ -1,5 +1,5 @@
-import { formatNotificationMessage } from "../notification-message.js";
-import { formatNotificationTime } from "../notification-time.js";
+import { formatNotificationMessage } from "../utils/notification-message.js";
+import { formatNotificationTime } from "../utils/notification-time.js";
 import styles from "./NotificationItem.module.css";
 
 export default function NotificationItem({ notification }) {

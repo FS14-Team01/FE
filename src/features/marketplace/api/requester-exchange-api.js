@@ -1,6 +1,6 @@
 import apiClient from "@/lib/axios";
 
-/** 테스트 확장 saleId로 현재 판매글의 본인 제안만 조회한다. */
+/** saleId를 지정하면 해당 판매글의 본인 제안만, 생략하면 전체 보낸 제안을 조회한다. */
 export async function getMyExchangeOffers({ saleId, cursor, signal }) {
   const response = await apiClient.get("/users/me/exchange-offers", {
     params: { saleId, limit: 12, cursor },

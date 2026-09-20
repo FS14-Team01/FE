@@ -1,5 +1,12 @@
 import apiClient from "@/lib/axios";
 
+export async function getMarketSummary(keyword = "") {
+  const response = await apiClient.get("/sales/summary", {
+    params: { keyword: keyword.trim() || undefined },
+  });
+  return response.data?.data ?? response.data;
+}
+
 export async function createExchangeOffer(
   saleId,
   { offeredCardId, offeredDescription },

@@ -16,6 +16,9 @@ export const marketKeys = {
   /** filters: { keyword, grade, category, status, sort, limit } */
   list: (filters) => [...marketKeys.lists(), filters],
 
+  // 목록 관련 집계도 기존 lists() 무효화에 포함한다.
+  summary: (keyword = "") => [...marketKeys.lists(), "summary", { keyword }],
+
   details: () => [...marketKeys.all, "detail"],
 
   detail: (saleId) => [
@@ -77,22 +80,6 @@ export const saleKeys = {
     ...saleKeys.all,
     "summary",
     ...(keyword ? [{ keyword }] : []),
-  ],
-};
-
-/* 포토카드 원본 — GET /photo-cards/:photoCardId */
-// 생성 직후 이동하는 상세는 판매글이 아닌 카드 원본이라 marketKeys와 별개입니다
-export const photoCardKeys = {
-  all: ["photoCard"],
-
-  details: () => [
-    ...photoCardKeys.all,
-    "detail",
-  ],
-
-  detail: (photoCardId) => [
-    ...photoCardKeys.details(),
-    photoCardId,
   ],
 };
 

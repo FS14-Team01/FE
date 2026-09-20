@@ -1,5 +1,12 @@
 import apiClient from "@/lib/axios";
 
+export async function getOwnershipSummary(keyword = "") {
+  const response = await apiClient.get("/users/me/ownerships/summary", {
+    params: { keyword: keyword.trim() || undefined },
+  });
+  return response.data?.data ?? response.data;
+}
+
 export async function getMyOwnerships(filters = {}) {
   const {
     keyword,

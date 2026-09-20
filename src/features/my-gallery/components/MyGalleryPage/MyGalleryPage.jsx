@@ -15,6 +15,7 @@ import PhotoCard from "@/components/common/PhotoCard/PhotoCard";
 import { useToast } from "@/components/common/Toast/ToastProvider";
 
 import { useCurrentUser } from "@/features/auth/hooks/use-current-user";
+import useOwnershipSummary from "@/features/my-gallery/hooks/use-ownership-summary";
 import useInfiniteMyGallery from "@/features/my-gallery/hooks/use-infinite-my-gallery";
 import usePhotoCardCreationStatus from "@/features/my-gallery/hooks/use-photo-card-creation-status";
 
@@ -178,6 +179,12 @@ export default function MyGalleryPage() {
     setKeyword(value.trim());
   };
 
+  // 검색어를 모두 지우면 엔터 없이도 전체 목록으로 돌아간다
+  const handleKeywordChange = (value) => {
+    setKeywordInput(value);
+    if (value.trim() === "") setKeyword("");
+  };
+
   const handleMobileFilterApply = ({ grade, category }) => {
     setSelectedGrade(grade ?? "");
     setSelectedCategory(category ?? "");
@@ -207,14 +214,21 @@ export default function MyGalleryPage() {
   } = useInfiniteMyGallery(filters);
 
   // 전체 보유 통계
+  const summaryQuery = useOwnershipSummary();
+  const filterSummaryQuery = useOwnershipSummary(keyword);
+  const summaryData = summaryQuery.data;
+  const filterSummary = filterSummaryQuery.isError
+    ? undefined
+    : filterSummaryQuery.data;
+
   const photoCardList =
     data?.pages.flatMap((page) => page.items) ?? [];
 
-  const summary = data?.pages?.[0]?.summary;
+  const totalCount =
+    summaryData?.totalQuantity ?? 0;
 
-  const totalCount = summary?.totalQuantity ?? 0;
-
-  const gradeQuantities = summary?.gradeQuantities ?? {};
+  const gradeQuantities =
+    summaryData?.gradeQuantities ?? {};
 
   const gradeCounts = [
     {
@@ -332,10 +346,21 @@ export default function MyGalleryPage() {
       <div className={styles.ownershipWrap}>
         <div className={styles.title}>
           {nickname}님이 보유한 포토카드
-          <span>({totalCount}장)</span>
+          {summaryQuery.isSuccess && <span>({totalCount}장)</span>}
         </div>
 
-        <div className={styles.gradeWrap}>
+        {summaryQuery.isPending && (
+          <p role="status">보유 수량을 불러오는 중입니다.</p>
+        )}
+        {summaryQuery.isError && (
+          <div role="alert">
+            <p>보유 수량을 불러오지 못했습니다.</p>
+            <Button type="button" size="sm" onClick={() => summaryQuery.refetch()}>
+              다시 시도
+            </Button>
+          </div>
+        )}
+        {summaryQuery.isSuccess && <div className={styles.gradeWrap}>
           {gradeCounts.map((item) => (
             <div
               key={item.grade}
@@ -345,7 +370,7 @@ export default function MyGalleryPage() {
               {item.grade.replace("_", " ")} {item.count}장
             </div>
           ))}
-        </div>
+        </div>}
       </div>
 
       {/* 검색 / 필터 */}
@@ -356,8 +381,12 @@ export default function MyGalleryPage() {
             categoryOptions={CATEGORY_OPTIONS}
             grade={selectedGrade}
             category={selectedCategory}
-            counts={gradeQuantities}
-            totalCount={totalCount}
+            counts={filterSummary ? {
+              ...filterSummary.gradeQuantities,
+              ...filterSummary.categoryQuantities,
+            } : undefined}
+            totalCount={filterSummary?.totalQuantity}
+            countUnit="장"
             onApply={handleMobileFilterApply}
           />
         </div>
@@ -365,7 +394,7 @@ export default function MyGalleryPage() {
           <SearchInput
             className={styles.searchInput}
             value={keywordInput}
-            onChange={setKeywordInput}
+            onChange={handleKeywordChange}
             onSearch={handleSearch}
           />
         </div>
@@ -375,7 +404,10 @@ export default function MyGalleryPage() {
             <Dropdown
               options={GRADE_OPTIONS}
               value={selectedGrade}
-              onChange={(value) => setSelectedGrade((current) => current === value ? "" : value)}
+              onChange={(value) => {
+                setSelectedGrade((current) => current === value ? "" : value);
+                setSelectedCategory("");
+              }}
               placeholder="등급"
               label="등급 필터"
               variant="filter"
@@ -386,7 +418,10 @@ export default function MyGalleryPage() {
             <Dropdown
               options={CATEGORY_OPTIONS}
               value={selectedCategory}
-              onChange={(value) => setSelectedCategory((current) => current === value ? "" : value)}
+              onChange={(value) => {
+                setSelectedCategory((current) => current === value ? "" : value);
+                setSelectedGrade("");
+              }}
               placeholder="장르"
               label="장르 필터"
               variant="filter"
